@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -68,11 +68,6 @@
             0% { transform: scale(0.9); opacity: 0; } 
             100% { transform: scale(1); opacity: 1; } 
         }
-        @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
-        }
 
         .slide-up { animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -84,15 +79,6 @@
                         linear-gradient(45deg, transparent 5px, #f97316 5px) 0 5px;
             background-repeat: repeat-x;
             background-size: 10px 10px;
-            height: 10px;
-            width: 100%;
-        }
-
-        .zigzag {
-             background: linear-gradient(-45deg, transparent 5px, #fff 5px) 0 5px,
-                        linear-gradient(45deg, transparent 5px, #fff 5px) 0 5px;
-            background-repeat: repeat-x;
-            background-size: 10px 10px; 
             height: 10px;
             width: 100%;
         }
@@ -198,7 +184,7 @@
     <div id="login-modal" class="absolute inset-0 z-[90] bg-black/60 hidden items-end sm:items-center justify-center backdrop-blur-sm p-0 sm:p-4">
         <div class="bg-white w-full sm:max-w-xs h-auto p-8 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl slide-up relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 to-red-500"></div>
-            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4 mx-auto text-3xl">👋</div>
+            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4 mx-auto text-3xl">ðŸ‘‹</div>
             <h2 class="text-3xl font-extrabold text-gray-900 mb-2 text-center">Let's Eat!</h2>
             <p class="text-gray-500 text-sm mb-8 text-center">Tell us your name to start.</p>
             <div class="space-y-4">
@@ -214,6 +200,23 @@
                     Enter Cafe <i class="fas fa-arrow-right ml-2"></i>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <div id="offer-success-modal" class="absolute inset-0 z-[140] bg-black/80 hidden items-center justify-center backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl relative pop-in text-center border-4 border-green-400">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
+                <i class="fas fa-gift text-4xl text-green-600"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-1">Woohoo! ðŸŽ‰</h2>
+            <p class="text-sm text-gray-500 font-bold mb-4" id="offer-success-name">Coupon Applied</p>
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <p class="text-xs text-green-600 uppercase tracking-wider font-bold mb-1">You Saved</p>
+                <p class="text-4xl font-black text-green-700 tracking-tight">â‚¹<span id="offer-saved-amount">0</span></p>
+            </div>
+            <button onclick="closeOfferSuccessModal()" class="w-full bg-green-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-green-700 transition-all active:scale-95">
+                Awesome!
+            </button>
         </div>
     </div>
 
@@ -246,7 +249,7 @@
 
         <div class="px-5 mt-4">
             <div class="flex justify-between items-end mb-3">
-                <h3 class="font-bold text-gray-800 text-lg">Crazy Offers 🎉</h3>
+                <h3 class="font-bold text-gray-800 text-lg">Crazy Offers ðŸŽ‰</h3>
             </div>
             <div id="banner-container" class="flex overflow-x-auto gap-4 hide-scrollbar snap-x scroll-smooth pb-4 min-h-[140px]">
                  <div class="w-full text-center text-xs text-gray-400 py-10">Loading Offers...</div>
@@ -257,25 +260,25 @@
             <h3 class="font-bold text-gray-800 text-lg mb-3">Explore Menu</h3>
             <div class="flex overflow-x-auto gap-3 hide-scrollbar pb-2">
                 <div onclick="filterByExplore('All')" class="explore-btn active flex-shrink-0 w-20 h-24 bg-gray-800 rounded-xl flex flex-col items-center justify-center gap-1 border border-gray-600 cursor-pointer transition-all active:scale-95 shadow-sm" id="exp-all">
-                    <span class="text-2xl">🍽️</span><span class="text-[10px] font-bold text-white">All Menu</span>
+                    <span class="text-2xl">ðŸ½ï¸</span><span class="text-[10px] font-bold text-white">All Menu</span>
                 </div>
                 <div onclick="filterByExplore('Pizza')" class="explore-btn flex-shrink-0 w-20 h-24 bg-red-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-red-100 cursor-pointer transition-all active:scale-95 hover:bg-red-100" id="exp-pizza">
-                    <span class="text-2xl">🍕</span><span class="text-[10px] font-bold text-red-800">Pizza</span>
+                    <span class="text-2xl">ðŸ•</span><span class="text-[10px] font-bold text-red-800">Pizza</span>
                 </div>
                 <div onclick="filterByExplore('Burger')" class="explore-btn flex-shrink-0 w-20 h-24 bg-yellow-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-yellow-100 cursor-pointer transition-all active:scale-95 hover:bg-yellow-100" id="exp-burger">
-                    <span class="text-2xl">🍔</span><span class="text-[10px] font-bold text-yellow-800">Burger</span>
+                    <span class="text-2xl">ðŸ”</span><span class="text-[10px] font-bold text-yellow-800">Burger</span>
                 </div>
                 <div onclick="filterByExplore('Sandwich')" class="explore-btn flex-shrink-0 w-20 h-24 bg-green-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-green-100 cursor-pointer transition-all active:scale-95 hover:bg-green-100" id="exp-sandwich">
-                    <span class="text-2xl">🥪</span><span class="text-[10px] font-bold text-green-800">Sandwich</span>
+                    <span class="text-2xl">ðŸ¥ª</span><span class="text-[10px] font-bold text-green-800">Sandwich</span>
                 </div>
                  <div onclick="filterByExplore('Pasta')" class="explore-btn flex-shrink-0 w-20 h-24 bg-orange-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-orange-100 cursor-pointer transition-all active:scale-95 hover:bg-orange-100" id="exp-pasta">
-                    <span class="text-2xl">🍝</span><span class="text-[10px] font-bold text-orange-800">Pasta</span>
+                    <span class="text-2xl">ðŸ</span><span class="text-[10px] font-bold text-orange-800">Pasta</span>
                 </div>
                  <div onclick="filterByExplore('Drinks')" class="explore-btn flex-shrink-0 w-20 h-24 bg-blue-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-blue-100 cursor-pointer transition-all active:scale-95 hover:bg-blue-100" id="exp-drinks">
-                    <span class="text-2xl">🥤</span><span class="text-[10px] font-bold text-blue-800">Drinks</span>
+                    <span class="text-2xl">ðŸ¥¤</span><span class="text-[10px] font-bold text-blue-800">Drinks</span>
                 </div>
                 <div onclick="filterByExplore('Dessert')" class="explore-btn flex-shrink-0 w-20 h-24 bg-pink-50 rounded-xl flex flex-col items-center justify-center gap-1 border border-pink-100 cursor-pointer transition-all active:scale-95 hover:bg-pink-100" id="exp-dessert">
-                    <span class="text-2xl">🧁</span><span class="text-[10px] font-bold text-pink-800">Dessert</span>
+                    <span class="text-2xl">ðŸ§</span><span class="text-[10px] font-bold text-pink-800">Dessert</span>
                 </div>
             </div>
         </div>
@@ -305,7 +308,7 @@
     <div id="custom-modal" class="absolute inset-0 z-[150] bg-black/80 hidden center-modal backdrop-blur-sm p-4">
         <div class="bg-white w-full max-w-xs rounded-[2rem] p-6 slide-up relative shadow-2xl">
             <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                <h3 class="text-xl font-bold text-gray-800">Customize It! 🎨</h3>
+                <h3 class="text-xl font-bold text-gray-800">Customize It! ðŸŽ¨</h3>
                 <button onclick="closeCustomModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"><i class="fas fa-times"></i></button>
             </div>
             
@@ -326,7 +329,7 @@
             <div class="bg-white/20 backdrop-blur-md w-10 h-10 rounded-full flex items-center justify-center font-bold text-white border border-white/30" id="cart-count">0</div>
             <div class="flex flex-col">
                 <span class="text-xs font-medium text-orange-100 opacity-80 uppercase tracking-wide">Total</span>
-                <span class="text-xl font-bold leading-none">₹<span id="cart-total">0</span></span>
+                <span class="text-xl font-bold leading-none">â‚¹<span id="cart-total">0</span></span>
             </div>
         </div>
         <div class="bg-white text-orange-600 px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg hover:bg-orange-50 transition-colors">
@@ -339,7 +342,7 @@
         <div class="absolute bottom-0 left-0 right-0 w-full bg-orange-50 rounded-t-[2rem] h-[92%] flex flex-col transform translate-y-full transition-transform duration-300 border-t-8 border-orange-500" id="checkout-panel">
             
             <div class="bg-white px-6 py-4 rounded-t-[1.5rem] shadow-sm flex justify-between items-center z-10 border-b border-orange-100">
-                <h2 class="text-xl font-bold flex items-center gap-2 text-orange-900">🍽️ Your Tray</h2>
+                <h2 class="text-xl font-bold flex items-center gap-2 text-orange-900">ðŸ½ï¸ Your Tray</h2>
                 <button onclick="closeCheckout()" class="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-100"><i class="fas fa-times"></i></button>
             </div>
 
@@ -362,21 +365,30 @@
                 </div>
 
                 <div class="mx-5 mb-4 donation-section p-4 rounded-2xl shadow-sm">
-                    <h4 class="text-xs font-bold text-red-500 uppercase tracking-wide mb-2 flex items-center gap-2"><i class="fas fa-hand-holding-heart"></i> Support & Donate ❤️</h4>
+                    <h4 class="text-xs font-bold text-red-500 uppercase tracking-wide mb-2 flex items-center gap-2"><i class="fas fa-hand-holding-heart"></i> Support & Donate â¤ï¸</h4>
                     <div class="flex gap-2 mb-3">
-                        <button onclick="setDonation(5, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">₹5</button>
-                        <button onclick="setDonation(10, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">₹10</button>
-                        <button onclick="setDonation(50, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">₹50</button>
+                        <button onclick="setDonation(5, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">â‚¹5</button>
+                        <button onclick="setDonation(10, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">â‚¹10</button>
+                        <button onclick="setDonation(50, this)" class="donation-btn flex-1 py-2 border border-red-200 rounded-lg text-sm font-bold text-red-600 bg-white transition-all hover:bg-red-50">â‚¹50</button>
                     </div>
                     
                     <button id="love-btn-toggle" onclick="toggleLoveDonation()" class="love-btn w-full py-3 rounded-xl flex items-center justify-center gap-2 font-bold text-sm text-pink-600 border-pink-200">
-                        <i class="fas fa-heart animate-pulse"></i> Donate ₹10 & Spread Love
+                        <i class="fas fa-heart animate-pulse"></i> Donate â‚¹10 & Spread Love
                     </button>
                 </div>
 
                 <div class="mx-5 mb-2">
+                    <div class="bg-white border border-gray-200 rounded-xl p-2 flex gap-2 mb-3 shadow-sm">
+                        <input type="text" id="manual-coupon-code" placeholder="Enter Coupon Code" 
+                               class="flex-1 bg-transparent outline-none text-sm font-bold text-gray-700 px-2 uppercase">
+                        <button onclick="applyManualCoupon()" 
+                                class="bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-orange-700 transition">
+                            APPLY
+                        </button>
+                    </div>
+
                     <button onclick="toggleOffers()" class="w-full bg-amber-50 border border-amber-200 border-dashed rounded-xl p-3 flex justify-between items-center text-sm font-bold text-amber-800 hover:bg-amber-100 transition-colors">
-                        <span class="flex items-center gap-2"><i class="fas fa-ticket-alt text-amber-600"></i> Apply Coupon / Offers</span>
+                        <span class="flex items-center gap-2"><i class="fas fa-ticket-alt text-amber-600"></i> View Available Offers</span>
                         <i class="fas fa-chevron-down text-amber-400 transition-transform" id="offer-arrow"></i>
                     </button>
                     <div id="offers-dropdown" class="hidden mt-3 space-y-3 transition-all"></div>
@@ -386,13 +398,13 @@
                     <div class="zigzag absolute top-0 left-0 w-full opacity-30"></div>
                     <h3 class="font-bold text-gray-800 mb-3 pt-2">Bill Details</h3>
                     <div class="space-y-2 text-sm">
-                        <div class="flex justify-between text-gray-600"><span>Item Total</span><span>₹<span id="summary-total">0.00</span></span></div>
-                        <div class="flex justify-between text-gray-500 text-[11px]"><span>Tax (5%)</span><span>₹<span id="summary-tax">0.00</span></span></div>
-                        <div class="flex justify-between text-gray-500 text-[11px]"><span>Platform Fee</span><span>₹0.98</span></div>
-                        <div class="flex justify-between text-red-500 text-[11px] font-bold"><span>Donation</span><span>₹<span id="summary-donation">0</span></span></div>
-                        <div id="discount-row" class="flex justify-between text-green-600 font-medium hidden"><span>Discount</span><span>- ₹<span id="summary-discount">0</span></span></div>
+                        <div class="flex justify-between text-gray-600"><span>Item Total</span><span>â‚¹<span id="summary-total">0.00</span></span></div>
+                        <div class="flex justify-between text-gray-500 text-[11px]"><span>Tax (5%)</span><span>â‚¹<span id="summary-tax">0.00</span></span></div>
+                        <div class="flex justify-between text-gray-500 text-[11px]"><span>Platform Fee</span><span>â‚¹0.98</span></div>
+                        <div class="flex justify-between text-red-500 text-[11px] font-bold"><span>Donation</span><span>â‚¹<span id="summary-donation">0</span></span></div>
+                        <div id="discount-row" class="flex justify-between text-green-600 font-medium hidden"><span>Discount</span><span>- â‚¹<span id="summary-discount">0</span></span></div>
                         <div class="flex justify-between text-xl font-extrabold text-gray-900 mt-3 pt-3 border-t border-dashed border-gray-300">
-                            <span>To Pay</span><span>₹<span id="summary-grand">0.00</span></span>
+                            <span>To Pay</span><span>â‚¹<span id="summary-grand">0.00</span></span>
                         </div>
                     </div>
                     <div class="zigzag absolute bottom-0 left-0 w-full rotate-180 opacity-30"></div>
@@ -403,7 +415,7 @@
                 <button onclick="openPaymentModal()" class="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-orange-200 active:scale-[0.98] transition-all flex justify-between px-6 items-center">
                     <span class="text-sm opacity-90 flex flex-col items-start leading-tight">
                         <span class="text-xs text-orange-100 font-normal">TOTAL PAYABLE</span>
-                        ₹<span id="btn-pay-amt">0.00</span>
+                        â‚¹<span id="btn-pay-amt">0.00</span>
                     </span>
                     <span>Proceed to Pay <i class="fas fa-angle-right ml-2"></i></span>
                 </button>
@@ -413,26 +425,92 @@
 
     <div id="payment-modal" class="absolute inset-0 z-[60] hidden center-modal">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closePaymentModal()"></div>
-        <div class="w-full sm:max-w-md bg-orange-50 rounded-[2rem] p-6 relative transform transition-all scale-100 mx-4" id="payment-panel">
-            <button onclick="closePaymentModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"><i class="fas fa-times text-gray-600"></i></button>
+        <div class="w-full sm:max-w-md bg-orange-50 rounded-[2rem] p-6 relative transform transition-all scale-100 mx-4 max-h-[90vh] overflow-y-auto" id="payment-panel">
+            <button onclick="closePaymentModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center z-10"><i class="fas fa-times text-gray-600"></i></button>
             
-            <div id="payment-default-view" class="text-center pt-2">
-                <h2 class="text-2xl font-black mb-2 text-gray-800">Confirm Order?</h2>
-                <p class="text-sm text-gray-500 mb-6">Total Amount: <strong class="text-orange-600 text-xl">₹<span id="pay-modal-amt">0.00</span></strong></p>
+            <!-- Payment Options View -->
+            <div id="payment-options-view" class="text-center pt-2">
+                <h2 class="text-2xl font-black mb-2 text-gray-800">Choose Payment</h2>
+                <p class="text-sm text-gray-500 mb-6">Total Amount: <strong class="text-orange-600 text-xl">â‚¹<span id="pay-modal-amt">0.00</span></strong></p>
                 
                 <div class="space-y-4">
-                    <button id="btn-cash-pay" onclick="processOrder('Cash')" class="w-full bg-white border-2 border-green-500 p-6 rounded-2xl flex items-center justify-between hover:bg-green-50 transition-colors group shadow-lg shadow-green-100 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <div class="flex items-center gap-5">
-                            <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-2xl shadow-green-200 shadow-lg animate-[pulse-border_2s_infinite]"><i class="fas fa-money-bill-wave"></i></div>
+                    <!-- Pay Cash Button -->
+                    <button id="btn-cash-pay" onclick="processOrder('Cash')" class="w-full bg-white border-2 border-green-500 p-5 rounded-2xl flex items-center justify-between hover:bg-green-50 transition-colors group shadow-lg shadow-green-100 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl shadow-green-200 shadow-lg"><i class="fas fa-money-bill-wave"></i></div>
                             <div class="text-left">
-                                <h3 class="font-black text-xl text-green-900 leading-tight">PAY CASH</h3>
-                                <p class="text-xs text-green-700 font-bold uppercase tracking-wider mt-1">At Counter</p>
+                                <h3 class="font-black text-lg text-green-900 leading-tight">PAY CASH</h3>
+                                <p class="text-xs text-green-700 font-bold uppercase tracking-wider mt-0.5">At Counter</p>
                             </div>
                         </div>
                         <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"><i class="fas fa-chevron-right text-green-600"></i></div>
                     </button>
+                    
+                    <!-- Pay Online Button -->
+                    <button id="btn-online-pay" onclick="showOnlinePaymentView()" class="w-full bg-white border-2 border-blue-500 p-5 rounded-2xl flex items-center justify-between hover:bg-blue-50 transition-colors group shadow-lg shadow-blue-100 active:scale-95">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl shadow-blue-200 shadow-lg"><i class="fas fa-qrcode"></i></div>
+                            <div class="text-left">
+                                <h3 class="font-black text-lg text-blue-900 leading-tight">PAY ONLINE</h3>
+                                <p class="text-xs text-blue-700 font-bold uppercase tracking-wider mt-0.5">UPI / QR Code</p>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"><i class="fas fa-chevron-right text-blue-600"></i></div>
+                    </button>
                 </div>
-                 <p class="text-[10px] text-gray-400 mt-6 uppercase font-bold tracking-widest">Secure Payment System</p>
+                <p class="text-[10px] text-gray-400 mt-6 uppercase font-bold tracking-widest">Secure Payment System</p>
+            </div>
+            
+            <!-- Online Payment View (QR Code) -->
+            <div id="online-payment-view" class="hidden">
+                <button onclick="backToPaymentOptions()" class="flex items-center gap-2 text-gray-600 font-bold text-sm mb-4 hover:text-orange-600">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                
+                <div class="text-center">
+                    <h2 class="text-xl font-black mb-1 text-gray-800">Scan & Pay</h2>
+                    <p class="text-2xl font-black text-orange-600 mb-4">â‚¹<span id="qr-amount">0.00</span></p>
+                    
+                    <!-- QR Code Display -->
+                    <div id="qr-code-container" class="bg-white p-4 rounded-2xl shadow-lg mb-4 inline-block">
+                        <div id="qr-code-display" class="w-48 h-48 bg-gray-100 rounded-xl flex items-center justify-center mx-auto">
+                            <i class="fas fa-qrcode text-5xl text-gray-300"></i>
+                        </div>
+                        <p id="qr-payment-name" class="text-sm font-bold text-gray-700 mt-2">Business Name</p>
+                        <p id="qr-upi-id" class="text-xs text-gray-500">UPI ID</p>
+                    </div>
+                    
+                    <p class="text-xs text-red-500 font-bold mb-4"><i class="fas fa-lock mr-1"></i> Amount is fixed and cannot be changed</p>
+                    
+                    <!-- UPI App Buttons -->
+                    <div class="space-y-2 mb-4">
+                        <p class="text-xs text-gray-500 font-bold uppercase">Or pay using UPI app</p>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="openUPIApp('gpay')" class="flex flex-col items-center p-3 bg-white rounded-xl shadow hover:shadow-md transition-shadow active:scale-95">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" alt="GPay" class="w-8 h-8 object-contain mb-1">
+                                <span class="text-[10px] font-bold text-gray-600">GPay</span>
+                            </button>
+                            <button onclick="openUPIApp('phonepe')" class="flex flex-col items-center p-3 bg-white rounded-xl shadow hover:shadow-md transition-shadow active:scale-95">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/PhonePe_Logo.png/480px-PhonePe_Logo.png" alt="PhonePe" class="w-8 h-8 object-contain mb-1">
+                                <span class="text-[10px] font-bold text-gray-600">PhonePe</span>
+                            </button>
+                            <button onclick="openUPIApp('paytm')" class="flex flex-col items-center p-3 bg-white rounded-xl shadow hover:shadow-md transition-shadow active:scale-95">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/1280px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" class="w-8 h-8 object-contain mb-1">
+                                <span class="text-[10px] font-bold text-gray-600">Paytm</span>
+                            </button>
+                            <button onclick="openUPIApp('bhim')" class="flex flex-col items-center p-3 bg-white rounded-xl shadow hover:shadow-md transition-shadow active:scale-95">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="BHIM" class="w-8 h-8 object-contain mb-1">
+                                <span class="text-[10px] font-bold text-gray-600">BHIM</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="confirmOnlinePayment()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-transform">
+                        <i class="fas fa-check-circle mr-2"></i> I've Paid - Confirm Order
+                    </button>
+                    
+                    <p class="text-[10px] text-gray-400 mt-3">After payment, tap the button above to place your order</p>
+                </div>
             </div>
         </div>
     </div>
@@ -449,7 +527,7 @@
                 </div>
                 
                 <h2 class="text-xl font-bold text-gray-800" id="success-title">Order Placed!</h2>
-                <div class="mt-2 px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold border border-red-200 animate-pulse">
+                <div id="payment-status-badge" class="mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold border border-yellow-200 animate-pulse">
                     <i class="fas fa-clock mr-1"></i> Payment Pending
                 </div>
             </div>
@@ -459,8 +537,8 @@
                 <p class="text-gray-600 font-medium italic mb-4">"Thank you for ordering!"</p>
 
                 <div class="text-center mb-6">
-                    <h1 class="text-4xl font-extrabold text-gray-900">₹<span id="final-amt">0.00</span></h1>
-                    <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mt-1">Cash to be paid</p>
+                    <h1 class="text-4xl font-extrabold text-gray-900">â‚¹<span id="final-amt">0.00</span></h1>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider font-bold mt-1" id="amount-label">To Pay at Counter</p>
                 </div>
 
                 <div class="space-y-3 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
@@ -492,14 +570,21 @@
             
             <div class="zigzag absolute bottom-0 left-0 w-full"></div>
             
-            <div id="rating-widget" class="absolute bottom-0 left-0 right-0 bg-white p-6 rounded-t-[2rem] shadow-[0_-10px_40px_rgba(0,0,0,0.2)] transform translate-y-full transition-transform duration-500 z-50 flex flex-col items-center justify-center pb-10">
-                <h3 class="font-bold text-gray-800 text-lg mb-2">Rate your experience 🌟</h3>
-                <div class="star-rating text-3xl text-gray-300 py-4">
-                    <i class="fas fa-star" onclick="submitRating(1)"></i>
-                    <i class="fas fa-star" onclick="submitRating(2)"></i>
-                    <i class="fas fa-star" onclick="submitRating(3)"></i>
-                    <i class="fas fa-star" onclick="submitRating(4)"></i>
-                    <i class="fas fa-star" onclick="submitRating(5)"></i>
+            <div id="rating-widget" class="absolute inset-0 bg-black/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+                <div class="bg-white rounded-3xl p-8 shadow-2xl text-center max-w-xs w-full pop-in">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-star text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl mb-2">Rate Your Experience ðŸŒŸ</h3>
+                    <p class="text-sm text-gray-500 mb-4">How was your ordering experience?</p>
+                    <div class="star-rating text-4xl text-gray-300 py-4">
+                        <i class="fas fa-star" onclick="submitRating(1)"></i>
+                        <i class="fas fa-star" onclick="submitRating(2)"></i>
+                        <i class="fas fa-star" onclick="submitRating(3)"></i>
+                        <i class="fas fa-star" onclick="submitRating(4)"></i>
+                        <i class="fas fa-star" onclick="submitRating(5)"></i>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">Tap a star to rate</p>
                 </div>
             </div>
 
@@ -509,7 +594,7 @@
     <div id="notif-modal" class="absolute inset-0 z-[80] bg-black/60 hidden items-start justify-center backdrop-blur-sm pt-20" onclick="toggleNotif()">
         <div class="bg-white w-[90%] max-w-[380px] rounded-2xl shadow-2xl p-5 m-auto relative" onclick="event.stopPropagation()">
             <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-                <h3 class="font-bold text-lg">🔔 Recent Bills</h3>
+                <h3 class="font-bold text-lg">ðŸ”” Recent Bills</h3>
                 <button onclick="toggleNotif()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
             </div>
             <div id="recent-orders-list" class="space-y-3 max-h-[300px] overflow-y-auto hide-scrollbar">
@@ -519,20 +604,44 @@
     </div>
 
     <div id="bill-detail-modal" class="absolute inset-0 z-[90] bg-black/70 hidden items-center justify-center backdrop-blur-sm p-4">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl relative slide-up">
-            <div class="bg-orange-50 p-6 border-b border-orange-100 text-center relative">
-                 <button onclick="closeBillDetail()" class="absolute top-4 right-4 w-8 h-8 bg-white/50 rounded-full flex items-center justify-center"><i class="fas fa-times text-gray-600"></i></button>
+        <div class="bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl relative slide-up max-h-[85vh] flex flex-col">
+            <div class="bg-orange-50 p-6 border-b border-orange-100 text-center relative flex-shrink-0">
+                <button onclick="closeBillDetail()" class="absolute top-4 right-4 w-8 h-8 bg-white/50 rounded-full flex items-center justify-center"><i class="fas fa-times text-gray-600"></i></button>
                 <div class="zigzag-orange absolute bottom-0 left-0 w-full opacity-50"></div>
-                <h2 class="text-xl font-black text-gray-800">Bill Receipt</h2>
-                <div class="font-mono text-orange-600 font-bold bg-white inline-block px-2 py-0.5 rounded mt-2 text-sm" id="hist-id">#ID</div>
-            </div>
-            <div class="p-6">
-                <div class="space-y-3 mb-4" id="hist-items"></div>
-                <div class="border-t border-dashed border-gray-300 pt-4 flex justify-between items-center">
-                    <span class="text-gray-500 font-bold text-sm">Total Paid</span>
-                    <span class="text-xl font-extrabold text-gray-900">₹<span id="hist-total">0</span></span>
+                <h1 class="text-2xl font-black text-gray-800">Wow<span class="text-orange-600">Cafe</span></h1>
+                <div class="font-mono text-orange-600 font-bold bg-white inline-block px-3 py-1 rounded-lg mt-2 text-sm shadow-sm" id="hist-id">#ID</div>
+                <div id="hist-payment-badge" class="mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold border border-yellow-200 inline-block">
+                    <i class="fas fa-clock mr-1"></i> Payment Pending
                 </div>
-                 <div class="mt-2 text-center text-xs text-gray-400" id="hist-date"></div>
+            </div>
+            
+            <div class="p-5 overflow-y-auto flex-1 hide-scrollbar">
+                <div class="space-y-2 mb-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Customer</span>
+                        <span class="font-bold text-gray-800" id="hist-customer">--</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Order Type</span>
+                        <span class="font-bold text-gray-800" id="hist-order-type">--</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Date & Time</span>
+                        <span class="font-bold text-gray-800 text-xs" id="hist-date">--</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Order Items</h4>
+                    <div class="space-y-2 bg-white border border-gray-100 rounded-xl p-3" id="hist-items"></div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-xl border border-orange-100">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 font-bold">Total Amount</span>
+                        <span class="text-2xl font-black text-orange-600">â‚¹<span id="hist-total">0</span></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -553,7 +662,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, where, serverTimestamp as firestoreTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDSl6L3ym7G9wXJjZoCYGtU6oBuMyswMBA",
@@ -569,10 +678,53 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);        
     const dbFirestore = getFirestore(app);
+    
+    // Restaurant ID - Get from URL or default to 'Orderly'
+    // Added 'id' parameter so Admin and Customer use the same ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const RESTAURANT_ID = urlParams.get('id') || urlParams.get('r') || urlParams.get('restaurant') || 'Orderly';
+    console.log('ðŸª Restaurant ID:', RESTAURANT_ID);
 
     window.rawMenuDocs = [];
     window.allAddons = {}; 
     window.currentDocId = null; // Store Firestore Document ID for rating
+    window.customerSiteSettings = {}; // Store customer site settings (QR, UPI, etc.)
+    
+    // Load Customer Site Settings (QR Code, UPI ID, etc.)
+    async function loadPaymentSettings() {
+        try {
+            const docSnap = await getDoc(doc(dbFirestore, "restaurants", RESTAURANT_ID, "settings", "customerSite"));
+            if (docSnap.exists()) {
+                window.customerSiteSettings = docSnap.data();
+                
+                // Update QR Display
+                if (window.customerSiteSettings.qrImage) {
+                    document.getElementById('qr-code-display').innerHTML = `
+                        <img src="${window.customerSiteSettings.qrImage}" class="w-full h-full object-contain rounded-xl">
+                    `;
+                }
+                
+                // Update Payment Name and UPI ID
+                if (window.customerSiteSettings.paymentName) {
+                    document.getElementById('qr-payment-name').innerText = window.customerSiteSettings.paymentName;
+                }
+                if (window.customerSiteSettings.upiId) {
+                    document.getElementById('qr-upi-id').innerText = window.customerSiteSettings.upiId;
+                }
+                
+                // Update Brand Name if available
+                if (window.customerSiteSettings.brandName) {
+                    const brandEl = document.querySelector('.text-5xl.font-extrabold');
+                    if (brandEl) {
+                        brandEl.innerHTML = window.customerSiteSettings.brandName.replace(/(\w+)$/, '<span class="text-yellow-200">$1</span>');
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Failed to load payment settings:', e);
+        }
+    }
+    window.loadPaymentSettings = loadPaymentSettings;
 
     function processMenuData() {
         window.menuData = window.rawMenuDocs.map(item => {
@@ -601,7 +753,7 @@
     }
 
     function initAddonsSync() {
-        const addonRef = collection(dbFirestore, "addons");
+        const addonRef = collection(dbFirestore, "restaurants", RESTAURANT_ID, "addons");
         onSnapshot(addonRef, (snapshot) => {
             window.allAddons = {};
             snapshot.forEach(doc => {
@@ -613,11 +765,18 @@
     }
 
     function initMenuSync() {
-        const menuRef = collection(dbFirestore, "menu");
+        const menuRef = collection(dbFirestore, "restaurants", RESTAURANT_ID, "menu");
         onSnapshot(menuRef, (snapshot) => {
             window.rawMenuDocs = [];
             snapshot.forEach(doc => {
                 const item = doc.data();
+                
+                // Only show items that are available (available !== false)
+                // If available is undefined or true, show the item
+                if (item.available === false) {
+                    console.log("ðŸš« Item hidden (unavailable):", item.name);
+                    return; // Skip this item
+                }
                 
                 let safeSizes = [];
                 if (item.sizes) {
@@ -651,50 +810,228 @@
     }
 
     function initOffersSync() {
-        const cardsRef = collection(dbFirestore, "site_cards");
+        const cardsRef = collection(dbFirestore, "restaurants", RESTAURANT_ID, "site_cards");
         onSnapshot(cardsRef, (snapshot) => {
             window.offerList = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
                 if(data.offerText && data.offerText !== "No Offer") {
                     window.offerList.push({
+                        id: docSnap.id,
                         title: data.discount > 0 ? `${data.discount}% OFF` : 'SPECIAL',
-                        desc: data.offerText, // This acts as the main offer name now
-                        code: 'OFFER' + data.slotId, // kept for internal tracking
+                        desc: data.offerText,
+                        code: 'OFFER' + data.slotId,
                         minAmt: 100,
                         discountPercent: data.discount || 0,
+                        discountFlat: data.discountFlat || 0,
                         color: 'from-orange-500 to-red-600',
-                        img: data.img
+                        img: data.img,
+                        isPersonal: false
                     });
                 }
             });
+            
+            // 2. Ab Personal Won Coupons load karo (User ke phone number se)
+            if (window.wowUser && window.wowUser.phone) {
+                const couponQuery = query(
+                    collection(dbFirestore, "restaurants", RESTAURANT_ID, "coupons"), 
+                    where("userPhone", "==", window.wowUser.phone),
+                    where("status", "==", "active") // Sirf active coupons dikhao
+                );
+
+                onSnapshot(couponQuery, (couponSnap) => {
+                    // Remove old personal coupons from list
+                    window.offerList = window.offerList.filter(o => !o.isPersonal);
+                    
+                    // Add personal won coupons
+                    couponSnap.forEach(couponDoc => {
+                        const data = couponDoc.data();
+                        window.offerList.push({
+                            id: couponDoc.id, // Doc ID zaroori hai status update ke liye
+                            title: "ðŸŽ‰ YOU WON!",
+                            desc: data.desc, // "10% OFF"
+                            code: data.code,
+                            minAmt: 0, // Jeete hue coupon pe min amount 0 rakho
+                            discountPercent: data.isFlat ? 0 : data.discountValue,
+                            discountFlat: data.isFlat ? data.discountValue : 0,
+                            color: 'from-purple-600 to-pink-600', // Alag color
+                            isPersonal: true // Flag taaki humein pata chale ye DB wala coupon hai
+                        });
+                    });
+                    
+                    if(window.renderOffers) window.renderOffers();
+                });
+            }
+            
             // Ensure UI updates whenever data changes
             if(window.initBanners) window.initBanners();
             if(window.renderOffers) window.renderOffers();
         });
     }
     
+    // --- 1. NEW: Offer Success Modal Show Function ---
+    window.showOfferSuccessModal = (savedAmount, offerName) => {
+        // Update Text
+        document.getElementById('offer-saved-amount').innerText = savedAmount;
+        document.getElementById('offer-success-name').innerText = offerName;
+
+        // Show Modal
+        const modal = document.getElementById('offer-success-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Confetti Blast (Patakhe)
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#22c55e', '#fbbf24'] // Green and Yellow confetti
+            });
+        }
+    };
+
+    // --- 2. NEW: Close Modal Function ---
+    window.closeOfferSuccessModal = () => {
+        const modal = document.getElementById('offer-success-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+
+    // --- 3. UPDATED: applyOffer Function (Logic for both) ---
+    window.applyOffer = (index) => {
+        // Calculate Total Cart Value
+        const total = window.wowCart.reduce((a,b) => a + (b.price * b.qty), 0);
+        const offer = window.offerList[index];
+
+        // 1. Check if offer exists
+        if (!offer) return;
+
+        // 2. Toggle Logic (Agar pehle se select hai to deselect kar do)
+        if (window.selectedOffer === index) {
+            window.selectedOffer = null;
+            if(typeof Toastify !== 'undefined') Toastify({ text: "Offer Removed", style: { background: "#6b7280" }, duration: 1000 }).showToast();
+        } else {
+            // 3. Validation: Minimum Amount Check
+            if (total < offer.minAmt) {
+                const diff = offer.minAmt - total;
+                if(typeof Toastify !== 'undefined') Toastify({ text: `Add items worth â‚¹${diff} more to apply!`, className: "toast-center", style: { background: "#EF4444" } }).showToast();
+                return;
+            }
+
+            // 4. Calculate Savings (Dikhane ke liye)
+            let saved = 0;
+            if (offer.discountPercent > 0) {
+                saved = Math.round(total * (offer.discountPercent / 100));
+            } else {
+                saved = offer.discountFlat;
+            }
+
+            // 5. Apply Offer
+            window.selectedOffer = index;
+            
+            // 6. Trigger Celebration Popup! ðŸŽ‰
+            showOfferSuccessModal(saved, offer.code || offer.title);
+        }
+
+        // 7. Update UI
+        renderOffers();
+        // Dropdown ko band kar do taaki popup dikhe
+        document.getElementById('offers-dropdown').classList.add('hidden'); 
+        document.getElementById('offer-arrow').classList.remove('rotate-180');
+        
+        calculateTotals();
+    };
+
+    // --- 4. UPDATED: applyManualCoupon (Connects to applyOffer) ---
+    window.applyManualCoupon = async () => {
+        const codeInput = document.getElementById('manual-coupon-code');
+        const code = codeInput.value.trim().toUpperCase();
+
+        if(!code) {
+            if(typeof Toastify !== 'undefined') Toastify({ text: "Enter a code", style: { background: "#EF4444" }, duration: 2000 }).showToast();
+            return;
+        }
+
+        // List mein dhoondo
+        const foundIndex = window.offerList.findIndex(o => o.code === code);
+
+        if (foundIndex !== -1) {
+            // Agar mil gaya, to wahi logic use karo jo upar banaya hai
+            window.applyOffer(foundIndex); 
+            
+            // Input clear karo
+            codeInput.value = "";
+        } else {
+            if(typeof Toastify !== 'undefined') Toastify({ text: "Invalid or Expired Code", style: { background: "#EF4444" }, duration: 2000 }).showToast();
+        }
+    };
+    
     // Rating logic specifically for Firestore
     window.submitRating = async (star) => {
+        // Highlight selected stars
+        const stars = document.querySelectorAll('.star-rating i');
+        stars.forEach((s, idx) => {
+            if(idx < star) {
+                s.classList.add('text-yellow-400');
+                s.classList.remove('text-gray-300');
+            }
+        });
+
         if(typeof Toastify !== 'undefined') {
             Toastify({ 
-                text: "Thanks for rating! ⭐", 
+                text: "Thanks for rating! â­", 
                 className: "toast-center", 
-                style: { background: "#10B981" },
-                duration: 2000
+                style: { background: "#10B981" }, 
+                duration: 1500
             }).showToast();
         }
 
         // Add to Database
         if(window.currentDocId) {
              try {
-                const orderRef = doc(dbFirestore, "orders", window.currentDocId);
+                const orderRef = doc(dbFirestore, "restaurants", RESTAURANT_ID, "orders", window.currentDocId);
                 await updateDoc(orderRef, { rating: star });
              } catch(e) { console.log("Rating save error", e); }
         }
 
-        // Animate stars away
-        document.getElementById('rating-widget').classList.add('translate-y-full');
+        // Close rating and reset app
+        setTimeout(() => {
+            document.getElementById('rating-widget').classList.add('hidden');
+            document.getElementById('rating-widget').classList.remove('flex');
+            
+            // Reset app after rating
+            setTimeout(() => {
+                window.resetApp();
+            }, 1000);
+        }, 1000);
+    }
+    
+    // Show rating widget
+    // --- FIX: Stars animation logic added ---
+    function showRatingWidget() {
+        const ratingWidget = document.getElementById('rating-widget');
+        if (ratingWidget) {
+            // 1. Modal open karo (z-index 110 already set hai HTML mein)
+            ratingWidget.classList.remove('hidden');
+            ratingWidget.classList.add('flex');
+
+            // 2. FIX: Stars ko visible banane ke liye animation trigger karo
+            const stars = document.querySelectorAll('.star-rating i');
+            
+            // Reset stars pehle (agar dobara open ho raha ho)
+            stars.forEach(star => {
+                star.classList.remove('visible', 'text-yellow-400');
+                star.classList.add('text-gray-300');
+            });
+
+            // Ek-ek karke stars ko pop-up karo
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    star.classList.add('visible');
+                }, index * 100); // 100ms ka delay har star ke beech
+            });
+        }
     }
 
     const timeout = (ms) => new Promise((_, r) => setTimeout(() => r(new Error("Timeout")), ms));
@@ -739,9 +1076,9 @@
                 createdAt: new Date()
             };
 
-            const rtdbPromise = push(ref(db, 'orders'), orderData);
+            const rtdbPromise = push(ref(db, `restaurants/${RESTAURANT_ID}/orders`), orderData);
             // We need to await addDoc to get the reference ID for updating rating later
-            const docRef = await addDoc(collection(dbFirestore, "orders"), orderData);
+            const docRef = await addDoc(collection(dbFirestore, "restaurants", RESTAURANT_ID, "orders"), orderData);
             window.currentDocId = docRef.id;
 
             await Promise.race([rtdbPromise, timeout(8000)]);
@@ -749,16 +1086,45 @@
             const savedHistory = JSON.parse(localStorage.getItem('wowRecentOrders') || '[]');
             savedHistory.unshift({
                 id: orderID,
+                docId: docRef.id, // Store Firestore doc ID for payment tracking
                 amount: grandTotal,
                 date: new Date().toLocaleDateString(),
                 time: new Date().toLocaleTimeString(),
-                items: [...window.wowCart]
+                items: [...window.wowCart],
+                orderType: window.orderType,
+                paymentStatus: 'pending' // Initially pending
             });
             if(savedHistory.length > 10) savedHistory.pop();
             localStorage.setItem('wowRecentOrders', JSON.stringify(savedHistory));
             if(window.loadRecentOrders) window.loadRecentOrders();
+            
+            // Listen for payment status update from admin
+            listenForPaymentUpdate(docRef.id, orderID);
 
             window.wowCart = [];
+            
+            // Step 4: Check karo agar koi offer selected tha aur wo Personal DB coupon tha
+            if (window.selectedOffer !== null && window.selectedOffer !== undefined) {
+                const usedOffer = window.offerList[window.selectedOffer];
+                
+                if (usedOffer && usedOffer.isPersonal && usedOffer.id) {
+                    // Firestore mein status update karo -> 'used'
+                    try {
+                        await updateDoc(doc(dbFirestore, "restaurants", RESTAURANT_ID, "coupons", usedOffer.id), {
+                            status: 'used',
+                            usedAt: firestoreTimestamp(),
+                            usedOnOrder: orderID
+                        });
+                        console.log("âœ… Coupon marked as USED in DB:", usedOffer.code);
+                    } catch (e) {
+                        console.error("Failed to mark coupon used", e);
+                    }
+                }
+            }
+
+            // Reset Selection
+            window.selectedOffer = null;
+            
             if(window.saveCartToStorage) window.saveCartToStorage();
             if(window.updateCartBar) window.updateCartBar();
             if(window.renderMenu && window.menuData) window.renderMenu(window.currentCategory === 'All' ? window.menuData : window.menuData.filter(i => i.category === window.currentCategory));
@@ -773,17 +1139,8 @@
             document.getElementById('success-screen').classList.remove('hidden');
             document.getElementById('success-screen').classList.add('flex');
             
-            // Trigger Rating Animation with staggered effect
-            setTimeout(() => {
-                document.getElementById('rating-widget').classList.remove('translate-y-full');
-                const stars = document.querySelectorAll('.star-rating i');
-                stars.forEach((star, index) => {
-                    star.classList.remove('visible'); // reset
-                    setTimeout(() => {
-                         star.classList.add('visible');
-                    }, index * 100); // 0.1s delay per star
-                });
-            }, 800);
+            // Rating widget will be triggered automatically after payment is collected
+            // via the listenForPaymentUpdate function
 
             if(window.closePaymentModal) window.closePaymentModal();
             if(window.closeCheckout) window.closeCheckout();
@@ -910,18 +1267,27 @@
         }
 
         document.getElementById('notif-dot').classList.remove('hidden');
-        container.innerHTML = history.map((order, idx) => `
+        container.innerHTML = history.map((order, idx) => {
+            const isPaid = order.paymentStatus === 'paid' || order.paymentStatus === 'collected';
+            const statusBadge = isPaid 
+                ? `<span class="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold"><i class="fas fa-check-circle"></i> Paid</span>`
+                : `<span class="text-[9px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded-full font-bold animate-pulse"><i class="fas fa-clock"></i> Pending</span>`;
+            
+            return `
             <div onclick="openBillDetail(${idx})" class="flex justify-between items-center p-3 bg-gray-50 rounded-xl cursor-pointer hover:bg-orange-50 transition-colors border border-gray-100">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs"><i class="fas fa-receipt"></i></div>
+                    <div class="w-8 h-8 rounded-full ${isPaid ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'} flex items-center justify-center font-bold text-xs">
+                        <i class="fas fa-receipt"></i>
+                    </div>
                     <div>
                         <div class="font-bold text-gray-800 text-sm">Order #${order.id.split('-')[1]}...</div>
                         <div class="text-[10px] text-gray-400">${order.date}, ${order.time}</div>
+                        ${statusBadge}
                     </div>
                 </div>
-                <div class="font-bold text-orange-600 text-sm">₹${order.amount}</div>
+                <div class="font-bold ${isPaid ? 'text-green-600' : 'text-orange-600'} text-sm">â‚¹${order.amount}</div>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     window.filterByExplore = (cat) => {
@@ -956,12 +1322,12 @@
             const typeColor = 'green'; 
             
             const bestsellerBadge = item.isBestseller 
-                ? `<span class="ml-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm">🔥 BESTSELLER</span>`
+                ? `<span class="ml-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow-sm">ðŸ”¥ BESTSELLER</span>`
                 : '';
 
             const hasCustomization = (item.sizes && item.sizes.length > 0) || (item.addons && item.addons.length > 0);
             const customBadge = hasCustomization 
-                ? `<span class="text-[9px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-1.5 py-0.5 rounded mt-1 inline-block">✨ Customizable</span>` 
+                ? `<span class="text-[9px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-1.5 py-0.5 rounded mt-1 inline-block">âœ¨ Customizable</span>` 
                 : '';
 
             let btnHtml = '';
@@ -986,11 +1352,11 @@
                     <div>
                         <div class="flex items-center gap-1 mb-1">
                             <div class="w-3 h-3 border border-${typeColor}-600 flex justify-center items-center rounded-[2px]"><div class="w-1.5 h-1.5 bg-${typeColor}-600 rounded-full"></div></div>
-                            <div class="bg-yellow-50 px-1 rounded text-[10px] font-bold text-yellow-700 flex items-center gap-0.5">⭐ ${item.rating}</div>
+                            <div class="bg-yellow-50 px-1 rounded text-[10px] font-bold text-yellow-700 flex items-center gap-0.5">â­ ${item.rating}</div>
                             ${bestsellerBadge}
                         </div>
                         <h3 class="font-bold text-gray-800 leading-tight text-[15px] mb-1">${item.name}</h3>
-                        <p class="font-bold text-gray-900 text-sm">₹${item.price}</p>
+                        <p class="font-bold text-gray-900 text-sm">â‚¹${item.price}</p>
                         ${customBadge}
                         <p class="text-xs text-gray-400 mt-1 line-clamp-1">${item.desc}</p>
                     </div>
@@ -1031,7 +1397,7 @@
                                data-name="${displaySize}" 
                                class="hidden custom-radio" ${isChecked} onchange="updateModalPrice()">
                         <label for="size-${index}" class="block border border-gray-200 rounded-xl p-3 text-center cursor-pointer transition-all font-bold text-sm text-gray-600">
-                            ${displaySize}<br><span class="text-[10px] font-normal">₹${sizeObj.price}</span>
+                            ${displaySize}<br><span class="text-[10px] font-normal">â‚¹${sizeObj.price}</span>
                         </label>
                     </div>
                 `;
@@ -1046,7 +1412,7 @@
                 <label class="flex items-center justify-between border border-gray-200 p-3 rounded-xl cursor-pointer">
                     <span class="text-sm font-bold text-gray-600">${addon.name}</span>
                     <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">+₹${addon.price}</span>
+                        <span class="text-xs text-gray-400">+â‚¹${addon.price}</span>
                         <input type="checkbox" data-name="${addon.name}" data-price="${addon.price}" class="w-5 h-5 accent-orange-500 addon-check" onchange="updateModalPrice()">
                     </div>
                 </label>
@@ -1086,7 +1452,7 @@
             price += parseInt(chk.dataset.price || 0);
         });
 
-        document.getElementById('custom-price-display').innerText = `₹${price}`;
+        document.getElementById('custom-price-display').innerText = `â‚¹${price}`;
     }
 
     window.confirmCustomization = () => {
@@ -1193,7 +1559,7 @@
                 <div class="flex-1">
                       <span class="text-gray-800 font-bold block">${i.name}</span>
                       <span class="text-[10px] text-blue-600 font-bold bg-blue-50 px-1 rounded block w-fit mb-1">[${i.variantDetails}]</span>
-                      <span class="text-xs text-gray-400">₹${i.price} x ${i.qty}</span>
+                      <span class="text-xs text-gray-400">â‚¹${i.price} x ${i.qty}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="editCartItem('${i.id}')" class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center hover:bg-blue-100"><i class="fas fa-pencil-alt text-xs"></i></button>
@@ -1212,11 +1578,11 @@
     window.setDonation = (amt, btn) => {
         window.donationAmt = amt;
         document.getElementById('love-btn-toggle').classList.remove('active');
-        document.getElementById('love-btn-toggle').innerHTML = `<i class="fas fa-heart animate-pulse"></i> Donate ₹10 & Spread Love`;
+        document.getElementById('love-btn-toggle').innerHTML = `<i class="fas fa-heart animate-pulse"></i> Donate â‚¹10 & Spread Love`;
         updateDonationUI();
         calculateTotals();
         
-        const originalText = `₹${amt}`;
+        const originalText = `â‚¹${amt}`;
         btn.innerText = "Thanks!";
         if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 50, origin: { y: 0.7 }, colors: ['#ec4899'] });
         setTimeout(() => { btn.innerText = originalText; }, 1500);
@@ -1227,7 +1593,7 @@
         if(btn.classList.contains('active')) {
             window.donationAmt = 0;
             btn.classList.remove('active');
-            btn.innerHTML = `<i class="fas fa-heart animate-pulse"></i> Donate ₹10 & Spread Love`;
+            btn.innerHTML = `<i class="fas fa-heart animate-pulse"></i> Donate â‚¹10 & Spread Love`;
         } else {
             window.donationAmt = 10;
             btn.classList.add('active');
@@ -1315,6 +1681,13 @@
         modal.classList.add('flex');
         panel.classList.remove('scale-95', 'opacity-0');
         panel.classList.add('scale-100', 'opacity-100');
+        
+        // Reset to payment options view
+        document.getElementById('payment-options-view').classList.remove('hidden');
+        document.getElementById('online-payment-view').classList.add('hidden');
+        
+        // Load customer site settings for QR
+        loadPaymentSettings();
     };
 
     window.closePaymentModal = () => {
@@ -1324,7 +1697,71 @@
          setTimeout(() => {
              document.getElementById('payment-modal').classList.add('hidden');
              document.getElementById('payment-modal').classList.remove('flex');
+             // Reset views
+             document.getElementById('payment-options-view').classList.remove('hidden');
+             document.getElementById('online-payment-view').classList.add('hidden');
          }, 200);
+    };
+    
+    // Show Online Payment View with QR
+    window.showOnlinePaymentView = () => {
+        document.getElementById('payment-options-view').classList.add('hidden');
+        document.getElementById('online-payment-view').classList.remove('hidden');
+        
+        // Set amount
+        const amount = document.getElementById('pay-modal-amt').innerText;
+        document.getElementById('qr-amount').innerText = amount;
+    };
+    
+    // Back to Payment Options
+    window.backToPaymentOptions = () => {
+        document.getElementById('online-payment-view').classList.add('hidden');
+        document.getElementById('payment-options-view').classList.remove('hidden');
+    };
+    
+    // Open UPI App with pre-filled amount (non-changeable via intent)
+    window.openUPIApp = (app) => {
+        const amount = document.getElementById('qr-amount').innerText;
+        const upiId = window.customerSiteSettings?.upiId || '';
+        const payeeName = window.customerSiteSettings?.paymentName || 'Business';
+        
+        if (!upiId) {
+            Toastify({ text: "UPI not configured!", className: "toast-center", style: { background: "#EF4444" } }).showToast();
+            return;
+        }
+        
+        // UPI Intent URL with fixed amount
+        const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=Order%20Payment`;
+        
+        // App-specific deep links
+        let deepLink = upiUrl;
+        switch(app) {
+            case 'gpay':
+                deepLink = `gpay://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=Order%20Payment`;
+                break;
+            case 'phonepe':
+                deepLink = `phonepe://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=Order%20Payment`;
+                break;
+            case 'paytm':
+                deepLink = `paytmmp://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=Order%20Payment`;
+                break;
+            case 'bhim':
+                deepLink = upiUrl; // BHIM uses standard UPI intent
+                break;
+        }
+        
+        // Try to open the app
+        window.location.href = deepLink;
+        
+        // Fallback to standard UPI intent after a short delay
+        setTimeout(() => {
+            window.location.href = upiUrl;
+        }, 2500);
+    };
+    
+    // Confirm Online Payment - Process order with Online method
+    window.confirmOnlinePayment = () => {
+        processOrder('Online');
     };
 
     window.resetApp = () => {
@@ -1350,15 +1787,29 @@
         document.getElementById('hist-id').innerText = order.id;
         document.getElementById('hist-total').innerText = order.amount;
         document.getElementById('hist-date').innerText = `${order.date} at ${order.time}`;
+        document.getElementById('hist-customer').innerText = window.wowUser?.name || 'Guest';
+        document.getElementById('hist-order-type').innerText = order.orderType || 'Dine-in';
+        
+        // Payment Status Badge
+        const isPaid = order.paymentStatus === 'paid' || order.paymentStatus === 'collected';
+        const badge = document.getElementById('hist-payment-badge');
+        if (isPaid) {
+            badge.className = 'mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold border border-green-200 inline-block';
+            badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Payment Collected';
+        } else {
+            badge.className = 'mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold border border-yellow-200 inline-block animate-pulse';
+            badge.innerHTML = '<i class="fas fa-clock mr-1"></i> Payment Pending';
+        }
         
         const container = document.getElementById('hist-items');
         container.innerHTML = order.items.map(i => `
-            <div class="flex justify-between text-sm">
-                <div>
+            <div class="flex justify-between items-start text-sm py-2 border-b border-gray-50 last:border-0">
+                <div class="flex-1">
                     <span class="text-gray-800 font-bold block">${i.name}</span>
-                    <span class="text-[10px] text-gray-500">[${i.variantDetails}]</span>
+                    <span class="text-[10px] text-blue-600 bg-blue-50 px-1 rounded">[${i.variantDetails}]</span>
+                    <span class="text-[10px] text-gray-400 block mt-1">â‚¹${i.price} Ã— ${i.qty}</span>
                 </div>
-                <span class="text-gray-500">x${i.qty}</span>
+                <span class="text-gray-800 font-bold">â‚¹${i.price * i.qty}</span>
             </div>
         `).join('');
 
@@ -1379,7 +1830,7 @@
             <p><strong>4. Rights:</strong> WowCafe reserves the right to admission.</p>
         `,
         'Contact': `
-            <p><i class="fas fa-phone mr-2 text-orange-500"></i> +91 98765 43210</p>
+            <p><i class="fas fa-phone mr-2 text-orange-500"></i> +91 86191 52422</p>
             <p><i class="fas fa-envelope mr-2 text-orange-500"></i> help@wowcafe.in</p>
             <p><i class="fas fa-map-marker-alt mr-2 text-orange-500"></i> Shop 12, Food Court, City Mall.</p>
         `,

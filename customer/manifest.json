@@ -1,6 +1,6 @@
-{
-  "name": "Wow Cafe",
-  "short_name": "Wow Cafe",
+﻿{
+  "name": "Orderly",
+  "short_name": "Orderly",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fff7ed",
