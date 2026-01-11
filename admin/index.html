@@ -70,6 +70,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Firebase compat scripts removed; using type="module" below -->
+    <link rel="manifest" href="manifest.json">
 
     <style>
         /* --- MODERN THEME VARIABLES --- */
@@ -5133,8 +5134,11 @@
                         });
                     }
 
-                    document.getElementById('live-orders-table').innerHTML = liveHtml;
-                    document.getElementById('no-live-orders').classList.toggle('hidden', activeCount > 0);
+                    const liveTable = document.getElementById('live-orders-table');
+                    if (liveTable) liveTable.innerHTML = liveHtml;
+
+                    const noLiveOrders = document.getElementById('no-live-orders');
+                    if (noLiveOrders) noLiveOrders.classList.toggle('hidden', activeCount > 0);
 
                     // Safe DOM updates with null checks
                     const statPending = document.getElementById('stat-pending');
@@ -5779,7 +5783,7 @@
                 return;
             }
 
-            btn.innerText = "Saving...";
+            if (btn) btn.innerText = "Saving...";
             console.log('aving menu item to:', `restaurants/${RESTAURANT_ID}/menu`);
 
             const sizes = [];
@@ -5815,7 +5819,8 @@
                 console.error('?ï¿½Å’ Failed to save menu item:', e);
                 window.showToast("Failed to save: " + e.message, "error");
             }
-            btn.innerText = "Save Item";
+            const btnFinal = document.getElementById('btn-save-item');
+            if (btnFinal) btnFinal.innerText = "Save Item";
         };
 
         window.populateMenuEdit = (id) => {
