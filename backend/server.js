@@ -66,7 +66,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Data sanitization against NoSQL injection
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 
 // Prevent parameter pollution
 app.use(hpp());
