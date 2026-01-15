@@ -16,14 +16,26 @@ exports.registerCustomer = async (req, res) => {
         let user = await User.findOne({ phone, role: 'customer' });
         console.log('Existing user lookup result:', user);
         if (user) {
-            // Return existing customer
-            return res.json({ user, message: 'Welcome back!' });
+            // Return existing customer with token
+            const token = jwt.sign(
+                { userId: user._id, role: user.role }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '365d' }
+            );
+            return res.json({ token, user, message: 'Welcome back!' });
         }
 
         user = new User({ name, phone, role: 'customer' });
         await user.save();
         console.log('New user created:', user);
-        res.status(201).json({ user, message: 'Welcome!' });
+        
+        const token = jwt.sign(
+            { userId: user._id, role: user.role }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '365d' }
+        );
+        
+        res.status(201).json({ token, user, message: 'Welcome!' });
     } catch (error) {
         console.error('registerCustomer error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });

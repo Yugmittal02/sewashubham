@@ -7,7 +7,7 @@ exports.createOrder = async (req, res) => {
         const { user, items, totalAmount, paymentMethod, orderType, customerNote } = req.body;
         
         const order = new Order({
-            user: user, // User ID from frontend
+            user: req.user ? req.user.userId : user, // Prioritize authenticated user from token
             items,
             totalAmount,
             paymentMethod: paymentMethod || 'Cash',
@@ -17,6 +17,19 @@ exports.createOrder = async (req, res) => {
         res.status(201).json(order);
     } catch (error) {
         res.status(500).json({ message: 'Error creating order', error: error.message });
+    }
+};
+
+// Track order status (Public - uses order ID as capability token)
+exports.trackOrder = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).select('status createdAt paymentMethod totalAmount');
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ message: 'Error tracking order' });
     }
 };
 

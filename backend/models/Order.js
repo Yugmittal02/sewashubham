@@ -22,6 +22,15 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: { type: String, enum: ['Cash', 'Online'], default: 'Cash' },
     paymentStatus: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
+    deliveryAddress: {
+        address: String,
+        landmark: String,
+        pincode: String,
+        coordinates: {
+            lat: Number,
+            lng: Number
+        }
+    },
     customerNote: String,
     createdAt: { type: Date, default: Date.now }
 });

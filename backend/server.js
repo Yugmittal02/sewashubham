@@ -13,6 +13,19 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ===================
+// CORS MIDDLEWARE (MUST BE FIRST)
+// ===================
+app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+}));
+
+// Handle preflight requests explicitly just in case
+// app.options('*', cors());
+
+// ===================
 // SECURITY MIDDLEWARE
 // ===================
 
@@ -40,26 +53,7 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/admin/login', authLimiter);
 
-// CORS configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-    ? process.env.ALLOWED_ORIGINS.split(',') 
-    : ['http://localhost:5173', 'http://localhost:3000'];
-
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, curl, etc.)
-        if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// CORS configuration moved to top
 
 // Body parser with limits
 app.use(express.json({ limit: '10mb' }));
@@ -101,6 +95,7 @@ app.use('/api/orders', require('./routes/orders'));
 app.use('/api/offers', require('./routes/offers'));
 app.use('/api/ratings', require('./routes/ratings'));
 app.use('/api/upload', require('./routes/upload'));
+app.use('/api/settings', require('./routes/settings'));
 
 // Health check endpoint
 app.get('/', (req, res) => {
