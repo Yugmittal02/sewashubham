@@ -6,9 +6,13 @@ const API = axios.create({
 
 // Interceptor to add admin token to requests
 API.interceptors.request.use((req) => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-        req.headers.Authorization = `Bearer ${token}`;
+    const adminToken = localStorage.getItem('adminToken');
+    const customerToken = localStorage.getItem('customerToken');
+    
+    if (adminToken) {
+        req.headers.Authorization = `Bearer ${adminToken}`;
+    } else if (customerToken) {
+        req.headers.Authorization = `Bearer ${customerToken}`;
     }
     return req;
 });
@@ -26,6 +30,7 @@ export const toggleProductAvailability = (id) => API.patch(`/products/${id}/togg
 
 // Orders
 export const createOrder = (data) => API.post('/orders', data);
+export const fetchOrderStatus = (id) => API.get(`/orders/track/${id}`);
 export const fetchMyOrders = () => API.get('/orders/my-orders');
 export const fetchAllOrders = () => API.get('/orders/all');
 export const updateOrderStatus = (id, status) => API.put(`/orders/${id}/status`, { status });
@@ -47,5 +52,15 @@ export const fetchAllRatings = () => API.get('/ratings/all');
 export const uploadImage = (formData) => API.post('/upload/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
 });
+
+// Settings
+// Settings
+export const getUPISettings = () => API.get('/settings/upi');
+export const getUPISettingsAdmin = () => API.get('/settings/upi/admin');
+export const updateUPISettings = (data) => API.put('/settings/upi', data);
+export const getStoreSettings = () => API.get('/settings/store');
+export const updateStoreSettings = (data) => API.put('/settings/store', data);
+export const verifySettingsPassword = (password, type) => API.post('/settings/verify-password', { password, type });
+export const changeSettingsPassword = (data) => API.put('/settings/change-password', data);
 
 export default API;

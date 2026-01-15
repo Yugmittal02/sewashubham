@@ -1,84 +1,191 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaHome, FaReceipt } from 'react-icons/fa';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaCheckCircle, FaHome, FaReceipt, FaPhoneAlt, FaSpinner, FaUtensils, FaBoxOpen, FaMotorcycle } from 'react-icons/fa';
+import { fetchOrderStatus, getStoreSettings } from '../services/api';
+import Footer from '../components/Footer';
 
 const OrderSuccess = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { state } = location;
+    
+    // Redirect if direct access without state (optional security/UX)
+    useEffect(() => {
+        if (!state?.orderId) {
+            navigate('/');
+        }
+    }, [state, navigate]);
+
     const [showContent, setShowContent] = useState(false);
+    const [adminPhone, setAdminPhone] = useState('9876543210');
+    const [orderStatus, setOrderStatus] = useState('Pending');
 
     useEffect(() => {
         // Trigger animation after mount
         setTimeout(() => setShowContent(true), 100);
-    }, []);
+        
+        // Fetch store settings for admin phone
+        const loadSettings = async () => {
+            try {
+                const { data } = await getStoreSettings();
+                if (data.adminPhone) {
+                    setAdminPhone(data.adminPhone);
+                }
+            } catch (error) {
+                console.error('Failed to load store settings:', error);
+            }
+        };
+        loadSettings();
+
+        // Poll for order status
+        if (state?.orderId) {
+            const pollStatus = async () => {
+                try {
+                    const { data } = await fetchOrderStatus(state.orderId);
+                    setOrderStatus(data.status);
+                } catch (error) {
+                    console.error('Failed to track order:', error);
+                }
+            };
+            
+            // Initial poll
+            pollStatus();
+            
+            // Poll every 5 seconds
+            const interval = setInterval(pollStatus, 5000);
+            return () => clearInterval(interval);
+        }
+    }, [state?.orderId]);
+
+    const steps = [
+        { status: 'Pending', label: 'Order Received', icon: FaReceipt },
+        { status: 'Preparing', label: 'Preparing', icon: FaUtensils },
+        { status: 'Ready', label: 'Ready', icon: FaBoxOpen },
+        { status: 'Delivered', label: 'Completed', icon: FaCheckCircle },
+    ];
+
+    const getCurrentStepIndex = () => {
+        if (orderStatus === 'Cancelled') return -1;
+        const idx = steps.findIndex(s => s.status === orderStatus);
+        return idx === -1 ? 0 : idx; // Default to 0 if unknown
+    };
+
+    const currentStepIndex = getCurrentStepIndex();
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-50 flex items-center justify-center p-6 relative overflow-hidden">
-            {/* Background celebration elements */}
+        <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-50 flex flex-col relative overflow-hidden">
+            {/* Background ... (same) */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Confetti-like elements */}
-                <div className="absolute top-10 left-10 w-4 h-4 bg-orange-400 rounded-full animate-float-1 opacity-60"></div>
-                <div className="absolute top-20 right-20 w-3 h-3 bg-green-400 rounded-full animate-float-2 opacity-60"></div>
-                <div className="absolute top-40 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-float-3 opacity-60"></div>
-                <div className="absolute bottom-40 right-1/3 w-4 h-4 bg-pink-400 rounded-full animate-float-1 opacity-60"></div>
-                <div className="absolute bottom-20 left-20 w-3 h-3 bg-blue-400 rounded-full animate-float-2 opacity-60"></div>
-                <div className="absolute top-1/3 right-10 w-2 h-2 bg-purple-400 rounded-full animate-float-3 opacity-60"></div>
-                
-                {/* Glowing orbs */}
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-green-300/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-300/20 rounded-full blur-3xl"></div>
+                {/* ... confetti ... */}
             </div>
 
-            {/* Main Content */}
-            <div className={`relative z-10 text-center max-w-sm transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                {/* Success Icon */}
-                <div className="relative mb-8">
-                    <div className="w-28 h-28 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-green-300/50 animate-pulse-slow">
-                        <FaCheckCircle className="text-5xl text-white" />
+            {/* Main Content - Centered */}
+            <div className="flex-1 flex items-center justify-center p-6 py-12">
+                <div className={`relative z-10 text-center max-w-sm w-full transition-all duration-700 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                    
+                    {/* Status Header */}
+                    <div className="mb-8">
+                        {orderStatus === 'Cancelled' ? (
+                            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-xl">
+                                <span className="text-3xl">❌</span>
+                            </div>
+                        ) : (
+                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-xl animate-pulse-slow">
+                                <span className="text-3xl">🎉</span>
+                            </div>
+                        )}
+                        <h1 className="text-2xl font-black text-gray-800 mb-1">
+                            {orderStatus === 'Cancelled' ? 'Order Cancelled' : 'Order Placed!'}
+                        </h1>
+                        <p className="text-gray-500 font-medium">
+                            {orderStatus === 'Cancelled' ? 'This order was cancelled.' : `Thank You, ${state?.customerName || 'Friend'}!`}
+                        </p>
                     </div>
-                    {/* Ring animation */}
-                    <div className="absolute inset-0 w-28 h-28 mx-auto rounded-full border-4 border-green-300/50 animate-ping-slow"></div>
-                </div>
 
-                {/* Text */}
-                <h1 className="text-3xl font-black text-gray-800 mb-3">
-                    Order Placed! 🎉
-                </h1>
-                <p className="text-gray-600 mb-2 font-medium">
-                    Your order has been successfully placed.
-                </p>
-                <p className="text-sm text-gray-500 mb-8">
-                    We're preparing your delicious food. It'll be ready soon!
-                </p>
+                    {/* Status Tracker */}
+                    {orderStatus !== 'Cancelled' && (
+                        <div className="bg-white rounded-3xl p-6 shadow-xl shadow-green-100/50 border border-white mb-6">
+                            <div className="flex justify-between relative">
+                                {/* Connector Line */}
+                                <div className="absolute top-1/3 left-0 right-0 h-1 bg-gray-100 -z-0 rounded-full mx-4">
+                                    <div 
+                                        className="h-full bg-green-500 rounded-full transition-all duration-1000"
+                                        style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
+                                    ></div>
+                                </div>
 
-                {/* Order Info Card */}
-                <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100 mb-6">
-                    <div className="flex items-center justify-center gap-3 text-green-600">
-                        <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                            <FaReceipt />
+                                {steps.map((step, idx) => {
+                                    const isCompleted = idx <= currentStepIndex;
+                                    const isCurrent = idx === currentStepIndex;
+                                    const Icon = step.icon;
+                                    
+                                    return (
+                                        <div key={idx} className="relative z-10 flex flex-col items-center gap-2">
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+                                                isCompleted 
+                                                    ? 'bg-green-500 border-green-500 text-white shadow-lg shadow-green-200' 
+                                                    : 'bg-white border-gray-200 text-gray-300'
+                                            }`}>
+                                                <Icon size={14} />
+                                            </div>
+                                            <span className={`text-[10px] font-bold transition-all duration-300 ${
+                                                isCurrent ? 'text-green-600 scale-110' : 'text-gray-400'
+                                            }`}>
+                                                {step.label}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            
+                                {/* Status Message */}
+                            <div className="mt-6 bg-green-50 rounded-xl p-3 text-green-800 text-sm font-bold flex items-center justify-center gap-2">
+                                {orderStatus === 'Pending' && <FaSpinner className="animate-spin" />}
+                                {orderStatus === 'Preparing' && <FaUtensils className="animate-bounce" />} 
+                                <span>
+                                    {orderStatus === 'Pending' && 'Waiting for confirmation...'}
+                                    {orderStatus === 'Preparing' && 'Chef is preparing your food!'}
+                                    {orderStatus === 'Ready' && 'Your order is ready!'}
+                                    {orderStatus === 'Delivered' && 'Order Completed!'}
+                                </span>
+                            </div>
                         </div>
-                        <div className="text-left">
-                            <p className="text-xs text-gray-500">Estimated Time</p>
-                            <p className="font-bold text-gray-800">15-20 minutes</p>
+                    )}
+
+                    {/* Order Details */}
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-white/50 mb-6 space-y-3">
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Order ID</span>
+                            <span className="font-bold text-gray-700 font-mono tracking-wider">{state?.orderId?.slice(-6).toUpperCase() || '---'}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Date</span>
+                            <span className="font-bold text-gray-700">
+                                {state?.orderDate ? new Date(state.orderDate).toLocaleString('en-IN', {
+                                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                                }) : '---'}
+                            </span>
                         </div>
                     </div>
-                </div>
 
-                {/* Buttons */}
-                <div className="space-y-3">
+                    {/* Admin Contact Button */}
+                    <a href={`tel:${adminPhone}`} className="block w-full bg-white border-2 border-orange-100 text-gray-700 font-bold py-4 rounded-2xl hover:bg-orange-50 hover:border-orange-200 transition-colors flex items-center justify-center gap-2 mb-4">
+                        <FaPhoneAlt className="text-orange-500" />
+                        <span>Call Store: {adminPhone}</span>
+                    </a>
+
+                    {/* Home Button */}
                     <button 
                         onClick={() => navigate('/menu')}
-                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-orange-200/50 hover:shadow-orange-300/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        className="text-gray-400 font-semibold text-sm hover:text-gray-600 transition-colors"
                     >
-                        <FaHome /> Back to Menu
+                        Return to Home
                     </button>
-                    <button 
-                        onClick={() => navigate('/')}
-                        className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 transition-all"
-                    >
-                        Go to Home
-                    </button>
+                    
                 </div>
             </div>
+
+            <Footer />
 
             {/* Custom CSS */}
             <style>{`

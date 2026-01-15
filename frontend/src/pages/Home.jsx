@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchProducts, fetchOffers } from '../services/api';
 import ProductCard from '../components/ProductCard';
-import CustomerEntry from '../components/CustomerEntry';
+import Footer from '../components/Footer';
 import { FaSearch, FaShoppingBag, FaTimes } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -12,7 +12,6 @@ const Home = () => {
     const [offers, setOffers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [category, setCategory] = useState('All');
-    const [showEntry, setShowEntry] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const { customer, isCustomer } = useAuth();
@@ -20,29 +19,24 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isCustomer) {
-            setShowEntry(true);
-        }
-        loadData();
-    }, [isCustomer]);
+        loadOffers();
+        // loadProducts will be triggered by the category useEffect initially as well
+        // since category defaults to 'All'
+    }, []);
 
     useEffect(() => {
         loadProducts();
     }, [category]);
 
-    const loadData = async () => {
+    const loadOffers = async () => {
         try {
-            const [productsRes, offersRes] = await Promise.all([
-                fetchProducts(),
-                fetchOffers()
-            ]);
-            setProducts(productsRes.data);
+            const offersRes = await fetchOffers();
             setOffers(offersRes.data);
         } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
+            console.error("Error loading offers:", error);
         }
+        // distinct loading state for offers could be added if needed, 
+        // but main loading usually refers to products
     };
 
     const loadProducts = async () => {
@@ -75,8 +69,6 @@ const Home = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-amber-50 pb-36">
-            {/* Customer Entry Modal */}
-            {showEntry && <CustomerEntry onClose={() => setShowEntry(false)} />}
             
             {/* Compact Mobile Header */}
             <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-orange-100/50 shadow-sm safe-area-top">
@@ -84,7 +76,7 @@ const Home = () => {
                     <div className="flex justify-between items-center">
                         <div className="flex-1">
                             <h1 className="text-xl font-black text-gray-800 tracking-tight">
-                                Sewa<span className="text-orange-600">Shubham</span>
+                                Shubham<span className="text-orange-600">Pattis</span>
                             </h1>
                             <p className="text-[11px] font-medium text-gray-500 -mt-0.5">
                                 Hi, <span className="text-orange-600 font-semibold">{customer?.name || 'Guest'}</span> 👋
@@ -96,6 +88,14 @@ const Home = () => {
                         >
                             {showSearch ? <FaTimes size={18} /> : <FaSearch size={18} />}
                         </button>
+                        {customer && (
+                            <button 
+                                onClick={() => navigate('/dashboard')}
+                                className="w-12 h-12 ml-2 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center text-orange-600 active:scale-95 transition-transform shadow-sm"
+                            >
+                                <span className="text-xl">👤</span>
+                            </button>
+                        )}
                     </div>
                     
                     {/* Expandable Search */}
@@ -215,13 +215,13 @@ const Home = () => {
                         </span>
                     </h3>
                 </div>
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {loading ? (
-                        <div className="flex justify-center py-20">
+                        <div className="col-span-full flex justify-center py-20">
                             <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin"></div>
                         </div>
                     ) : filteredProducts.length === 0 ? (
-                        <div className="text-center py-20">
+                        <div className="col-span-full text-center py-20">
                             <p className="text-6xl mb-4">🍽️</p>
                             <p className="text-gray-400 font-medium text-lg">No items found</p>
                             <p className="text-gray-300 text-sm mt-1">Try a different category</p>
@@ -272,9 +272,10 @@ const Home = () => {
                     60% { transform: translateY(-10px); }
                     100% { transform: translateY(0); opacity: 1; }
                 }
-                .animate-fade-in { animation: fade-in 0.2s ease-out; }
                 .animate-bounce-in { animation: bounce-in 0.4s ease-out; }
             `}</style>
+            
+            <Footer />
         </div>
     );
 };

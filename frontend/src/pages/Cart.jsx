@@ -3,18 +3,29 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { createOrder, validateCoupon, registerCustomer } from '../services/api';
-import { FaTrash, FaArrowLeft, FaMinus, FaPlus, FaTag, FaMoneyBillWave, FaMobileAlt, FaCheckCircle } from 'react-icons/fa';
+import { FaTrash, FaArrowLeft, FaMinus, FaPlus, FaTag, FaMoneyBillWave, FaMobileAlt, FaCheckCircle, FaMapMarkerAlt } from 'react-icons/fa';
+import UPIPaymentModal from '../components/UPIPaymentModal';
+import CustomerEntry from '../components/CustomerEntry';
+import LocationPicker from '../components/LocationPicker';
+import Footer from '../components/Footer';
 
 const Cart = () => {
     const { cart, total, updateQuantity, removeFromCart, clearCart } = useCart();
-    const { customer } = useAuth();
+    const { customer, logoutCustomer } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [couponApplied, setCouponApplied] = useState(null);
     const [orderType, setOrderType] = useState('Dine-in');
+    
+    // Debugging
+    // console.log('Cart Render - Customer:', customer);
     const [paymentMethod, setPaymentMethod] = useState('Cash');
+    const [showUPIModal, setShowUPIModal] = useState(false);
+    const [showCustomerEntry, setShowCustomerEntry] = useState(false);
+    const [showLocationPicker, setShowLocationPicker] = useState(false);
+    const [deliveryAddress, setDeliveryAddress] = useState(null);
 
     const TAX_RATE = 0.05;
     const PLATFORM_FEE = 0.98;
@@ -40,8 +51,31 @@ const Cart = () => {
         if (cart.length === 0) return;
         
         if (!customer || !customer.name || !customer.phone) {
-            alert('Please enter your details first.');
-            navigate('/');
+            setShowCustomerEntry(true);
+            return;
+        }
+
+        // Check for delivery address if order type is Delivery
+        if (orderType === 'Delivery' && !deliveryAddress) {
+            setShowLocationPicker(true);
+            return;
+        }
+
+        // If UPI is selected, show the UPI modal instead of direct checkout
+        if (paymentMethod === 'UPI') {
+            setShowUPIModal(true);
+            return;
+        }
+        
+        await processOrder();
+    };
+
+    // Process the order (called after payment method selection)
+    const processOrder = async () => {
+        // Validate customer data before processing
+        if (!customer || !customer.name || !customer.phone) {
+            // Show customer entry modal instead of redirecting
+            setShowCustomerEntry(true);
             return;
         }
         
@@ -63,18 +97,52 @@ const Cart = () => {
                 })),
                 totalAmount: grandTotal,
                 paymentMethod,
-                orderType
+                orderType,
+                deliveryAddress: orderType === 'Delivery' ? deliveryAddress : undefined
             };
             
-            await createOrder(orderData);
+            
+            const response = await createOrder(orderData);
             clearCart();
-            navigate('/order-success');
+            navigate('/order-success', { 
+                state: { 
+                    customerName: customer.name,
+                    orderDate: new Date().toISOString(),
+                    orderId: response.data._id
+                } 
+            });
         } catch (error) {
             console.error(error);
-            alert('Failed to place order. Please try again.');
+            const msg = error.response?.data?.message;
+            const validationErrors = error.response?.data?.errors;
+            
+            let displayMsg = 'Failed to place order. Please try again.';
+            if (msg) {
+                displayMsg = msg;
+                if (validationErrors && Array.isArray(validationErrors)) {
+                    displayMsg += `:\n• ${validationErrors.join('\n• ')}`;
+                }
+            } else if (error.message) {
+                displayMsg = error.message;
+            }
+            
+            // If validation failed (400), clear stored customer data so they can re-enter correct details
+            if (error.response?.status === 400) {
+                logoutCustomer();
+            }
+            
+            alert(displayMsg);
         } finally {
             setLoading(false);
         }
+    };
+
+    // Handle UPI payment initiation
+    const handleUPIPaymentInitiated = (paymentInfo) => {
+        console.log('UPI Payment initiated:', paymentInfo);
+        // After user initiates UPI payment, process the order
+        // The actual payment confirmation would come from the UPI app
+        processOrder();
     };
 
     const paymentMethods = [
@@ -85,17 +153,33 @@ const Cart = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-orange-50/30 pb-48">
             {/* Header */}
-            <header className="bg-white/95 backdrop-blur-xl px-4 py-4 shadow-sm border-b border-gray-100 flex items-center gap-4 sticky top-0 z-10 safe-area-top">
-                <button 
-                    onClick={() => navigate(-1)} 
-                    className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-600 active:scale-95 active:bg-gray-200 transition-all"
-                >
-                    <FaArrowLeft size={18} />
-                </button>
-                <div>
-                    <h1 className="text-xl font-black text-gray-800">Your Cart</h1>
-                    <p className="text-sm text-gray-500">{cart.length} item{cart.length !== 1 ? 's' : ''}</p>
+            <header className="bg-white/95 backdrop-blur-xl px-4 py-4 shadow-sm border-b border-gray-100 flex justify-between items-center sticky top-0 z-10 safe-area-top">
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => navigate(-1)} 
+                        className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-600 active:scale-95 active:bg-gray-200 transition-all"
+                    >
+                        <FaArrowLeft size={18} />
+                    </button>
+                    <div>
+                        <h1 className="text-xl font-black text-gray-800">Your Cart</h1>
+                        <p className="text-sm text-gray-500">{cart.length} item{cart.length !== 1 ? 's' : ''}</p>
+                    </div>
                 </div>
+                {customer && (
+                    <div className="flex flex-col items-end">
+                        <div className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-0.5">Ordering as</div>
+                        <div className="flex items-center gap-2 bg-orange-50 pl-3 pr-1 py-1 rounded-lg border border-orange-100">
+                            <span className="text-xs font-bold text-orange-800 max-w-[80px] truncate">{customer.name}</span>
+                            <button 
+                                onClick={logoutCustomer}
+                                className="w-5 h-5 flex items-center justify-center bg-white rounded-md text-orange-500 shadow-sm"
+                            >
+                                <span className="text-[10px] font-bold">✕</span>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </header>
 
             {/* Order Type Toggle - Large Touch */}
@@ -295,11 +379,58 @@ const Cart = () => {
                 </div>
             )}
 
+            {/* UPI Payment Modal */}
+            <UPIPaymentModal
+                isOpen={showUPIModal}
+                onClose={() => setShowUPIModal(false)}
+                amount={grandTotal}
+                orderDetails={{ orderId: `ORD-${Date.now()}` }}
+                onPaymentInitiated={handleUPIPaymentInitiated}
+            />
+
+            {/* Customer Entry Modal */}
+            {showCustomerEntry && (
+                <div className="relative z-[100]">
+                    <CustomerEntry onClose={() => setShowCustomerEntry(false)} />
+                </div>
+            )}
+
+            {/* Location Picker Modal */}
+            {showLocationPicker && (
+                <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-end justify-center sm:items-center p-0 sm:p-4">
+                    <div className="bg-white w-full h-[90vh] sm:h-auto sm:max-w-md sm:rounded-3xl rounded-t-3xl overflow-hidden shadow-2xl animate-slide-up flex flex-col">
+                        <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white z-10">
+                            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                <FaMapMarkerAlt className="text-orange-500" />
+                                Delivery Location
+                            </h3>
+                            <button onClick={() => setShowLocationPicker(false)} className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 font-bold">
+                                &times;
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto">
+                            <LocationPicker 
+                                onLocationSelect={(addressData) => {
+                                    setDeliveryAddress(addressData);
+                                    setShowLocationPicker(false);
+                                    // Continue checkout after small delay
+                                    setTimeout(() => handleCheckout(), 100);
+                                }} 
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Custom CSS */}
             <style>{`
                 .safe-area-top { padding-top: env(safe-area-inset-top); }
                 .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+                @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+                .animate-slide-up { animation: slide-up 0.3s ease-out; }
             `}</style>
+            
+            <Footer />
         </div>
     );
 };

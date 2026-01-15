@@ -10,6 +10,7 @@ import Cart from './pages/Cart';
 import OrderSuccess from './pages/OrderSuccess';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 // Protected Route for Admin
 const AdminRoute = ({ children }) => {
@@ -29,6 +30,7 @@ const App = () => {
                         <Route path="/menu" element={<Home />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/order-success" element={<OrderSuccess />} />
+                        <Route path="/dashboard" element={<UserDashboard />} />
                         
                         {/* Admin Routes */}
                         <Route path="/admin/login" element={<AdminLogin />} />

@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
     fetchAllOrders, updateOrderStatus, 
     fetchProducts, createProduct, updateProduct, deleteProduct, toggleProductAvailability,
     fetchAllOffersAdmin, createOffer, deleteOffer,
-    fetchAllRatings
+    fetchAllRatings,
+    getUPISettingsAdmin, updateUPISettings,
+    getStoreSettings, updateStoreSettings
 } from '../services/api';
 import { 
     FaPlus, FaSignOutAlt, FaClipboardList, FaUtensils, FaGift, FaStar, 
     FaTrash, FaToggleOn, FaToggleOff, FaEdit, FaRupeeSign,
-    FaClock, FaCheckCircle, FaSpinner, FaTruck, FaHome
+    FaClock, FaCheckCircle, FaSpinner, FaTruck, FaCog, FaLock, FaEye, FaEyeSlash,
+    FaMapMarkerAlt, FaExternalLinkAlt
 } from 'react-icons/fa';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('orders');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = searchParams.get('tab') || 'orders';
+    
+    const setActiveTab = (tab) => {
+        setSearchParams({ tab });
+    };
+
+    // const [activeTab, setActiveTab] = useState('orders'); // Replaced by URL state
     const [orders, setOrders] = useState([]);
     const [products, setProducts] = useState([]);
     const [offers, setOffers] = useState([]);
@@ -22,6 +32,16 @@ const AdminDashboard = () => {
     const [showProductForm, setShowProductForm] = useState(false);
     const [showOfferForm, setShowOfferForm] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [upiSettings, setUpiSettings] = useState({ upiId: '', merchantName: '', isConfigured: false });
+    const [settingsPassword, setSettingsPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [settingsLoading, setSettingsLoading] = useState(false);
+    const [settingsMsg, setSettingsMsg] = useState({ type: '', text: '' });
+    
+    // Store Settings State
+    const [storeSettings, setStoreSettings] = useState({ adminPhone: '' });
+    const [storeLoading, setStoreLoading] = useState(false);
+    const [storeMsg, setStoreMsg] = useState({ type: '', text: '' });
     
     const { admin, logoutAdmin, isAdmin } = useAuth();
     const navigate = useNavigate();
@@ -45,6 +65,8 @@ const AdminDashboard = () => {
         loadProducts();
         loadOffers();
         loadRatings();
+        loadUPISettings();
+        loadStoreSettings();
     };
 
     const loadOrders = async () => {
@@ -73,6 +95,64 @@ const AdminDashboard = () => {
             const { data } = await fetchAllRatings();
             setRatings(data);
         } catch (err) { console.error(err); }
+    };
+
+    const loadUPISettings = async () => {
+        try {
+            const { data } = await getUPISettingsAdmin();
+            setUpiSettings(data);
+        } catch (err) { console.error(err); }
+    };
+
+    const loadStoreSettings = async () => {
+        try {
+            const { data } = await getStoreSettings();
+            setStoreSettings({ adminPhone: data.adminPhone || '' });
+        } catch (err) { console.error(err); }
+    };
+
+    const handleUpdateUPISettings = async (e) => {
+        e.preventDefault();
+        setSettingsLoading(true);
+        setSettingsMsg({ type: '', text: '' });
+        try {
+            await updateUPISettings({
+                upiId: upiSettings.upiId,
+                merchantName: upiSettings.merchantName,
+                password: settingsPassword
+            });
+            setSettingsMsg({ type: 'success', text: 'UPI settings updated successfully!' });
+            setSettingsPassword('');
+            loadUPISettings();
+        } catch (err) {
+            setSettingsMsg({ type: 'error', text: err.response?.data?.message || 'Failed to update settings' });
+        } finally {
+            setSettingsLoading(false);
+        }
+    };
+
+    const handleUpdateStoreSettings = async (e) => {
+        e.preventDefault();
+        setStoreLoading(true);
+        setStoreMsg({ type: '', text: '' });
+
+        try {
+            await updateStoreSettings({
+                ...storeSettings,
+                password: settingsPassword
+            });
+            setStoreMsg({ type: 'success', text: 'Store settings updated successfully!' });
+            // Clear password after success
+            setSettingsPassword('');
+            setTimeout(() => setStoreMsg({ type: '', text: '' }), 3000);
+        } catch (error) {
+            setStoreMsg({ 
+                type: 'error', 
+                text: error.response?.data?.message || 'Failed to update settings' 
+            });
+        } finally {
+            setStoreLoading(false);
+        }
     };
 
     const handleStatusChange = async (id, status) => {
@@ -113,7 +193,8 @@ const AdminDashboard = () => {
         { id: 'orders', icon: FaClipboardList, label: 'Orders', count: pendingOrders },
         { id: 'menu', icon: FaUtensils, label: 'Menu' },
         { id: 'offers', icon: FaGift, label: 'Offers' },
-        { id: 'ratings', icon: FaStar, label: 'Reviews' }
+        { id: 'ratings', icon: FaStar, label: 'Reviews' },
+        { id: 'settings', icon: FaCog, label: 'Settings' }
     ];
 
     const statusConfig = {
@@ -194,6 +275,25 @@ const AdminDashboard = () => {
                                             <p className="font-bold text-gray-800">#{order._id.slice(-6).toUpperCase()}</p>
                                             <p className="text-xs text-gray-500">{order.user?.name} • {order.user?.phone}</p>
                                             <p className="text-xs text-gray-400 mt-0.5">{order.orderType} • {order.paymentMethod}</p>
+                                            
+                                            {order.deliveryAddress && (
+                                                <div className="mt-2 p-2 bg-gray-50 rounded-lg text-xs">
+                                                    <p className="font-bold text-gray-700 flex items-center gap-1">
+                                                        <FaMapMarkerAlt size={10} /> Delivery:
+                                                    </p>
+                                                    <p className="text-gray-600 mt-1">{order.deliveryAddress.manualAddress || order.deliveryAddress.address || 'Address not captured'}</p>
+                                                    {order.deliveryAddress.coordinates && (
+                                                        <a 
+                                                            href={`https://www.google.com/maps?q=${order.deliveryAddress.coordinates.lat},${order.deliveryAddress.coordinates.lng}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-600 font-bold mt-1.5 inline-flex items-center gap-1 active:text-blue-800"
+                                                        >
+                                                            View on Map <FaExternalLinkAlt size={8} />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                         <span className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${config.bg} ${config.text}`}>
                                             <config.icon size={10} />
@@ -350,6 +450,177 @@ const AdminDashboard = () => {
                                     <p>No reviews yet</p>
                                 </div>
                             )}
+                        </div>
+                    </div>
+                )}
+
+                {/* Settings Tab */}
+                {activeTab === 'settings' && (
+                    <div>
+                        <h2 className="text-lg font-bold text-gray-800 mb-4">Settings</h2>
+                        
+                        {/* UPI Configuration */}
+                        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                                <span className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <FaRupeeSign className="text-purple-600" />
+                                </span>
+                                UPI Payment Configuration
+                            </h3>
+                            
+                            {/* Current Status */}
+                            <div className={`p-3 rounded-xl mb-4 ${upiSettings.isConfigured ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
+                                <div className="flex items-center gap-2">
+                                    <span className={`w-2 h-2 rounded-full ${upiSettings.isConfigured ? 'bg-green-500' : 'bg-yellow-500'}`}></span>
+                                    <span className={`text-sm font-medium ${upiSettings.isConfigured ? 'text-green-700' : 'text-yellow-700'}`}>
+                                        {upiSettings.isConfigured ? 'UPI is configured' : 'UPI not configured'}
+                                    </span>
+                                </div>
+                                {upiSettings.maskedUpiId && (
+                                    <p className="text-xs text-gray-500 mt-1">Current ID: {upiSettings.maskedUpiId}</p>
+                                )}
+                            </div>
+
+                            {/* Settings Form */}
+                            <form onSubmit={handleUpdateUPISettings} className="space-y-4">
+                                <div>
+                                    <label className="text-sm font-bold text-gray-700 mb-1 block">UPI ID</label>
+                                    <input 
+                                        type="text" 
+                                        value={upiSettings.upiId}
+                                        onChange={(e) => setUpiSettings({...upiSettings, upiId: e.target.value})}
+                                        placeholder="yourname@ybl or yourname@paytm"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base"
+                                    />
+                                    <p className="text-xs text-gray-400 mt-1">Format: name@bankhandle (e.g., store@ybl)</p>
+                                </div>
+
+                                <div>
+                                    <label className="text-sm font-bold text-gray-700 mb-1 block">Merchant Name</label>
+                                    <input 
+                                        type="text" 
+                                        value={upiSettings.merchantName}
+                                        onChange={(e) => setUpiSettings({...upiSettings, merchantName: e.target.value})}
+                                        placeholder="Store Name"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="text-sm font-bold text-gray-700 mb-1 block flex items-center gap-2">
+                                        <FaLock size={12} />
+                                        Settings Password
+                                    </label>
+                                    <div className="relative">
+                                        <input 
+                                            type={showPassword ? 'text' : 'password'}
+                                            value={settingsPassword}
+                                            onChange={(e) => setSettingsPassword(e.target.value)}
+                                            placeholder="Enter password to save changes"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base pr-12"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 p-2"
+                                        >
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">Default password: admin123</p>
+                                </div>
+
+                                {/* Status Messages */}
+                                {settingsMsg.text && (
+                                    <div className={`p-3 rounded-xl text-sm font-medium ${settingsMsg.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                        {settingsMsg.text}
+                                    </div>
+                                )}
+
+                                <button 
+                                    type="submit"
+                                    disabled={settingsLoading || !settingsPassword}
+                                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-bold shadow-lg shadow-purple-200 disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {settingsLoading ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaLock size={14} />
+                                            Save UPI Settings
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* Store Configuration */}
+                        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mt-6">
+                            <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                                <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <FaMobileAlt className="text-blue-600" />
+                                </span>
+                                Store Contact Configuration
+                            </h3>
+                            
+                            <form onSubmit={handleUpdateStoreSettings} className="space-y-4">
+                                <div>
+                                    <label className="text-sm font-bold text-gray-700 mb-1 block">Admin Contact Number</label>
+                                    <input 
+                                        type="tel" 
+                                        value={storeSettings.adminPhone}
+                                        onChange={(e) => setStoreSettings({...storeSettings, adminPhone: e.target.value})}
+                                        placeholder="9876543210"
+                                        maxLength="10"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base"
+                                    />
+                                    <p className="text-xs text-gray-400 mt-1">This number will be shown to customers after placing an order.</p>
+                                </div>
+
+                                <div>
+                                    <label className="text-sm font-bold text-gray-700 mb-1 block flex items-center gap-2">
+                                        <FaLock size={12} />
+                                        Settings Password
+                                    </label>
+                                    <input 
+                                        type="password"
+                                        value={settingsPassword}
+                                        onChange={(e) => setSettingsPassword(e.target.value)}
+                                        placeholder="Enter password to save changes"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Status Messages */}
+                                {storeMsg.text && (
+                                    <div className={`p-3 rounded-xl text-sm font-medium ${storeMsg.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                        {storeMsg.text}
+                                    </div>
+                                )}
+
+                                <button 
+                                    type="submit"
+                                    disabled={storeLoading || !settingsPassword}
+                                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-200 disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {storeLoading ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaLock size={14} />
+                                            Save Store Settings
+                                        </>
+                                    )}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 )}

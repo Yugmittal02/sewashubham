@@ -8,21 +8,33 @@ const CustomerEntry = ({ onClose }) => {
     const [error, setError] = useState('');
     const { enterAsCustomer } = useAuth();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         if (!name.trim() || !phone.trim()) {
             setError('Please fill in all fields');
             return;
         }
+
+        // Validate Name (letters only)
+        if (!/^[a-zA-Z\s]+$/.test(name.trim())) {
+            setError('Name should only contain letters');
+            return;
+        }
         
-        if (phone.length < 10) {
-            setError('Please enter a valid 10-digit phone number');
+        // Validate Phone (Indian format)
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+            setError('Please enter a valid valid 10-digit mobile number (starting with 6-9)');
             return;
         }
 
-        enterAsCustomer(name.trim(), phone.trim());
-        onClose();
+        const result = await enterAsCustomer(name.trim(), phone.trim());
+        
+        if (result.success) {
+            onClose();
+        } else {
+            setError(result.message || 'Login failed. Please try again.');
+        }
     };
 
     return (

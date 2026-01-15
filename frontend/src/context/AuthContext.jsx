@@ -11,8 +11,14 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // Check for customer in sessionStorage
         const storedCustomer = sessionStorage.getItem('customer');
-        if (storedCustomer) {
+        const customerToken = localStorage.getItem('customerToken');
+        
+        if (storedCustomer && customerToken) {
             setCustomer(JSON.parse(storedCustomer));
+        } else {
+            // Invalid state: Clear potential leftovers
+            sessionStorage.removeItem('customer');
+            localStorage.removeItem('customerToken');
         }
 
         // Check for admin in localStorage
@@ -25,12 +31,26 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    // Customer entry (session-based, no login)
-    const enterAsCustomer = (name, phone) => {
-        const customerData = { name, phone };
-        sessionStorage.setItem('customer', JSON.stringify(customerData));
-        setCustomer(customerData);
-        return { success: true };
+    // Customer entry (API-based with token)
+    const enterAsCustomer = async (name, phone) => {
+        try {
+            const { data } = await API.post('/auth/customer', { name, phone });
+            
+            // Store token and user data
+            localStorage.setItem('customerToken', data.token);
+            sessionStorage.setItem('customer', JSON.stringify(data.user));
+            
+            // Clear potential admin session to avoid conflicts
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('admin');
+            setAdmin(null);
+
+            setCustomer(data.user);
+            return { success: true };
+        } catch (error) {
+            console.error('Customer login failed:', error);
+            return { success: false, message: error.response?.data?.message || 'Login failed' };
+        }
     };
 
     // Admin login (JWT-based)
@@ -59,6 +79,7 @@ export const AuthProvider = ({ children }) => {
 
     const logoutCustomer = () => {
         sessionStorage.removeItem('customer');
+        localStorage.removeItem('customerToken');
         setCustomer(null);
     };
 
