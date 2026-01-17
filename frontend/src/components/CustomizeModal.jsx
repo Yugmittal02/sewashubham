@@ -30,7 +30,7 @@ const CustomizeModal = ({ product, onClose }) => {
             price: calculatePrice() / quantity,
             quantity
         });
-        onClose();
+        onClose(true); // Pass true to indicate item was added
     };
 
     return (

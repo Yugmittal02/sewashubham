@@ -7,10 +7,14 @@ import { CartProvider } from './context/CartContext';
 import Welcome from './pages/Welcome';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
+import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
+import TermsConditions from './pages/TermsConditions';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import ContactUs from './pages/ContactUs';
 
 // Protected Route for Admin
 const AdminRoute = ({ children }) => {
@@ -29,8 +33,14 @@ const App = () => {
                         <Route path="/" element={<Welcome />} />
                         <Route path="/menu" element={<Home />} />
                         <Route path="/cart" element={<Cart />} />
+                        <Route path="/payment" element={<Payment />} />
                         <Route path="/order-success" element={<OrderSuccess />} />
                         <Route path="/dashboard" element={<UserDashboard />} />
+                        
+                        {/* Static Pages */}
+                        <Route path="/terms" element={<TermsConditions />} />
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/contact" element={<ContactUs />} />
                         
                         {/* Admin Routes */}
                         <Route path="/admin/login" element={<AdminLogin />} />

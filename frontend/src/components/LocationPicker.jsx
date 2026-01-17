@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
-import { FaLocationArrow, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
+import { FaLocationArrow, FaMapMarkerAlt, FaMicrophone, FaStop, FaBuilding, FaRoad } from 'react-icons/fa';
 import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -41,7 +41,7 @@ const DraggableMarker = ({ position, setPosition, onAddressFound }) => {
         // Reverse geocoding when position changes
         const timer = setTimeout(async () => {
             try {
-                const { data } = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}`);
+                const { data } = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}&addressdetails=1`);
                 onAddressFound(data);
             } catch (err) {
                 console.error('Geocoding error:', err);
@@ -72,9 +72,102 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
         display_name: '',
         details: {}
     });
-    const [manualAddress, setManualAddress] = useState('');
+    const [detailedAddress, setDetailedAddress] = useState('');
+    const [landmark, setLandmark] = useState('');
     const [loading, setLoading] = useState(false);
     const [gpsLoading, setGpsLoading] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [voiceField, setVoiceField] = useState(null); // 'address' or 'landmark'
+    const recognitionRef = useRef(null);
+
+    // Initialize Web Speech API
+    useEffect(() => {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognitionRef.current = new SpeechRecognition();
+            recognitionRef.current.continuous = false;
+            recognitionRef.current.interimResults = false;
+            recognitionRef.current.lang = 'en-IN'; // Hindi-English mix support
+            
+            recognitionRef.current.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                if (voiceField === 'address') {
+                    setDetailedAddress(prev => prev ? `${prev} ${transcript}` : transcript);
+                } else if (voiceField === 'landmark') {
+                    setLandmark(prev => prev ? `${prev} ${transcript}` : transcript);
+                }
+                setIsListening(false);
+                setVoiceField(null);
+            };
+
+            recognitionRef.current.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                setIsListening(false);
+                setVoiceField(null);
+            };
+
+            recognitionRef.current.onend = () => {
+                setIsListening(false);
+                setVoiceField(null);
+            };
+        }
+    }, [voiceField]);
+
+    // Start voice input
+    const startVoiceInput = (field) => {
+        if (!recognitionRef.current) {
+            alert('Voice input is not supported in your browser. Please use Chrome or Edge.');
+            return;
+        }
+        setVoiceField(field);
+        setIsListening(true);
+        recognitionRef.current.start();
+    };
+
+    // Stop voice input
+    const stopVoiceInput = () => {
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+        }
+        setIsListening(false);
+        setVoiceField(null);
+    };
+
+    // Parse address components from geocoding response
+    const parseAddressComponents = (data) => {
+        const addr = data.address || {};
+        const parts = [];
+        
+        // Building/house number
+        if (addr.house_number) parts.push(addr.house_number);
+        if (addr.building) parts.push(addr.building);
+        if (addr.amenity) parts.push(addr.amenity);
+        
+        // Road/street
+        if (addr.road) parts.push(addr.road);
+        if (addr.street) parts.push(addr.street);
+        
+        // Neighbourhood/suburb
+        if (addr.neighbourhood) parts.push(addr.neighbourhood);
+        if (addr.suburb) parts.push(addr.suburb);
+        
+        return parts.join(', ');
+    };
+
+    // Parse landmark from geocoding response
+    const parseLandmark = (data) => {
+        const addr = data.address || {};
+        const landmarks = [];
+        
+        if (addr.amenity) landmarks.push(`Near ${addr.amenity}`);
+        if (addr.shop) landmarks.push(`Near ${addr.shop}`);
+        if (addr.tourism) landmarks.push(`Near ${addr.tourism}`);
+        if (addr.leisure) landmarks.push(`Near ${addr.leisure}`);
+        if (addr.locality && !landmarks.length) landmarks.push(addr.locality);
+        if (addr.neighbourhood && !landmarks.length) landmarks.push(addr.neighbourhood);
+        
+        return landmarks[0] || '';
+    };
 
     // Get current location
     const handleGetCurrentLocation = () => {
@@ -104,8 +197,10 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
         onLocationSelect({
             coordinates: position,
             address: address.display_name,
-            manualAddress: manualAddress,
-            details: address.address // Pincode, city, etc.
+            manualAddress: detailedAddress,
+            landmark: landmark,
+            pincode: address.address?.postcode || '',
+            details: address.address
         });
     };
 
@@ -127,9 +222,15 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
                                 display_name: data.display_name,
                                 address: data.address
                             });
-                            // Auto-fill manual address if empty
-                            if (!manualAddress) {
-                                setManualAddress(data.display_name?.split(',')[0] || '');
+                            // Auto-fill detailed address
+                            const parsedAddress = parseAddressComponents(data);
+                            if (parsedAddress && !detailedAddress) {
+                                setDetailedAddress(parsedAddress);
+                            }
+                            // Auto-fill landmark
+                            const parsedLandmark = parseLandmark(data);
+                            if (parsedLandmark && !landmark) {
+                                setLandmark(parsedLandmark);
                             }
                         }}
                     />
@@ -161,14 +262,65 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
                     </p>
                 </div>
 
+                {/* Detailed Address Input with Voice */}
                 <div>
-                    <label className="text-sm font-bold text-gray-700 block mb-1">Detailed Address / Landmark</label>
-                    <textarea 
-                        value={manualAddress}
-                        onChange={(e) => setManualAddress(e.target.value)}
-                        placeholder="House No, Floor, Landmark (e.g. Near City Park)"
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base h-24 resize-none"
-                    ></textarea>
+                    <label className="text-sm font-bold text-gray-700 block mb-1 flex items-center gap-2">
+                        <FaBuilding className="text-gray-400" />
+                        Detailed Address
+                    </label>
+                    <div className="relative">
+                        <textarea 
+                            value={detailedAddress}
+                            onChange={(e) => setDetailedAddress(e.target.value)}
+                            placeholder="House No, Floor, Building Name, Street..."
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 pr-12 text-base h-20 resize-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all"
+                        ></textarea>
+                        <button
+                            onClick={() => isListening && voiceField === 'address' ? stopVoiceInput() : startVoiceInput('address')}
+                            className={`absolute right-3 top-3 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                                isListening && voiceField === 'address'
+                                    ? 'bg-red-500 text-white animate-pulse'
+                                    : 'bg-orange-100 text-orange-600 hover:bg-orange-200'
+                            }`}
+                            title="Speak your address"
+                        >
+                            {isListening && voiceField === 'address' ? <FaStop size={16} /> : <FaMicrophone size={16} />}
+                        </button>
+                    </div>
+                    {isListening && voiceField === 'address' && (
+                        <p className="text-xs text-orange-600 mt-1 animate-pulse">🎤 Listening... Speak now</p>
+                    )}
+                </div>
+
+                {/* Landmark Input with Voice */}
+                <div>
+                    <label className="text-sm font-bold text-gray-700 block mb-1 flex items-center gap-2">
+                        <FaRoad className="text-gray-400" />
+                        Landmark
+                    </label>
+                    <div className="relative">
+                        <input 
+                            type="text"
+                            value={landmark}
+                            onChange={(e) => setLandmark(e.target.value)}
+                            placeholder="Near City Park, Opposite Mall..."
+                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 pr-12 text-base focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all"
+                        />
+                        <button
+                            onClick={() => isListening && voiceField === 'landmark' ? stopVoiceInput() : startVoiceInput('landmark')}
+                            className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                                isListening && voiceField === 'landmark'
+                                    ? 'bg-red-500 text-white animate-pulse'
+                                    : 'bg-orange-100 text-orange-600 hover:bg-orange-200'
+                            }`}
+                            title="Speak landmark"
+                        >
+                            {isListening && voiceField === 'landmark' ? <FaStop size={16} /> : <FaMicrophone size={16} />}
+                        </button>
+                    </div>
+                    {isListening && voiceField === 'landmark' && (
+                        <p className="text-xs text-orange-600 mt-1 animate-pulse">🎤 Listening... Speak now</p>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -194,8 +346,8 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
 
                 <button
                     onClick={handleConfirm}
-                    disabled={!manualAddress}
-                    className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold shadow-lg shadow-orange-200 disabled:opacity-50 disabled:shadow-none"
+                    disabled={!detailedAddress}
+                    className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold shadow-lg shadow-orange-200 disabled:opacity-50 disabled:shadow-none active:scale-[0.98] transition-transform"
                 >
                     Confirm & Save Address
                 </button>
@@ -205,3 +357,4 @@ const LocationPicker = ({ onLocationSelect, defaultLocation = { lat: 28.6139, ln
 };
 
 export default LocationPicker;
+

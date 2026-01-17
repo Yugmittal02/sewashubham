@@ -126,3 +126,184 @@ button {
   transform: scale(0.9);
   transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* =========================================
+   MOBILE RESPONSIVE UTILITIES
+   ========================================= */
+
+/* Prevent horizontal overflow globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Container with proper padding for all screen sizes */
+.container-responsive {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Minimum touch target size (44px as per Apple HIG) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Responsive text that doesn't break layout */
+.text-responsive {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Responsive grid for cards */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile-friendly table alternative (stacked cards) */
+.table-mobile {
+  display: block;
+}
+
+.table-mobile thead {
+  display: none;
+}
+
+.table-mobile tbody, 
+.table-mobile tr {
+  display: block;
+}
+
+.table-mobile td {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.table-mobile td::before {
+  content: attr(data-label);
+  font-weight: 600;
+  color: #6b7280;
+}
+
+@media (min-width: 768px) {
+  .table-mobile {
+    display: table;
+  }
+  
+  .table-mobile thead {
+    display: table-header-group;
+  }
+  
+  .table-mobile tbody {
+    display: table-row-group;
+  }
+  
+  .table-mobile tr {
+    display: table-row;
+  }
+  
+  .table-mobile td {
+    display: table-cell;
+    padding: 0.75rem;
+  }
+  
+  .table-mobile td::before {
+    display: none;
+  }
+}
+
+/* Responsive modal that works on all screens */
+.modal-responsive {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .modal-responsive {
+    max-width: 500px;
+  }
+}
+
+/* Form inputs with proper sizing */
+input, select, textarea {
+  font-size: 16px; /* Prevents iOS zoom on focus */
+}
+
+/* Responsive spacing utilities */
+.space-responsive {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .space-responsive {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .space-responsive {
+    padding: 2rem;
+  }
+}
+
+/* Bottom nav safe area */
+.bottom-nav-safe {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+/* Scrollable horizontal container */
+.scroll-x-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0.75rem;
+  padding: 0.25rem;
+}
+
+.scroll-x-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-x-container > * {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}

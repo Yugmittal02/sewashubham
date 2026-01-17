@@ -1,11 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { fetchProducts, fetchOffers } from '../services/api';
 import ProductCard from '../components/ProductCard';
+import SideCart from '../components/SideCart';
 import Footer from '../components/Footer';
 import { FaSearch, FaShoppingBag, FaTimes } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+
+// Skeleton loader component for performance
+const ProductSkeleton = () => (
+    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+        <div className="p-4 flex gap-4">
+            <div className="w-28 h-28 bg-gray-200 rounded-2xl flex-shrink-0"></div>
+            <div className="flex-1 py-1">
+                <div className="h-5 bg-gray-200 rounded-lg w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-100 rounded w-full mb-1"></div>
+                <div className="h-3 bg-gray-100 rounded w-2/3 mb-3"></div>
+                <div className="flex gap-1">
+                    <div className="h-6 bg-orange-100 rounded-lg w-12"></div>
+                    <div className="h-6 bg-orange-100 rounded-lg w-14"></div>
+                </div>
+                <div className="h-8 bg-gray-100 rounded-lg w-20 mt-3"></div>
+            </div>
+        </div>
+        <div className="h-14 bg-orange-50 border-t border-orange-100"></div>
+    </div>
+);
 
 const Home = () => {
     const [products, setProducts] = useState([]);
@@ -14,14 +35,25 @@ const Home = () => {
     const [category, setCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [showSearch, setShowSearch] = useState(false);
-    const { customer, isCustomer } = useAuth();
+    const [showSideCart, setShowSideCart] = useState(false);
+    const { customer } = useAuth();
     const { cart, total, getItemCount } = useCart();
     const navigate = useNavigate();
 
+    // Cache products in sessionStorage for faster reload
     useEffect(() => {
+        const cachedProducts = sessionStorage.getItem('cachedProducts');
+        const cacheTime = sessionStorage.getItem('productsCacheTime');
+        const now = Date.now();
+        
+        // Use cache if less than 2 minutes old
+        if (cachedProducts && cacheTime && (now - parseInt(cacheTime)) < 120000) {
+            setProducts(JSON.parse(cachedProducts));
+            setLoading(false);
+        }
+        
         loadOffers();
-        // loadProducts will be triggered by the category useEffect initially as well
-        // since category defaults to 'All'
+        loadProducts();
     }, []);
 
     useEffect(() => {
@@ -35,8 +67,6 @@ const Home = () => {
         } catch (error) {
             console.error("Error loading offers:", error);
         }
-        // distinct loading state for offers could be added if needed, 
-        // but main loading usually refers to products
     };
 
     const loadProducts = async () => {
@@ -44,6 +74,9 @@ const Home = () => {
         try {
             const { data } = await fetchProducts(category === 'All' ? '' : category);
             setProducts(data);
+            // Cache products
+            sessionStorage.setItem('cachedProducts', JSON.stringify(data));
+            sessionStorage.setItem('productsCacheTime', Date.now().toString());
         } catch (error) {
             console.error(error);
         } finally {
@@ -51,10 +84,18 @@ const Home = () => {
         }
     };
 
-    const filteredProducts = products.filter(p => 
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Memoized filtered products for performance
+    const filteredProducts = useMemo(() => {
+        return products.filter(p => 
+            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.description?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [products, searchQuery]);
+
+    // Callback for when item is added to cart
+    const handleItemAdded = useCallback(() => {
+        setShowSideCart(true);
+    }, []);
 
     const categories = [
         { name: 'All', icon: '🍽️' },
@@ -137,31 +178,24 @@ const Home = () => {
                             >
                                 {/* Celebration Decorations */}
                                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                    {/* Confetti dots */}
                                     <div className="absolute top-3 right-8 w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></div>
                                     <div className="absolute top-6 right-4 w-1.5 h-1.5 bg-white rounded-full opacity-80"></div>
                                     <div className="absolute top-4 right-16 w-1 h-1 bg-pink-200 rounded-full"></div>
                                     <div className="absolute bottom-8 left-6 w-2 h-2 bg-yellow-200 rounded-full opacity-70"></div>
                                     <div className="absolute bottom-12 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-60"></div>
-                                    
-                                    {/* Sparkle stars */}
                                     <span className="absolute top-2 right-3 text-lg opacity-80">✨</span>
                                     <span className="absolute bottom-4 left-3 text-sm opacity-60">⭐</span>
-                                    
-                                    {/* Decorative circles */}
                                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
                                     <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full"></div>
                                 </div>
                                 
                                 {/* Content */}
                                 <div className="relative z-10">
-                                    {/* Party emoji */}
                                     <div className="flex items-center gap-2 mb-2">
                                         <span className="text-2xl">🎊</span>
                                         <p className="text-xs font-bold uppercase tracking-wider opacity-90">{offer.title}</p>
                                     </div>
                                     
-                                    {/* Big Discount */}
                                     <p className="text-5xl font-black drop-shadow-lg">
                                         {offer.discountType === 'percentage' ? `${offer.discountValue}%` : `₹${offer.discountValue}`}
                                         <span className="text-2xl ml-1">OFF</span>
@@ -169,7 +203,6 @@ const Home = () => {
                                     
                                     <p className="text-sm mt-2 opacity-90 line-clamp-2">{offer.description}</p>
                                     
-                                    {/* Coupon Code - Prominent Pill */}
                                     <div className="mt-4 bg-white rounded-2xl px-4 py-3 inline-flex items-center gap-3 shadow-lg">
                                         <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg uppercase">
                                             Code
@@ -217,9 +250,12 @@ const Home = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {loading ? (
-                        <div className="col-span-full flex justify-center py-20">
-                            <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin"></div>
-                        </div>
+                        // Skeleton loading for better perceived performance
+                        <>
+                            <ProductSkeleton />
+                            <ProductSkeleton />
+                            <ProductSkeleton />
+                        </>
                     ) : filteredProducts.length === 0 ? (
                         <div className="col-span-full text-center py-20">
                             <p className="text-6xl mb-4">🍽️</p>
@@ -227,16 +263,22 @@ const Home = () => {
                             <p className="text-gray-300 text-sm mt-1">Try a different category</p>
                         </div>
                     ) : (
-                        filteredProducts.map(p => <ProductCard key={p._id} product={p} />)
+                        filteredProducts.map(p => (
+                            <ProductCard 
+                                key={p._id} 
+                                product={p} 
+                                onAddSuccess={handleItemAdded}
+                            />
+                        ))
                     )}
                 </div>
             </div>
 
-            {/* Floating Cart Button - Large & Prominent */}
+            {/* Floating Cart Button - Opens Side Cart */}
             {cart.length > 0 && (
                 <div 
-                    onClick={() => navigate('/cart')} 
-                    className="fixed bottom-6 left-4 right-4 z-50 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-white p-4 rounded-3xl shadow-2xl shadow-orange-500/40 flex justify-between items-center active:scale-[0.98] transition-transform animate-bounce-in"
+                    onClick={() => setShowSideCart(true)} 
+                    className="fixed bottom-6 left-4 right-4 z-50 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-white p-4 rounded-3xl shadow-2xl shadow-orange-500/40 flex justify-between items-center active:scale-[0.98] transition-transform animate-bounce-in cursor-pointer"
                 >
                     <div className="flex items-center gap-4">
                         <div className="relative">
@@ -258,6 +300,12 @@ const Home = () => {
                 </div>
             )}
 
+            {/* Side Cart Panel */}
+            <SideCart 
+                isOpen={showSideCart} 
+                onClose={() => setShowSideCart(false)} 
+            />
+
             {/* Custom CSS */}
             <style>{`
                 .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -273,6 +321,7 @@ const Home = () => {
                     100% { transform: translateY(0); opacity: 1; }
                 }
                 .animate-bounce-in { animation: bounce-in 0.4s ease-out; }
+                .animate-fade-in { animation: fade-in 0.2s ease-out; }
             `}</style>
             
             <Footer />
