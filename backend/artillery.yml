@@ -1,0 +1,68 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Sustained load"
+    - duration: 60
+      arrivalRate: 20
+      name: "Peak load"
+  processor: "./load-tests/processor.js"
+  
+scenarios:
+  - name: "Browse Products"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$[0]._id"
+              as: "productId"
+      - get:
+          url: "/api/products/{{ productId }}"
+      
+  - name: "Check Offers"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/offers/active"
+          
+  - name: "View Ratings"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/ratings"
+          
+  - name: "Place Order"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth/customer"
+          json:
+            name: "Test Customer"
+            phone: "{{ $randomNumber() }}"
+          capture:
+            - json: "$.user._id"
+              as: "userId"
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$[0]._id"
+              as: "productId"
+            - json: "$[0].name"
+              as: "productName"
+            - json: "$[0].basePrice"
+              as: "price"
+      - post:
+          url: "/api/orders"
+          json:
+            user: "{{ userId }}"
+            items:
+              - name: "{{ productName }}"
+                quantity: 1
+                price: "{{ price }}"
+            totalAmount: "{{ price }}"
+            paymentMethod: "Cash"

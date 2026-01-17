@@ -1,0 +1,43 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 90
+      arrivalRate: 3
+      name: "Admin operations test - 30 concurrent users"
+
+scenarios:
+  - name: "Admin Dashboard Operations"
+    flow:
+      # Admin login
+      - post:
+          url: "/api/auth/admin/login"
+          json:
+            email: "admin@sewashubham.com"
+            password: "admin123"
+          capture:
+            - json: "$.token"
+              as: "adminToken"
+      
+      - think: 2
+      
+      # Get all orders
+      - get:
+          url: "/api/orders"
+          headers:
+            Authorization: "Bearer {{ adminToken }}"
+      
+      - think: 1
+      
+      # Get all products
+      - get:
+          url: "/api/products"
+          headers:
+            Authorization: "Bearer {{ adminToken }}"
+      
+      - think: 2
+      
+      # Get all offers
+      - get:
+          url: "/api/offers"
+          headers:
+            Authorization: "Bearer {{ adminToken }}"

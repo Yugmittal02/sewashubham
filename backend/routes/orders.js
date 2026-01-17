@@ -12,5 +12,7 @@ router.get('/track/:id', validateObjectId('id'), orderController.trackOrder);
 router.get('/my-orders', verifyToken, orderController.getUserOrders);
 router.get('/all', verifyToken, isAdmin, orderController.getAllOrders);
 router.put('/:id/status', verifyToken, isAdmin, ...validateObjectId('id'), orderController.updateOrderStatus);
+router.put('/:id/accept', verifyToken, isAdmin, ...validateObjectId('id'), orderController.acceptOrder);
 
 module.exports = router;
+

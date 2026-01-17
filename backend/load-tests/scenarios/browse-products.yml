@@ -1,0 +1,16 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 2
+      name: "Light load - 10 concurrent users"
+
+scenarios:
+  - name: "Browse Products"
+    flow:
+      - get:
+          url: "/api/products"
+      - think: 3
+      - get:
+          url: "/api/products?category=Cakes"
+      - think: 2

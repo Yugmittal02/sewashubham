@@ -4,14 +4,24 @@ const User = require('../models/User');
 // Create order (for customers - can be guest or logged in)
 exports.createOrder = async (req, res) => {
     try {
-        const { user, items, totalAmount, paymentMethod, orderType, customerNote } = req.body;
+        const { 
+            user, items, totalAmount, paymentMethod, orderType, customerNote,
+            deliveryAddress, donationAmount, appliedOffer, deliveryFee, platformFee, taxAmount
+        } = req.body;
         
         const order = new Order({
-            user: req.user ? req.user.userId : user, // Prioritize authenticated user from token
+            user: req.user ? req.user.userId : user,
             items,
             totalAmount,
             paymentMethod: paymentMethod || 'Cash',
-            customerNote: orderType ? `${orderType}. ${customerNote || ''}` : customerNote
+            orderType: orderType || 'Dine-in',
+            customerNote,
+            deliveryAddress,
+            donationAmount: donationAmount || 0,
+            appliedOffer,
+            deliveryFee: deliveryFee || 0,
+            platformFee: platformFee || 0,
+            taxAmount: taxAmount || 0
         });
         await order.save();
         res.status(201).json(order);
@@ -23,7 +33,9 @@ exports.createOrder = async (req, res) => {
 // Track order status (Public - uses order ID as capability token)
 exports.trackOrder = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id).select('status createdAt paymentMethod totalAmount');
+        const order = await Order.findById(req.params.id)
+            .select('status isAccepted acceptedAt createdAt paymentMethod paymentStatus totalAmount items orderType deliveryAddress donationAmount appliedOffer deliveryFee platformFee taxAmount')
+            .populate('items.product', 'name image');
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
@@ -65,5 +77,28 @@ exports.updateOrderStatus = async (req, res) => {
         res.json(order);
     } catch (error) {
         res.status(500).json({ message: 'Error updating order status' });
+    }
+};
+
+// Admin: Accept order
+exports.acceptOrder = async (req, res) => {
+    try {
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            { 
+                isAccepted: true, 
+                acceptedAt: new Date(),
+                status: 'Preparing' // Auto-move to Preparing when accepted
+            },
+            { new: true }
+        ).populate('user', 'name phone');
+        
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ message: 'Error accepting order', error: error.message });
     }
 };

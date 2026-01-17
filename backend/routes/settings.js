@@ -231,4 +231,147 @@ router.put('/change-password', async (req, res) => {
     }
 });
 
+// GET /api/settings/fees - Get fee configuration (public)
+router.get('/fees', async (req, res) => {
+    try {
+        const settings = await getOrCreateSettings('fee_config');
+        res.json({
+            platformFee: settings.platformFee || 0.98,
+            taxRate: settings.taxRate || 5,
+            deliveryFeeBase: settings.deliveryFeeBase || 30,
+            deliveryFeePerKm: settings.deliveryFeePerKm || 5,
+            freeDeliveryThreshold: settings.freeDeliveryThreshold || 500,
+            deliveryRadiusKm: settings.deliveryRadiusKm || 10,
+            storeLocation: settings.storeLocation || { lat: 28.6139, lng: 77.2090 },
+            updatedAt: settings.updatedAt
+        });
+    } catch (error) {
+        console.error('Error fetching fee settings:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// PUT /api/settings/fees - Update fee configuration (requires password)
+router.put('/fees', async (req, res) => {
+    try {
+        const { 
+            platformFee, 
+            taxRate, 
+            deliveryFeeBase, 
+            deliveryFeePerKm, 
+            freeDeliveryThreshold,
+            deliveryRadiusKm,
+            storeLocation,
+            password 
+        } = req.body;
+        
+        if (!password) {
+            return res.status(400).json({ message: 'Settings password is required' });
+        }
+
+        const settings = await getOrCreateSettings('fee_config');
+        
+        // Verify password
+        const isMatch = await bcrypt.compare(password, settings.settingsPassword);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Incorrect settings password' });
+        }
+
+        // Update settings
+        if (platformFee !== undefined) settings.platformFee = platformFee;
+        if (taxRate !== undefined) settings.taxRate = taxRate;
+        if (deliveryFeeBase !== undefined) settings.deliveryFeeBase = deliveryFeeBase;
+        if (deliveryFeePerKm !== undefined) settings.deliveryFeePerKm = deliveryFeePerKm;
+        if (freeDeliveryThreshold !== undefined) settings.freeDeliveryThreshold = freeDeliveryThreshold;
+        if (deliveryRadiusKm !== undefined) settings.deliveryRadiusKm = deliveryRadiusKm;
+        if (storeLocation) settings.storeLocation = storeLocation;
+        settings.updatedAt = new Date();
+        settings.updatedBy = 'admin';
+
+        await settings.save();
+
+        res.json({
+            message: 'Fee settings updated successfully',
+            platformFee: settings.platformFee,
+            taxRate: settings.taxRate,
+            deliveryFeeBase: settings.deliveryFeeBase,
+            deliveryFeePerKm: settings.deliveryFeePerKm,
+            freeDeliveryThreshold: settings.freeDeliveryThreshold,
+            deliveryRadiusKm: settings.deliveryRadiusKm,
+            storeLocation: settings.storeLocation
+        });
+    } catch (error) {
+        console.error('Error updating fee settings:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// POST /api/settings/calculate-delivery - Calculate delivery fee based on coordinates
+router.post('/calculate-delivery', async (req, res) => {
+    try {
+        const { customerLat, customerLng, orderTotal } = req.body;
+        
+        if (!customerLat || !customerLng) {
+            return res.status(400).json({ message: 'Customer coordinates are required' });
+        }
+
+        const settings = await getOrCreateSettings('fee_config');
+        const storeLocation = settings.storeLocation || { lat: 28.6139, lng: 77.2090 };
+        
+        // Calculate distance using Haversine formula
+        const toRad = (deg) => deg * (Math.PI / 180);
+        const R = 6371; // Earth's radius in km
+        
+        const dLat = toRad(customerLat - storeLocation.lat);
+        const dLon = toRad(customerLng - storeLocation.lng);
+        const lat1 = toRad(storeLocation.lat);
+        const lat2 = toRad(customerLat);
+        
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c;
+        
+        // Check if within delivery radius
+        const deliveryRadiusKm = settings.deliveryRadiusKm || 10;
+        if (distance > deliveryRadiusKm) {
+            return res.status(400).json({ 
+                message: `Sorry, we only deliver within ${deliveryRadiusKm}km. Your location is ${distance.toFixed(1)}km away.`,
+                distance: distance.toFixed(2),
+                deliverable: false
+            });
+        }
+        
+        // Calculate delivery fee
+        const deliveryFeeBase = settings.deliveryFeeBase || 30;
+        const deliveryFeePerKm = settings.deliveryFeePerKm || 5;
+        const freeDeliveryThreshold = settings.freeDeliveryThreshold || 500;
+        
+        let deliveryFee = 0;
+        let freeDelivery = false;
+        
+        if (orderTotal >= freeDeliveryThreshold) {
+            freeDelivery = true;
+            deliveryFee = 0;
+        } else {
+            deliveryFee = deliveryFeeBase + (distance * deliveryFeePerKm);
+            deliveryFee = Math.round(deliveryFee * 100) / 100; // Round to 2 decimal places
+        }
+        
+        res.json({
+            distance: distance.toFixed(2),
+            deliveryFee,
+            freeDelivery,
+            freeDeliveryThreshold,
+            deliverable: true,
+            message: freeDelivery 
+                ? 'Free delivery!' 
+                : `Delivery fee: ₹${deliveryFee.toFixed(0)}`
+        });
+    } catch (error) {
+        console.error('Error calculating delivery fee:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;

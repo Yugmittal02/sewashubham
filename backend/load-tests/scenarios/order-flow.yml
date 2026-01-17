@@ -1,0 +1,50 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 120
+      arrivalRate: 5
+      name: "Order flow test - 50 concurrent users"
+
+scenarios:
+  - name: "Complete Order Flow"
+    flow:
+      # Register customer
+      - post:
+          url: "/api/auth/customer"
+          json:
+            name: "Load Test User"
+            phone: "{{ $randomNumber() }}"
+          capture:
+            - json: "$.token"
+              as: "authToken"
+            - json: "$.user._id"
+              as: "userId"
+      
+      - think: 2
+      
+      # Browse products
+      - get:
+          url: "/api/products"
+          capture:
+            - json: "$[0]._id"
+              as: "productId"
+            - json: "$[0].name"
+              as: "productName"
+            - json: "$[0].basePrice"
+              as: "basePrice"
+      
+      - think: 3
+      
+      # Create order
+      - post:
+          url: "/api/orders"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            user: "{{ userId }}"
+            items:
+              - name: "{{ productName }}"
+                quantity: 2
+                price: "{{ basePrice }}"
+            totalAmount: "{{ basePrice * 2 }}"
+            paymentMethod: "Cash"
