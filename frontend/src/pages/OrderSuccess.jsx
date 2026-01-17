@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaCheckCircle,
@@ -11,8 +11,10 @@ import {
   FaGift,
   FaHeart,
   FaTruck,
+  FaStar,
+  FaTimes,
 } from "react-icons/fa";
-import { fetchOrderStatus, getStoreSettings } from "../services/api";
+import { fetchOrderStatus, getStoreSettings, cancelOrder, submitRating } from "../services/api";
 import Footer from "../components/Footer";
 
 const OrderSuccess = () => {
@@ -32,6 +34,19 @@ const OrderSuccess = () => {
   const [orderData, setOrderData] = useState(null);
   const [orderStatus, setOrderStatus] = useState("Pending");
   const [isAccepted, setIsAccepted] = useState(false);
+  
+  // Cancellation countdown state
+  const [cancelCountdown, setCancelCountdown] = useState(30);
+  const [canCancel, setCanCancel] = useState(true);
+  const [isCancelling, setIsCancelling] = useState(false);
+  
+  // Rating state
+  const [showRating, setShowRating] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [ratingComment, setRatingComment] = useState("");
+  const [ratingSubmitted, setRatingSubmitted] = useState(false);
+  const [ratingLoading, setRatingLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setShowContent(true), 100);
@@ -57,6 +72,16 @@ const OrderSuccess = () => {
           setOrderData(data);
           setOrderStatus(data.status);
           setIsAccepted(data.isAccepted || false);
+          
+          // Disable cancel if order is accepted or status changed
+          if (data.isAccepted || data.status !== "Pending") {
+            setCanCancel(false);
+          }
+          
+          // Show rating option when order is delivered
+          if (data.status === "Delivered" && !ratingSubmitted) {
+            setShowRating(true);
+          }
         } catch (error) {
           console.error("Failed to track order:", error);
         }
@@ -66,7 +91,67 @@ const OrderSuccess = () => {
       const interval = setInterval(pollStatus, 5000);
       return () => clearInterval(interval);
     }
-  }, [state?.orderId]);
+  }, [state?.orderId, ratingSubmitted]);
+
+  // Cancellation countdown timer
+  useEffect(() => {
+    if (!canCancel || isAccepted || orderStatus !== "Pending") {
+      return;
+    }
+
+    if (cancelCountdown <= 0) {
+      setCanCancel(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCancelCountdown(prev => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [cancelCountdown, canCancel, isAccepted, orderStatus]);
+
+  // Handle order cancellation
+  const handleCancelOrder = async () => {
+    if (!canCancel || isCancelling) return;
+    
+    setIsCancelling(true);
+    try {
+      await cancelOrder(state.orderId);
+      setOrderStatus("Cancelled");
+      setCanCancel(false);
+    } catch (error) {
+      console.error("Failed to cancel order:", error);
+      alert(error.response?.data?.message || "Failed to cancel order");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  // Handle rating submission
+  const handleSubmitRating = async () => {
+    if (rating === 0 || ratingLoading) return;
+    
+    setRatingLoading(true);
+    try {
+      await submitRating({
+        order: state.orderId,
+        customer: {
+          name: state.customerName || "Customer",
+          phone: "N/A"
+        },
+        rating,
+        comment: ratingComment
+      });
+      setRatingSubmitted(true);
+      setShowRating(false);
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
+      alert("Failed to submit rating. Please try again.");
+    } finally {
+      setRatingLoading(false);
+    }
+  };
 
   const steps = [
     { status: "Pending", label: "Order Received", icon: FaReceipt },
@@ -230,6 +315,63 @@ const OrderSuccess = () => {
                   {orderStatus === "Delivered" && "Order Completed! Enjoy!"}
                 </span>
               </div>
+
+              {/* Cancellation Countdown */}
+              {canCancel && orderStatus === "Pending" && !isAccepted && (
+                <div className="mt-4 bg-red-50 rounded-xl p-4 border border-red-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <FaTimes className="text-red-500" />
+                      <span className="text-sm font-bold text-red-700">Cancel Order?</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-full border-4 border-red-200 flex items-center justify-center relative">
+                        <span className="text-sm font-black text-red-600">{cancelCountdown}</span>
+                        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 36 36">
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="16"
+                            fill="none"
+                            stroke="#fecaca"
+                            strokeWidth="3"
+                          />
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="16"
+                            fill="none"
+                            stroke="#ef4444"
+                            strokeWidth="3"
+                            strokeDasharray={`${(cancelCountdown / 30) * 100} 100`}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleCancelOrder}
+                    disabled={isCancelling}
+                    className="w-full py-3 bg-red-500 text-white font-bold rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isCancelling ? (
+                      <>
+                        <FaSpinner className="animate-spin" />
+                        Cancelling...
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes />
+                        Cancel Order ({cancelCountdown}s)
+                      </>
+                    )}
+                  </button>
+                  <p className="text-xs text-red-400 mt-2 text-center">
+                    You can cancel within 30 seconds if the order hasn't been accepted
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -350,6 +492,85 @@ const OrderSuccess = () => {
             <FaPhoneAlt className="text-orange-500" />
             <span>Call Store: {adminPhone}</span>
           </a>
+
+          {/* Rating Section */}
+          {showRating && !ratingSubmitted && (
+            <div className="bg-white rounded-3xl p-5 shadow-lg border border-gray-100 mb-4">
+              <h3 className="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <FaStar className="text-amber-500" />
+                Rate Your Experience
+              </h3>
+              
+              {/* Star Rating */}
+              <div className="flex justify-center gap-2 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className="p-1 transition-transform hover:scale-110 active:scale-95"
+                  >
+                    <FaStar
+                      size={32}
+                      className={`transition-colors ${
+                        star <= (hoverRating || rating)
+                          ? "text-amber-400"
+                          : "text-gray-200"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+              
+              {rating > 0 && (
+                <p className="text-center text-sm font-medium text-gray-500 mb-4">
+                  {rating === 1 && "Poor 😔"}
+                  {rating === 2 && "Fair 😐"}
+                  {rating === 3 && "Good 🙂"}
+                  {rating === 4 && "Very Good 😊"}
+                  {rating === 5 && "Excellent! 🤩"}
+                </p>
+              )}
+
+              {/* Comment Input */}
+              <textarea
+                value={ratingComment}
+                onChange={(e) => setRatingComment(e.target.value)}
+                placeholder="Share your feedback (optional)"
+                rows={3}
+                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 mb-4"
+              />
+
+              {/* Submit Button */}
+              <button
+                onClick={handleSubmitRating}
+                disabled={rating === 0 || ratingLoading}
+                className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {ratingLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <FaStar />
+                    Submit Rating
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* Rating Submitted Confirmation */}
+          {ratingSubmitted && (
+            <div className="bg-green-50 rounded-2xl p-4 mb-4 text-center border border-green-100">
+              <FaCheckCircle className="text-green-500 text-2xl mx-auto mb-2" />
+              <p className="font-bold text-green-700">Thank you for your feedback!</p>
+              <p className="text-sm text-green-600">Your rating helps us improve.</p>
+            </div>
+          )}
 
           {/* Home Button */}
           <button

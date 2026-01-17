@@ -30,4 +30,28 @@ export default defineConfig({
       }
     })
   ],
+  // Performance optimizations for faster loading
+  build: {
+    rollupOptions: {
+      output: {
+        // Split vendor chunks for better caching
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-icons': ['react-icons'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-maps': ['leaflet', 'react-leaflet'],
+        }
+      }
+    },
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 500,
+    // Enable minification
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true
+      }
+    }
+  }
 });

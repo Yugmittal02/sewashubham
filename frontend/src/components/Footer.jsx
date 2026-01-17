@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { FaPhoneAlt, FaEnvelope, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 
-const Footer = () => {
+const Footer = memo(() => {
+    const currentYear = useMemo(() => new Date().getFullYear(), []);
+    
     return (
         <footer className="w-full bg-white border-t border-gray-100 mt-auto">
             {/* Main Footer Content */}
@@ -78,11 +80,14 @@ const Footer = () => {
                     Powered by <span className="text-gray-500 font-bold">ElectronWays</span>
                 </p>
                 <p className="text-[10px] text-gray-300 mt-1">
-                    © {new Date().getFullYear()} ShubhamPattis. All rights reserved.
+                    © {currentYear} ShubhamPattis. All rights reserved.
                 </p>
             </div>
         </footer>
     );
-};
+});
+
+Footer.displayName = 'Footer';
 
 export default Footer;
+

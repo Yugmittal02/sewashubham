@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import { useCart } from '../context/CartContext';
 import { FaPlus, FaStar, FaCheck } from 'react-icons/fa';
 import CustomizeModal from './CustomizeModal';
 
-const ProductCard = ({ product, onAddSuccess }) => {
+const ProductCard = memo(({ product, onAddSuccess }) => {
     const { addToCart } = useCart();
     const [showCustomize, setShowCustomize] = useState(false);
     const [added, setAdded] = useState(false);
@@ -95,28 +95,12 @@ const ProductCard = ({ product, onAddSuccess }) => {
                                 </div>
                             )}
 
-                            {/* Add-ons Display */}
+                            {/* Add-ons Available Badge */}
                             {safeProduct.addons.length > 0 && (
                                 <div className="mt-2">
-                                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-1">
-                                        Add-ons Available
-                                    </p>
-                                    <div className="flex gap-1 flex-wrap">
-                                        {safeProduct.addons.slice(0, 3).map((addon, idx) => (
-                                            <span 
-                                                key={addon?.name || idx} 
-                                                className="text-xs text-green-700 font-medium bg-green-50 px-2 py-0.5 rounded-md border border-green-100"
-                                            >
-                                                +{addon?.name || 'Addon'} 
-                                                <span className="text-green-500 ml-0.5">₹{addon?.price || 0}</span>
-                                            </span>
-                                        ))}
-                                        {safeProduct.addons.length > 3 && (
-                                            <span className="text-xs text-gray-400 font-medium px-1">
-                                                +{safeProduct.addons.length - 3} more
-                                            </span>
-                                        )}
-                                    </div>
+                                    <span className="text-xs text-green-700 font-semibold bg-green-50 px-2.5 py-1 rounded-lg border border-green-100 inline-flex items-center gap-1">
+                                        ✨ Add-ons Available
+                                    </span>
                                 </div>
                             )}
                         </div>
@@ -166,7 +150,9 @@ const ProductCard = ({ product, onAddSuccess }) => {
             )}
         </>
     );
-};
+});
+
+ProductCard.displayName = 'ProductCard';
 
 export default ProductCard;
 

@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaTag, FaChevronDown, FaCheckCircle, FaPercent, FaRupeeSign, FaExclamationCircle } from 'react-icons/fa';
-import { fetchOffers } from '../services/api';
+import { fetchOffers, validateCoupon } from '../services/api';
 
 const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null }) => {
   const [offers, setOffers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
 
   const loadOffers = useCallback(async () => {
     try {
@@ -58,11 +61,41 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
       calculatedDiscount: discount
     });
     setIsOpen(false);
+    setCouponCode('');
+    setCouponError('');
   };
 
   const handleRemoveOffer = (e) => {
     e.stopPropagation();
     onOfferSelect?.(null);
+    setCouponCode('');
+    setCouponError('');
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError('Please enter a coupon code');
+      return;
+    }
+
+    setCouponLoading(true);
+    setCouponError('');
+
+    try {
+      const response = await validateCoupon(couponCode.trim().toUpperCase(), orderTotal);
+      const offer = response?.data?.offer;
+      
+      if (offer) {
+        handleSelectOffer(offer);
+      } else {
+        setCouponError('Invalid coupon code');
+      }
+    } catch (err) {
+      console.error('Error validating coupon:', err);
+      setCouponError(err.response?.data?.message || 'Invalid or expired coupon code');
+    } finally {
+      setCouponLoading(false);
+    }
   };
 
   if (loading) {
@@ -71,10 +104,6 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
         <div className="h-14 bg-gray-100 rounded-2xl"></div>
       </div>
     );
-  }
-
-  if (offers.length === 0 && !selectedOffer) {
-    return null;
   }
 
   return (
@@ -106,9 +135,11 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
             </>
           ) : (
             <>
-              <p className="font-bold text-gray-800">Available Offers</p>
+              <p className="font-bold text-gray-800">Apply Coupon / Offer</p>
               <p className="text-sm text-gray-500">
-                {offers.length} offer{offers.length !== 1 ? 's' : ''} available
+                {offers.length > 0 
+                  ? `${offers.length} offer${offers.length !== 1 ? 's' : ''} available`
+                  : 'Enter coupon code'}
               </p>
             </>
           )}
@@ -127,60 +158,113 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
       </button>
 
       {/* Dropdown Menu */}
-      {isOpen && offers.length > 0 && (
+      {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-fadeIn">
-          <div className="p-2 max-h-[300px] overflow-y-auto">
-            {offers.map((offer) => {
-              const discount = calculateDiscount(offer);
-              const isSelected = selectedOffer?._id === offer._id;
-              
-              return (
-                <button
-                  key={offer._id}
-                  onClick={() => handleSelectOffer(offer)}
-                  className={`w-full p-4 rounded-xl flex items-start gap-3 transition-all mb-1 last:mb-0 ${
-                    isSelected
-                      ? 'bg-green-50 border-2 border-green-400'
-                      : 'hover:bg-gray-50 border-2 border-transparent'
-                  }`}
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                    offer.discountType === 'percentage'
-                      ? 'bg-purple-100 text-purple-600'
-                      : 'bg-orange-100 text-orange-600'
-                  }`}>
-                    {offer.discountType === 'percentage' ? <FaPercent /> : <FaRupeeSign />}
-                  </div>
-                  
-                  <div className="flex-1 text-left">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-gray-800">{offer.title}</p>
-                      {isSelected && <FaCheckCircle className="text-green-500" />}
-                    </div>
-                    {offer.description && (
-                      <p className="text-xs text-gray-500 mt-0.5">{offer.description}</p>
-                    )}
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-lg font-bold">
-                        {offer.discountType === 'percentage' 
-                          ? `${offer.discountValue}% OFF` 
-                          : `₹${offer.discountValue} OFF`}
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        Save ₹{discount}
-                      </span>
-                    </div>
-                  </div>
-
-                  {offer.code && (
-                    <div className="text-xs bg-gray-100 px-2 py-1 rounded font-mono text-gray-600">
-                      {offer.code}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
+          {/* Coupon Code Input */}
+          <div className="p-4 border-b border-gray-100">
+            <label className="text-sm font-bold text-gray-700 mb-2 block">
+              Have a coupon code?
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => {
+                  setCouponCode(e.target.value.toUpperCase());
+                  setCouponError('');
+                }}
+                placeholder="Enter coupon code"
+                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium uppercase focus:outline-none focus:ring-2 focus:ring-orange-400"
+                onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+              />
+              <button
+                onClick={handleApplyCoupon}
+                disabled={couponLoading || !couponCode.trim()}
+                className="px-5 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-all"
+              >
+                {couponLoading ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  'Apply'
+                )}
+              </button>
+            </div>
+            {couponError && (
+              <p className="text-red-500 text-xs mt-2 font-medium flex items-center gap-1">
+                <FaExclamationCircle size={10} />
+                {couponError}
+              </p>
+            )}
           </div>
+
+          {/* Available Offers */}
+          {offers.length > 0 ? (
+            <div className="p-2 max-h-[300px] overflow-y-auto">
+              <p className="text-xs text-gray-400 font-bold uppercase px-2 py-1">
+                Available Offers
+              </p>
+              {offers.map((offer) => {
+                const discount = calculateDiscount(offer);
+                const isSelected = selectedOffer?._id === offer._id;
+                
+                return (
+                  <button
+                    key={offer._id}
+                    onClick={() => handleSelectOffer(offer)}
+                    className={`w-full p-4 rounded-xl flex items-start gap-3 transition-all mb-1 last:mb-0 ${
+                      isSelected
+                        ? 'bg-green-50 border-2 border-green-400'
+                        : 'hover:bg-gray-50 border-2 border-transparent'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                      offer.discountType === 'percentage'
+                        ? 'bg-purple-100 text-purple-600'
+                        : 'bg-orange-100 text-orange-600'
+                    }`}>
+                      {offer.discountType === 'percentage' ? <FaPercent /> : <FaRupeeSign />}
+                    </div>
+                    
+                    <div className="flex-1 text-left">
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-gray-800">{offer.title}</p>
+                        {isSelected && <FaCheckCircle className="text-green-500" />}
+                      </div>
+                      {offer.description && (
+                        <p className="text-xs text-gray-500 mt-0.5">{offer.description}</p>
+                      )}
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-lg font-bold">
+                          {offer.discountType === 'percentage' 
+                            ? `${offer.discountValue}% OFF` 
+                            : `₹${offer.discountValue} OFF`}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          Save ₹{discount}
+                        </span>
+                      </div>
+                    </div>
+
+                    {offer.code && (
+                      <div className="text-xs bg-gray-100 px-2 py-1 rounded font-mono text-gray-600">
+                        {offer.code}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-6 text-center">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FaTag className="text-gray-400" />
+              </div>
+              <p className="text-gray-500 font-medium">No offers available</p>
+              <p className="text-xs text-gray-400 mt-1">
+                Enter a coupon code above if you have one
+              </p>
+            </div>
+          )}
         </div>
       )}
 
@@ -206,3 +290,4 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
 };
 
 export default OffersDropdown;
+

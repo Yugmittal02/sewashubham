@@ -102,3 +102,35 @@ exports.acceptOrder = async (req, res) => {
         res.status(500).json({ message: 'Error accepting order', error: error.message });
     }
 };
+
+// Cancel order (within 30 seconds)
+exports.cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        
+        // Check if order is already accepted
+        if (order.isAccepted) {
+            return res.status(400).json({ message: 'Order already accepted, cannot cancel' });
+        }
+        
+        // Check if within 30 second window
+        const timeSinceOrder = Date.now() - new Date(order.createdAt).getTime();
+        const thirtySeconds = 30 * 1000;
+        
+        if (timeSinceOrder > thirtySeconds) {
+            return res.status(400).json({ message: 'Cancellation window expired' });
+        }
+        
+        // Update order status to Cancelled
+        order.status = 'Cancelled';
+        await order.save();
+        
+        res.json({ message: 'Order cancelled successfully', order });
+    } catch (error) {
+        res.status(500).json({ message: 'Error cancelling order', error: error.message });
+    }
+};

@@ -5,10 +5,13 @@ node_modules/
 
 # Testing
 coverage/
+playwright-report/
+test-results/
 
 # Production
 build/
 dist/
+dist-ssr
 
 # Environment variables
 .env
@@ -17,6 +20,7 @@ dist/
 .env.test.local
 .env.production.local
 .env.production
+*.local
 
 # Misc
 .DS_Store
@@ -30,6 +34,11 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # OS
 Thumbs.db

@@ -11,9 +11,11 @@ import {
   FaMapMarkerAlt,
   FaShoppingBag,
   FaTruck,
+  FaEdit,
 } from "react-icons/fa";
 import CustomerEntry from "../components/CustomerEntry";
 import LocationPicker from "../components/LocationPicker";
+import CustomizeModal from "../components/CustomizeModal";
 import Footer from "../components/Footer";
 
 const Cart = () => {
@@ -28,6 +30,7 @@ const Cart = () => {
     platformFee: 0.98,
     taxRate: 5,
   });
+  const [editingItem, setEditingItem] = useState(null);
 
   // Load fee settings on mount
   useEffect(() => {
@@ -233,6 +236,14 @@ const Cart = () => {
                   </p>
                 </div>
 
+                {/* Edit Button */}
+                <button
+                  onClick={() => setEditingItem(item)}
+                  className="w-12 h-12 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl flex items-center justify-center active:scale-90 transition-all"
+                >
+                  <FaEdit size={18} />
+                </button>
+
                 {/* Delete Button */}
                 <button
                   onClick={() => removeFromCart(item.cartId)}
@@ -363,6 +374,28 @@ const Cart = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Customize Modal for Editing */}
+      {editingItem && (
+        <CustomizeModal
+          product={{
+            _id: editingItem._id,
+            name: editingItem.name,
+            description: editingItem.description || "",
+            basePrice: editingItem.basePrice || editingItem.price,
+            image: editingItem.image,
+            sizes: editingItem.sizes || [],
+            addons: editingItem.addons || [],
+          }}
+          onClose={(didAdd) => {
+            if (didAdd) {
+              // Remove old item when new one is added
+              removeFromCart(editingItem.cartId);
+            }
+            setEditingItem(null);
+          }}
+        />
       )}
 
       {/* Custom CSS */}

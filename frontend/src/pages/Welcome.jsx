@@ -19,13 +19,13 @@ const Welcome = () => {
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Floating food icons with animations */}
                 {/* Floating food images with animations - Optimized for Mobile */}
-                <img src="https://ik.imagekit.io/ayushrathore1/dessert?updatedAt=1768506158643" alt="Dessert" className="absolute top-[5%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-60 animate-float-slow shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" className="absolute top-[15%] right-[5%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-medium shadow-lg" />
+                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Food" className="absolute top-[5%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-60 animate-float-slow shadow-lg" />
+                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute top-[15%] right-[5%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-medium shadow-lg" />
                 <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Bun" className="absolute top-[45%] left-[-5%] md:left-[5%] w-20 h-20 md:w-28 md:h-28 object-cover rounded-full opacity-60 animate-float-fast shadow-lg" />
                 
-                <img src="https://ik.imagekit.io/ayushrathore1/dessert?updatedAt=1768506158643" alt="Dessert" className="absolute bottom-[15%] right-[5%] w-24 h-24 md:w-32 md:h-32 object-cover rounded-full opacity-50 animate-float-slow shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" className="absolute bottom-[35%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-40 animate-float-medium shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Bun" className="absolute top-[55%] right-[-10%] md:right-[25%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-fast shadow-lg" />
+                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute bottom-[15%] right-[5%] w-24 h-24 md:w-32 md:h-32 object-cover rounded-full opacity-50 animate-float-slow shadow-lg" />
+                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute bottom-[35%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-40 animate-float-medium shadow-lg" />
+                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Bun" loading="lazy" className="absolute top-[55%] right-[-10%] md:right-[25%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-fast shadow-lg" />
                 
                 {/* Glowing orbs */}
                 <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-orange-200/20 rounded-full blur-[80px] md:blur-[100px]"></div>

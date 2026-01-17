@@ -38,6 +38,7 @@ export const fetchAllOrders = () => API.get("/orders/all");
 export const updateOrderStatus = (id, status) =>
   API.put(`/orders/${id}/status`, { status });
 export const acceptOrder = (id) => API.put(`/orders/${id}/accept`);
+export const cancelOrder = (id) => API.put(`/orders/${id}/cancel`);
 
 // Offers
 export const fetchOffers = () => API.get("/offers");

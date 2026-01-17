@@ -70,6 +70,16 @@ const Payment = () => {
     loadFeeSettings();
   }, []);
 
+  // Dynamically load Razorpay script only on Payment page (performance optimization)
+  useEffect(() => {
+    if (!window.Razorpay && !document.querySelector('script[src*="razorpay"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   // Calculate delivery fee when delivery address is set
   useEffect(() => {
     if (orderType === "Delivery" && deliveryAddress?.coordinates) {

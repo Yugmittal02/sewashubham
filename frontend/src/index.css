@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* =========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================= */
+
 /* Smooth Scrolling & Transitions Globally */
 html {
   scroll-behavior: smooth;
@@ -10,20 +14,58 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Smooth transitions for all interactive elements */
-button, a, input, select, textarea {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+/* GPU acceleration for all interactive elements */
+button, a, [role="button"] {
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-/* Better touch feedback */
-button:active, a:active {
-  transition-duration: 0.1s;
+/* Optimized transitions - only animate what's needed */
+button, a, input, select, textarea {
+  transition: transform 0.15s ease-out, 
+              background-color 0.15s ease-out, 
+              border-color 0.15s ease-out,
+              color 0.15s ease-out,
+              opacity 0.15s ease-out;
+}
+
+/* Instant feedback on touch */
+button:active, a:active, [role="button"]:active {
+  transition-duration: 0.05s;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Passive scroll optimization hint */
+.scroll-container {
+  touch-action: pan-y;
+}
+
+/* Horizontal scroll optimization */
+.scroll-x {
+  touch-action: pan-x;
 }
 
 /* Smooth momentum scrolling for overflow containers */
 .smooth-scroll {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Content visibility for off-screen elements (LCP improvement) */
+.lazy-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
 }
 
 /* Custom Animations */
@@ -67,6 +109,20 @@ button:active, a:active {
 
 .animate-bounce-in {
   animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* GPU acceleration for animated elements - reduces scroll/click lag */
+.animate-float-slow,
+.animate-float-medium,
+.animate-float-fast,
+.animate-bounce-gentle,
+.animate-slide-up,
+.animate-fade-in,
+.animate-pop-in,
+.animate-bounce-in {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Hide Scrollbar but keep smooth scroll */

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useCallback } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,7 +10,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-const SideCart = ({ isOpen, onClose }) => {
+const SideCart = memo(({ isOpen, onClose }) => {
   const { cart, total, updateQuantity, removeFromCart, getItemCount } = useCart();
   const navigate = useNavigate();
   const [isAnimating, setIsAnimating] = useState(false);
@@ -18,7 +18,6 @@ const SideCart = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
-      // Prevent body scroll when cart is open
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -28,15 +27,26 @@ const SideCart = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsAnimating(false);
     setTimeout(onClose, 300);
-  };
+  }, [onClose]);
 
-  const handleCheckout = () => {
-    handleClose();
-    setTimeout(() => navigate("/cart"), 300);
-  };
+  const handleCheckout = useCallback(() => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      onClose();
+      navigate("/cart");
+    }, 300);
+  }, [onClose, navigate]);
+
+  const handleRemoveItem = useCallback((cartId) => {
+    removeFromCart(cartId);
+  }, [removeFromCart]);
+
+  const handleUpdateQty = useCallback((cartId, delta) => {
+    updateQuantity(cartId, delta);
+  }, [updateQuantity]);
 
   if (!isOpen && !isAnimating) return null;
 
@@ -55,6 +65,7 @@ const SideCart = ({ isOpen, onClose }) => {
         className={`fixed top-0 right-0 h-full w-full sm:w-96 md:w-[420px] bg-white z-[101] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${
           isAnimating && isOpen ? "translate-x-0" : "translate-x-full"
         }`}
+        style={{ willChange: 'transform' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gradient-to-r from-orange-500 to-amber-500 text-white safe-area-top">
@@ -79,7 +90,7 @@ const SideCart = ({ isOpen, onClose }) => {
         </div>
 
         {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 scroll-container">
           {cart.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -134,14 +145,14 @@ const SideCart = ({ isOpen, onClose }) => {
                     {/* Quantity Controls */}
                     <div className="flex flex-col items-end justify-between">
                       <button
-                        onClick={() => removeFromCart(item.cartId)}
+                        onClick={() => handleRemoveItem(item.cartId)}
                         className="w-8 h-8 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex items-center justify-center transition-colors"
                       >
                         <FaTrash size={12} />
                       </button>
                       <div className="flex items-center gap-2 bg-white rounded-xl border border-gray-200 p-1">
                         <button
-                          onClick={() => updateQuantity(item.cartId, -1)}
+                          onClick={() => handleUpdateQty(item.cartId, -1)}
                           className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center active:scale-90 transition-transform"
                         >
                           <FaMinus size={10} />
@@ -150,7 +161,7 @@ const SideCart = ({ isOpen, onClose }) => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.cartId, 1)}
+                          onClick={() => handleUpdateQty(item.cartId, 1)}
                           className="w-8 h-8 bg-orange-500 text-white rounded-lg flex items-center justify-center active:scale-90 transition-transform"
                         >
                           <FaPlus size={10} />
@@ -195,6 +206,9 @@ const SideCart = ({ isOpen, onClose }) => {
       </div>
     </>
   );
-};
+});
+
+SideCart.displayName = 'SideCart';
 
 export default SideCart;
+

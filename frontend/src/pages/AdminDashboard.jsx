@@ -44,7 +44,8 @@ import {
   FaEyeSlash,
   FaMapMarkerAlt,
   FaExternalLinkAlt,
-  FaMobileAlt,
+  FaMobile,
+  FaUsers,
 } from "react-icons/fa";
 
 const AdminDashboard = () => {
@@ -346,6 +347,7 @@ const AdminDashboard = () => {
     { id: "menu", icon: FaUtensils, label: "Menu" },
     { id: "offers", icon: FaGift, label: "Offers" },
     { id: "ratings", icon: FaStar, label: "Reviews" },
+    { id: "customers", icon: FaUsers, label: "Customers" },
     { id: "settings", icon: FaCog, label: "Settings" },
   ];
 
@@ -896,7 +898,7 @@ const AdminDashboard = () => {
             <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mt-6">
               <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
                 <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FaMobileAlt className="text-blue-600" />
+                  <FaMobile className="text-blue-600" />
                 </span>
                 Store Contact Configuration
               </h3>
@@ -992,12 +994,13 @@ const AdminDashboard = () => {
                       type="number"
                       step="0.01"
                       value={feeSettings.platformFee}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const val = e.target.value;
                         setFeeSettings({
                           ...feeSettings,
-                          platformFee: parseFloat(e.target.value) || 0,
-                        })
-                      }
+                          platformFee: val === '' ? '' : parseFloat(val),
+                        });
+                      }}
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                     />
                   </div>
@@ -1009,12 +1012,13 @@ const AdminDashboard = () => {
                       type="number"
                       step="0.1"
                       value={feeSettings.taxRate}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const val = e.target.value;
                         setFeeSettings({
                           ...feeSettings,
-                          taxRate: parseFloat(e.target.value) || 0,
-                        })
-                      }
+                          taxRate: val === '' ? '' : parseFloat(val),
+                        });
+                      }}
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                     />
                   </div>
@@ -1032,12 +1036,13 @@ const AdminDashboard = () => {
                       <input
                         type="number"
                         value={feeSettings.deliveryFeeBase}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryFeeBase: parseFloat(e.target.value) || 0,
-                          })
-                        }
+                            deliveryFeeBase: val === '' ? '' : parseFloat(val),
+                          });
+                        }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                       />
                     </div>
@@ -1048,12 +1053,13 @@ const AdminDashboard = () => {
                       <input
                         type="number"
                         value={feeSettings.deliveryFeePerKm}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryFeePerKm: parseFloat(e.target.value) || 0,
-                          })
-                        }
+                            deliveryFeePerKm: val === '' ? '' : parseFloat(val),
+                          });
+                        }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                       />
                     </div>
@@ -1064,12 +1070,13 @@ const AdminDashboard = () => {
                       <input
                         type="number"
                         value={feeSettings.freeDeliveryThreshold}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            freeDeliveryThreshold: parseFloat(e.target.value) || 0,
-                          })
-                        }
+                            freeDeliveryThreshold: val === '' ? '' : parseFloat(val),
+                          });
+                        }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                       />
                     </div>
@@ -1080,12 +1087,13 @@ const AdminDashboard = () => {
                       <input
                         type="number"
                         value={feeSettings.deliveryRadiusKm}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryRadiusKm: parseFloat(e.target.value) || 0,
-                          })
-                        }
+                            deliveryRadiusKm: val === '' ? '' : parseFloat(val),
+                          });
+                        }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
                       />
                     </div>
@@ -1189,6 +1197,98 @@ const AdminDashboard = () => {
                   )}
                 </button>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Customers Tab */}
+        {activeTab === "customers" && (
+          <div>
+            <h2 className="text-lg font-bold text-gray-800 mb-4">Customers</h2>
+            <div className="space-y-3">
+              {(() => {
+                // Aggregate customers from orders
+                const customerMap = new Map();
+                orders.forEach((order) => {
+                  if (order.user?.phone) {
+                    const phone = order.user.phone;
+                    if (customerMap.has(phone)) {
+                      const existing = customerMap.get(phone);
+                      existing.orderCount += 1;
+                      existing.totalSpent += order.totalAmount || 0;
+                      if (new Date(order.createdAt) > new Date(existing.lastOrder)) {
+                        existing.lastOrder = order.createdAt;
+                        existing.name = order.user.name || existing.name;
+                      }
+                    } else {
+                      customerMap.set(phone, {
+                        name: order.user.name || "Unknown",
+                        phone,
+                        orderCount: 1,
+                        totalSpent: order.totalAmount || 0,
+                        lastOrder: order.createdAt,
+                      });
+                    }
+                  }
+                });
+
+                const customers = Array.from(customerMap.values()).sort(
+                  (a, b) => b.orderCount - a.orderCount
+                );
+
+                if (customers.length === 0) {
+                  return (
+                    <div className="text-center py-16 text-gray-400">
+                      <FaUsers className="text-4xl mx-auto mb-2 opacity-50" />
+                      <p>No customers yet</p>
+                    </div>
+                  );
+                }
+
+                return customers.map((customer, idx) => (
+                  <div
+                    key={customer.phone}
+                    className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center">
+                          <span className="text-lg font-black text-purple-600">
+                            {customer.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-800">{customer.name}</p>
+                          <p className="text-sm text-gray-500">{customer.phone}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-center gap-1 text-sm font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">
+                          <FaClipboardList size={12} />
+                          {customer.orderCount} order{customer.orderCount !== 1 ? "s" : ""}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm">
+                      <div>
+                        <span className="text-gray-400">Total Spent:</span>
+                        <span className="ml-1 font-bold text-green-600">
+                          ₹{customer.totalSpent.toFixed(0)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Last Order:</span>
+                        <span className="ml-1 text-gray-600">
+                          {new Date(customer.lastOrder).toLocaleDateString("en-IN", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ));
+              })()}
             </div>
           </div>
         )}

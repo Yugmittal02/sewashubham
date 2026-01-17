@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { fetchProducts, fetchOffers } from '../services/api';
 import ProductCard from '../components/ProductCard';
 import SideCart from '../components/SideCart';
@@ -34,11 +34,28 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [category, setCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [showSideCart, setShowSideCart] = useState(false);
     const { customer } = useAuth();
     const { cart, total, getItemCount } = useCart();
     const navigate = useNavigate();
+    const searchDebounceRef = useRef(null);
+
+    // Debounce search query for better performance
+    useEffect(() => {
+        if (searchDebounceRef.current) {
+            clearTimeout(searchDebounceRef.current);
+        }
+        searchDebounceRef.current = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 150);
+        return () => {
+            if (searchDebounceRef.current) {
+                clearTimeout(searchDebounceRef.current);
+            }
+        };
+    }, [searchQuery]);
 
     // Cache products in sessionStorage for faster reload
     useEffect(() => {
@@ -87,10 +104,10 @@ const Home = () => {
     // Memoized filtered products for performance
     const filteredProducts = useMemo(() => {
         return products.filter(p => 
-            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            p.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            p.description?.toLowerCase().includes(debouncedSearch.toLowerCase())
         );
-    }, [products, searchQuery]);
+    }, [products, debouncedSearch]);
 
     // Callback for when item is added to cart
     const handleItemAdded = useCallback(() => {
