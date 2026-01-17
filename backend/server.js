@@ -11,13 +11,38 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isProduction = process.env.NODE_ENV === "production";
+
+// Trust proxy for accurate IP detection behind Nginx/Load Balancer
+if (isProduction) {
+  app.set('trust proxy', 1);
+}
 
 // ===================
 // CORS MIDDLEWARE (MUST BE FIRST)
 // ===================
+
+// Parse allowed origins from environment variable
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : [];
+
 app.use(
   cors({
-    origin: true,
+    origin: function(origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      
+      // In development, allow all origins
+      if (!isProduction) return callback(null, true);
+      
+      // In production, check against whitelist
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
@@ -30,9 +55,6 @@ app.use(
   })
 );
 
-// Handle preflight requests explicitly just in case
-// app.options('*', cors());
-
 // ===================
 // SECURITY MIDDLEWARE
 // ===================
@@ -41,7 +63,15 @@ app.use(
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: false, // Disable for development, enable in production with proper config
+    contentSecurityPolicy: isProduction ? {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "blob:"],
+        scriptSrc: ["'self'"],
+        connectSrc: ["'self'"],
+      },
+    } : false,
   })
 );
 
