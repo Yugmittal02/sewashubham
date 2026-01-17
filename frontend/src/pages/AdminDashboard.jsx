@@ -46,6 +46,7 @@ import {
   FaExternalLinkAlt,
   FaMobile,
   FaUsers,
+  FaLocationArrow,
 } from "react-icons/fa";
 
 const AdminDashboard = () => {
@@ -900,7 +901,7 @@ const AdminDashboard = () => {
                 <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <FaMobile className="text-blue-600" />
                 </span>
-                Store Contact Configuration
+                Store Configuration
               </h3>
 
               <form onSubmit={handleUpdateStoreSettings} className="space-y-4">
@@ -925,6 +926,81 @@ const AdminDashboard = () => {
                     This number will be shown to customers after placing an
                     order.
                   </p>
+                </div>
+
+                {/* Store Address Section */}
+                <div>
+                  <label className="text-sm font-bold text-gray-700 mb-2 block flex items-center gap-2">
+                    <FaMapMarkerAlt size={14} />
+                    Store Address
+                  </label>
+                  <textarea
+                    value={storeSettings.storeAddress || ''}
+                    onChange={(e) =>
+                      setStoreSettings({
+                        ...storeSettings,
+                        storeAddress: e.target.value,
+                      })
+                    }
+                    placeholder="Enter complete store address..."
+                    rows="3"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base resize-none"
+                  />
+                  
+                  {/* GPS Location */}
+                  <div className="mt-3 space-y-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if ('geolocation' in navigator) {
+                          setStoreLoading(true);
+                          navigator.geolocation.getCurrentPosition(
+                            (pos) => {
+                              const { latitude, longitude } = pos.coords;
+                              setStoreSettings({
+                                ...storeSettings,
+                                storeLatitude: latitude,
+                                storeLongitude: longitude,
+                              });
+                              setStoreMsg({
+                                type: 'success',
+                                text: `GPS location captured: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+                              });
+                              setStoreLoading(false);
+                            },
+                            (err) => {
+                              console.error('GPS error:', err);
+                              setStoreMsg({
+                                type: 'error',
+                                text: 'Could not get GPS location. Please check permissions.'
+                              });
+                              setStoreLoading(false);
+                            },
+                            { enableHighAccuracy: true }
+                          );
+                        } else {
+                          setStoreMsg({
+                            type: 'error',
+                            text: 'GPS not supported by your browser'
+                          });
+                        }
+                      }}
+                      className="w-full py-2.5 bg-green-50 text-green-700 rounded-lg font-medium flex items-center justify-center gap-2 border border-green-200 hover:bg-green-100 transition-colors"
+                    >
+                      <FaLocationArrow size={14} />
+                      {storeSettings.storeLatitude ? 'Update GPS Location' : 'Capture GPS Location'}
+                    </button>
+                    
+                    {storeSettings.storeLatitude && storeSettings.storeLongitude && (
+                      <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded-lg">
+                        📍 Coordinates: {storeSettings.storeLatitude.toFixed(6)}, {storeSettings.storeLongitude.toFixed(6)}
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-gray-400">
+                      GPS coordinates are used for accurate delivery distance calculation
+                    </p>
+                  </div>
                 </div>
 
                 <div>

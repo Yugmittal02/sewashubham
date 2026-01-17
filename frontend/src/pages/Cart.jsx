@@ -348,6 +348,7 @@ const Cart = () => {
         </div>
       )}
 
+
       {/* Location Picker Modal */}
       {showLocationPicker && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-end justify-center sm:items-center p-0 sm:p-4">
@@ -369,12 +370,15 @@ const Cart = () => {
                 onLocationSelect={(addressData) => {
                   setDeliveryAddress(addressData);
                   setShowLocationPicker(false);
+                  // Proceed to payment after location is set
+                  proceedToPayment();
                 }}
               />
             </div>
           </div>
         </div>
       )}
+
 
       {/* Customize Modal for Editing */}
       {editingItem && (
