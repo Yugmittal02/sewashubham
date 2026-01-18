@@ -2,7 +2,15 @@ const Offer = require('../models/Offer');
 
 exports.getAllOffers = async (req, res) => {
     try {
-        const offers = await Offer.find({ isActive: true, validTo: { $gte: new Date() } });
+        // Include offers where validTo is null, doesn't exist, or is in the future
+        const offers = await Offer.find({ 
+            isActive: true,
+            $or: [
+                { validTo: null },
+                { validTo: { $exists: false } },
+                { validTo: { $gte: new Date() } }
+            ]
+        });
         res.json(offers);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching offers' });
@@ -52,7 +60,11 @@ exports.validateCoupon = async (req, res) => {
         const offer = await Offer.findOne({ 
             code: code.toUpperCase(), 
             isActive: true,
-            validTo: { $gte: new Date() }
+            $or: [
+                { validTo: null },
+                { validTo: { $exists: false } },
+                { validTo: { $gte: new Date() } }
+            ]
         });
         
         if (!offer) {

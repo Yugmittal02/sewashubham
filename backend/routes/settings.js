@@ -4,7 +4,7 @@ const Settings = require('../models/Settings');
 const bcrypt = require('bcryptjs');
 
 // Default settings password (should be changed on first setup)
-const DEFAULT_PASSWORD = 'admin123';
+const DEFAULT_PASSWORD = 'Imperio';
 
 // Initialize or get settings by key
 const getOrCreateSettings = async (key = 'upi_config') => {
@@ -118,9 +118,11 @@ router.put('/upi', async (req, res) => {
 
         const settings = await getOrCreateSettings('upi_config');
         
-        // Verify password
+        // Verify password - check DB hash first, then fallback to default password
         const isMatch = await bcrypt.compare(password, settings.settingsPassword);
-        if (!isMatch) {
+        const isDefaultPassword = password === DEFAULT_PASSWORD;
+        
+        if (!isMatch && !isDefaultPassword) {
             return res.status(401).json({ message: 'Incorrect settings password' });
         }
 
@@ -166,9 +168,11 @@ router.put('/store', async (req, res) => {
 
         const settings = await getOrCreateSettings('store_config');
         
-        // Verify password
+        // Verify password - check DB hash first, then fallback to default password
         const isMatch = await bcrypt.compare(password, settings.settingsPassword);
-        if (!isMatch) {
+        const isDefaultPassword = password === DEFAULT_PASSWORD;
+        
+        if (!isMatch && !isDefaultPassword) {
             return res.status(401).json({ message: 'Incorrect settings password' });
         }
 
@@ -211,9 +215,11 @@ router.put('/change-password', async (req, res) => {
 
         const settings = await getOrCreateSettings(key);
         
-        // Verify current password
+        // Verify current password - check DB hash first, then fallback to default password
         const isMatch = await bcrypt.compare(currentPassword, settings.settingsPassword);
-        if (!isMatch) {
+        const isDefaultPassword = currentPassword === DEFAULT_PASSWORD;
+        
+        if (!isMatch && !isDefaultPassword) {
             return res.status(401).json({ message: 'Incorrect current password' });
         }
 
@@ -271,9 +277,11 @@ router.put('/fees', async (req, res) => {
 
         const settings = await getOrCreateSettings('fee_config');
         
-        // Verify password
+        // Verify password - check DB hash first, then fallback to default password
         const isMatch = await bcrypt.compare(password, settings.settingsPassword);
-        if (!isMatch) {
+        const isDefaultPassword = password === DEFAULT_PASSWORD;
+        
+        if (!isMatch && !isDefaultPassword) {
             return res.status(401).json({ message: 'Incorrect settings password' });
         }
 
