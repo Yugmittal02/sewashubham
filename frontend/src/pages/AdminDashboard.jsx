@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -47,7 +47,12 @@ import {
   FaMobile,
   FaUsers,
   FaLocationArrow,
+  FaCalendarAlt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
+import useOrderNotification from "../hooks/useOrderNotification";
+import StoreLocationPicker from "../components/StoreLocationPicker";
 
 const AdminDashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -96,8 +101,21 @@ const AdminDashboard = () => {
   // Confirmation Modals State
   const [showStockConfirm, setShowStockConfirm] = useState(null); // Product to toggle
 
+  // Revenue Calendar State
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  
+  // Map Picker State
+  const [showMapPicker, setShowMapPicker] = useState(false);
+
   const { admin, logoutAdmin, isAdmin } = useAuth();
   const navigate = useNavigate();
+
+  // Order notification hook with Hindi voice alerts
+  const { 
+    formatPendingTime, 
+    getUrgencyLevel,
+  } = useOrderNotification(orders, activeTab === "orders");
 
   useEffect(() => {
     if (!isAdmin) {
@@ -328,16 +346,23 @@ const AdminDashboard = () => {
     }
   };
 
-  // Stats
-  const todayOrders = orders.filter(
-    (o) => new Date(o.createdAt).toDateString() === new Date().toDateString()
+  // Memoized Stats - prevents recalculation on every render
+  const todayOrders = useMemo(() => 
+    orders.filter((o) => new Date(o.createdAt).toDateString() === new Date().toDateString()),
+    [orders]
   );
-  const todayRevenue = todayOrders.reduce(
-    (sum, o) => sum + (o.totalAmount || 0),
-    0
+  
+  const todayRevenue = useMemo(() => 
+    todayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0),
+    [todayOrders]
   );
-  const pendingOrders = orders.filter((o) => o.status === "Pending").length;
+  
+  const pendingOrders = useMemo(() => 
+    orders.filter((o) => o.status === "Pending").length,
+    [orders]
+  );
 
+  // Tabs for bottom navigation - 5 tabs for mobile (removed ratings, moved to revenue)
   const tabs = [
     {
       id: "orders",
@@ -347,8 +372,7 @@ const AdminDashboard = () => {
     },
     { id: "menu", icon: FaUtensils, label: "Menu" },
     { id: "offers", icon: FaGift, label: "Offers" },
-    { id: "ratings", icon: FaStar, label: "Reviews" },
-    { id: "customers", icon: FaUsers, label: "Customers" },
+    { id: "revenue", icon: FaRupeeSign, label: "Revenue" },
     { id: "settings", icon: FaCog, label: "Settings" },
   ];
 
@@ -430,11 +454,32 @@ const AdminDashboard = () => {
             {orders.map((order) => {
               const config =
                 statusConfig[order.status] || statusConfig["Pending"];
+              const urgency = getUrgencyLevel(order.createdAt, order.status, order.isAccepted);
+              const pendingTime = formatPendingTime(order.createdAt);
+              
               return (
                 <div
                   key={order._id}
-                  className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100"
+                  className={`bg-white p-4 rounded-2xl shadow-sm border ${
+                    urgency === 'critical' ? 'border-red-300 bg-red-50/30' :
+                    urgency === 'high' ? 'border-orange-200 bg-orange-50/30' :
+                    'border-gray-100'
+                  }`}
                 >
+                  {/* Timer Badge - Top Right */}
+                  {order.status === 'Pending' && (
+                    <div className={`flex justify-end -mt-1 -mr-1 mb-2`}>
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
+                        urgency === 'critical' ? 'bg-red-500 text-white animate-pulse' :
+                        urgency === 'high' ? 'bg-orange-500 text-white' :
+                        urgency === 'medium' ? 'bg-yellow-500 text-white' :
+                        'bg-gray-200 text-gray-600'
+                      }`}>
+                        <FaClock size={10} />
+                        {pendingTime}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <p className="font-bold text-gray-800">
@@ -713,37 +758,193 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Ratings Tab */}
-        {activeTab === "ratings" && (
-          <div>
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Reviews</h2>
-            <div className="space-y-3">
-              {ratings.map((r) => (
-                <div
-                  key={r._id}
-                  className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100"
+        {/* Revenue Tab - Combines calendar, customers, and ratings */}
+        {activeTab === "revenue" && (
+          <div className="space-y-6">
+            {/* Calendar Section */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                <FaCalendarAlt className="text-green-600" />
+                Revenue Calendar
+              </h3>
+              
+              {/* Month Navigation */}
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1))}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800">
-                        {r.customer?.name}
-                      </p>
-                      <p className="text-xs text-gray-500">{r.product?.name}</p>
-                      <p className="text-sm text-gray-600 mt-2">{r.comment}</p>
+                  <FaChevronLeft />
+                </button>
+                <h4 className="font-bold text-gray-700">
+                  {calendarMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                </h4>
+                <button
+                  onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1))}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2">
+                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                  <div key={day} className="font-bold text-gray-400 py-1">{day}</div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">
+                {(() => {
+                  const year = calendarMonth.getFullYear();
+                  const month = calendarMonth.getMonth();
+                  const firstDay = new Date(year, month, 1).getDay();
+                  const daysInMonth = new Date(year, month + 1, 0).getDate();
+                  const days = [];
+                  
+                  // Empty cells for days before first day of month
+                  for (let i = 0; i < firstDay; i++) {
+                    days.push(<div key={`empty-${i}`} className="p-2"></div>);
+                  }
+                  
+                  // Calendar days
+                  for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = date.toDateString();
+                    const dayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === dateStr);
+                    const dayRevenue = dayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+                    const isSelected = selectedDate.toDateString() === dateStr;
+                    const isToday = new Date().toDateString() === dateStr;
+                    const hasOrders = dayOrders.length > 0;
+                    
+                    days.push(
+                      <button
+                        key={day}
+                        onClick={() => setSelectedDate(date)}
+                        className={`p-2 rounded-lg text-sm transition-all ${
+                          isSelected ? 'bg-green-500 text-white font-bold' :
+                          isToday ? 'bg-green-100 text-green-700 font-bold' :
+                          hasOrders ? 'bg-gray-50 hover:bg-gray-100' : 'hover:bg-gray-50'
+                        }`}
+                      >
+                        <div>{day}</div>
+                        {hasOrders && !isSelected && (
+                          <div className="text-[9px] text-green-600 font-bold mt-0.5">
+                            ₹{dayRevenue >= 1000 ? `${(dayRevenue/1000).toFixed(1)}k` : dayRevenue}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  }
+                  
+                  return days;
+                })()}
+              </div>
+
+              {/* Selected Day Summary */}
+              <div className="mt-4 p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                <p className="text-xs text-gray-500 mb-1">
+                  {selectedDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+                {(() => {
+                  const dateStr = selectedDate.toDateString();
+                  const dayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === dateStr);
+                  const dayRevenue = dayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+                  
+                  return (
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-2xl font-black text-green-700">₹{dayRevenue.toFixed(0)}</p>
+                        <p className="text-xs text-gray-500">{dayOrders.length} orders</p>
+                      </div>
+                      <FaRupeeSign className="text-4xl text-green-200" />
                     </div>
-                    <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full ml-3">
-                      <FaStar className="text-amber-500" size={12} />
-                      <span className="font-bold text-sm">{r.rating}</span>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* Customers Section */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                <FaUsers className="text-blue-600" />
+                Top Customers
+              </h3>
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {(() => {
+                  const customerMap = new Map();
+                  orders.forEach((order) => {
+                    if (order.user?.phone) {
+                      const phone = order.user.phone;
+                      if (customerMap.has(phone)) {
+                        const existing = customerMap.get(phone);
+                        existing.orderCount += 1;
+                        existing.totalSpent += order.totalAmount || 0;
+                      } else {
+                        customerMap.set(phone, {
+                          name: order.user.name || 'Customer',
+                          phone,
+                          orderCount: 1,
+                          totalSpent: order.totalAmount || 0,
+                        });
+                      }
+                    }
+                  });
+                  
+                  return Array.from(customerMap.values())
+                    .sort((a, b) => b.totalSpent - a.totalSpent)
+                    .slice(0, 5)
+                    .map((customer, idx) => (
+                      <div key={customer.phone} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
+                          idx === 0 ? 'bg-amber-500' : idx === 1 ? 'bg-gray-400' : idx === 2 ? 'bg-orange-400' : 'bg-gray-300'
+                        }`}>
+                          {idx + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-gray-800 truncate">{customer.name}</p>
+                          <p className="text-xs text-gray-500">{customer.phone} • {customer.orderCount} orders</p>
+                        </div>
+                        <p className="font-bold text-green-600">₹{customer.totalSpent.toFixed(0)}</p>
+                      </div>
+                    ));
+                })()}
+              </div>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                <FaStar className="text-amber-500" />
+                Customer Reviews
+              </h3>
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {ratings.map((r) => (
+                  <div
+                    key={r._id}
+                    className="p-3 bg-gray-50 rounded-xl"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-gray-800 text-sm">
+                          {r.customer?.name}
+                        </p>
+                        <p className="text-xs text-gray-500">{r.product?.name}</p>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{r.comment}</p>
+                      </div>
+                      <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full ml-2">
+                        <FaStar className="text-amber-500" size={10} />
+                        <span className="font-bold text-xs">{r.rating}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-              {ratings.length === 0 && (
-                <div className="text-center py-16 text-gray-400">
-                  <FaStar className="text-4xl mx-auto mb-2 opacity-50" />
-                  <p>No reviews yet</p>
-                </div>
-              )}
+                ))}
+                {ratings.length === 0 && (
+                  <div className="text-center py-8 text-gray-400">
+                    <FaStar className="text-3xl mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No reviews yet</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -947,59 +1148,68 @@ const AdminDashboard = () => {
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base resize-none"
                   />
                   
-                  {/* GPS Location */}
-                  <div className="mt-3 space-y-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if ('geolocation' in navigator) {
-                          setStoreLoading(true);
-                          navigator.geolocation.getCurrentPosition(
-                            (pos) => {
-                              const { latitude, longitude } = pos.coords;
-                              setStoreSettings({
-                                ...storeSettings,
-                                storeLatitude: latitude,
-                                storeLongitude: longitude,
-                              });
-                              setStoreMsg({
-                                type: 'success',
-                                text: `GPS location captured: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
-                              });
-                              setStoreLoading(false);
-                            },
-                            (err) => {
-                              console.error('GPS error:', err);
-                              setStoreMsg({
-                                type: 'error',
-                                text: 'Could not get GPS location. Please check permissions.'
-                              });
-                              setStoreLoading(false);
-                            },
-                            { enableHighAccuracy: true }
-                          );
-                        } else {
-                          setStoreMsg({
-                            type: 'error',
-                            text: 'GPS not supported by your browser'
-                          });
-                        }
-                      }}
-                      className="w-full py-2.5 bg-green-50 text-green-700 rounded-lg font-medium flex items-center justify-center gap-2 border border-green-200 hover:bg-green-100 transition-colors"
-                    >
-                      <FaLocationArrow size={14} />
-                      {storeSettings.storeLatitude ? 'Update GPS Location' : 'Capture GPS Location'}
-                    </button>
+                  {/* Additional Address Details */}
+                  <div className="mt-4 bg-blue-50 p-4 rounded-xl border border-blue-200">
+                    <p className="text-sm font-bold text-blue-800 mb-3 flex items-center gap-2">
+                      <FaMapMarkerAlt size={14} />
+                      📍 Please enter your complete store address details
+                    </p>
                     
-                    {storeSettings.storeLatitude && storeSettings.storeLongitude && (
-                      <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded-lg">
-                        📍 Coordinates: {storeSettings.storeLatitude.toFixed(6)}, {storeSettings.storeLongitude.toFixed(6)}
+                    {/* Landmark */}
+                    <div className="mb-3">
+                      <label className="text-xs font-medium text-gray-700 mb-1 block">Landmark</label>
+                      <input
+                        type="text"
+                        value={storeSettings.storeLandmark || ''}
+                        onChange={(e) =>
+                          setStoreSettings({
+                            ...storeSettings,
+                            storeLandmark: e.target.value,
+                          })
+                        }
+                        placeholder="Near City Park, Opposite Mall..."
+                        className="w-full bg-white border border-gray-200 rounded-lg p-2.5 text-sm"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-gray-700 mb-1 block">City</label>
+                        <input
+                          type="text"
+                          value={storeSettings.storeCity || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              storeCity: e.target.value,
+                            })
+                          }
+                          placeholder="Enter city"
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2.5 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-700 mb-1 block">Pincode</label>
+                        <input
+                          type="text"
+                          value={storeSettings.storePincode || ''}
+                          onChange={(e) =>
+                            setStoreSettings({
+                              ...storeSettings,
+                              storePincode: e.target.value,
+                            })
+                          }
+                          placeholder="Enter pincode"
+                          className="w-full bg-white border border-gray-200 rounded-lg p-2.5 text-sm"
+                        />
+                      </div>
+                    </div>
+                    
+                    {storeSettings.storeAddress && storeSettings.storeCity && (
+                      <div className="mt-3 text-xs text-green-600 bg-green-50 p-2 rounded-lg border border-green-200">
+                        ✓ Address saved: {storeSettings.storeAddress}, {storeSettings.storeCity}
                       </div>
                     )}
-                    
-                    <p className="text-xs text-gray-400">
-                      GPS coordinates are used for accurate delivery distance calculation
-                    </p>
                   </div>
                 </div>
 
@@ -1430,6 +1640,27 @@ const AdminDashboard = () => {
         />
       )}
 
+      {/* Store Location Map Picker */}
+      <StoreLocationPicker
+        isOpen={showMapPicker}
+        onClose={() => setShowMapPicker(false)}
+        initialLocation={{
+          lat: storeSettings.storeLatitude || 28.6139,
+          lng: storeSettings.storeLongitude || 77.2090
+        }}
+        onSave={(location) => {
+          setStoreSettings({
+            ...storeSettings,
+            storeLatitude: location.lat,
+            storeLongitude: location.lng,
+          });
+          setStoreMsg({
+            type: 'success',
+            text: `Location set: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`
+          });
+        }}
+      />
+
       {/* Stock Toggle Confirmation Modal */}
       {showStockConfirm && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -1767,6 +1998,8 @@ const OfferFormModal = ({ onClose, onSave }) => {
     discountValue: "",
     code: "",
     validTo: "",
+    minOrderValue: 0,
+    isActive: true,
   });
 
   const handleSubmit = async (e) => {

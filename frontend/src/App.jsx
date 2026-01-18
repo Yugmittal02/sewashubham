@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
+import CookieConsent from './components/CookieConsent';
 
 // Keep Welcome static for instant landing page load
 import Welcome from './pages/Welcome';
@@ -57,6 +58,7 @@ const App = () => {
                     </Suspense>
                 </Router>
             </CartProvider>
+            <CookieConsent />
         </AuthProvider>
     );
 };

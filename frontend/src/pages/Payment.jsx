@@ -36,6 +36,7 @@ const Payment = () => {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [showUPIModal, setShowUPIModal] = useState(false);
+  const [isProcessingOrder, setIsProcessingOrder] = useState(false);
 
   // Fee states
   const [feeSettings, setFeeSettings] = useState({
@@ -87,15 +88,16 @@ const Payment = () => {
     }
   }, [orderType, deliveryAddress, subtotal]);
 
-  // Redirect if no cart or order type
+  // Redirect if no cart or order type (but not during order processing)
   useEffect(() => {
+    if (isProcessingOrder) return; // Don't redirect during order processing
     if (cart.length === 0) {
       navigate("/cart");
     }
     if (!orderType) {
       navigate("/cart");
     }
-  }, [cart, orderType, navigate]);
+  }, [cart, orderType, navigate, isProcessingOrder]);
 
   const loadFeeSettings = async () => {
     try {
@@ -208,7 +210,12 @@ const Payment = () => {
       };
 
       const response = await createOrder(orderData);
+      
+      // Set flag before clearing cart to prevent redirect
+      setIsProcessingOrder(true);
       clearCart();
+      
+      // Navigate with replace to prevent going back to payment page
       navigate("/order-success", {
         state: {
           customerName: customer.name,
@@ -217,6 +224,7 @@ const Payment = () => {
           savedAmount: discount,
           donationAmount,
         },
+        replace: true,
       });
     } catch (error) {
       console.error(error);
@@ -232,7 +240,11 @@ const Payment = () => {
   };
 
   const handleRazorpaySuccess = (result) => {
+    // Set flag before clearing cart to prevent redirect
+    setIsProcessingOrder(true);
     clearCart();
+    
+    // Navigate with replace to prevent going back to payment page
     navigate("/order-success", {
       state: {
         customerName: customer?.name,
@@ -243,6 +255,7 @@ const Payment = () => {
         savedAmount: discount,
         donationAmount,
       },
+      replace: true,
     });
   };
 

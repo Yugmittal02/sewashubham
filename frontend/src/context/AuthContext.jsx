@@ -3,25 +3,57 @@ import API from '../services/api';
 
 const AuthContext = createContext();
 
+// Helper to check if cookies are accepted
+const isCookieConsentAccepted = () => {
+    return localStorage.getItem('cookieConsent') === 'accepted';
+};
+
+// Helper to get the appropriate storage based on consent
+const getCustomerStorage = () => {
+    return isCookieConsentAccepted() ? localStorage : sessionStorage;
+};
+
 export const AuthProvider = ({ children }) => {
     const [customer, setCustomer] = useState(null);
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check for customer in sessionStorage
-        const storedCustomer = sessionStorage.getItem('customer');
-        const customerToken = localStorage.getItem('customerToken');
+        // Check for customer in both localStorage and sessionStorage
+        // localStorage takes priority if cookies are accepted
+        let storedCustomer = null;
+        let customerToken = null;
+
+        if (isCookieConsentAccepted()) {
+            // Check localStorage first when cookies accepted
+            storedCustomer = localStorage.getItem('customer');
+            customerToken = localStorage.getItem('customerToken');
+            
+            // Migrate from sessionStorage to localStorage if needed
+            if (!storedCustomer && sessionStorage.getItem('customer')) {
+                storedCustomer = sessionStorage.getItem('customer');
+                localStorage.setItem('customer', storedCustomer);
+            }
+            if (!customerToken && sessionStorage.getItem('customerToken')) {
+                customerToken = sessionStorage.getItem('customerToken');
+                localStorage.setItem('customerToken', customerToken);
+            }
+        } else {
+            // Use sessionStorage when cookies not accepted
+            storedCustomer = sessionStorage.getItem('customer');
+            customerToken = sessionStorage.getItem('customerToken') || localStorage.getItem('customerToken');
+        }
         
         if (storedCustomer && customerToken) {
             setCustomer(JSON.parse(storedCustomer));
         } else {
             // Invalid state: Clear potential leftovers
             sessionStorage.removeItem('customer');
+            localStorage.removeItem('customer');
             localStorage.removeItem('customerToken');
         }
 
-        // Check for admin in localStorage
+        // Check for admin in localStorage (admin always uses localStorage)
         const storedAdmin = localStorage.getItem('admin');
         const token = localStorage.getItem('adminToken');
         if (storedAdmin && token) {
@@ -36,9 +68,17 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await API.post('/auth/customer', { name, phone });
             
-            // Store token and user data
+            const storage = getCustomerStorage();
+            
+            // Store token in localStorage always for API auth
             localStorage.setItem('customerToken', data.token);
-            sessionStorage.setItem('customer', JSON.stringify(data.user));
+            // Store customer data based on consent
+            storage.setItem('customer', JSON.stringify(data.user));
+            
+            // If cookies accepted, ensure data is in localStorage
+            if (isCookieConsentAccepted()) {
+                localStorage.setItem('customer', JSON.stringify(data.user));
+            }
             
             // Clear potential admin session to avoid conflicts
             localStorage.removeItem('adminToken');
@@ -69,6 +109,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         // Clear customer session
         sessionStorage.removeItem('customer');
+        localStorage.removeItem('customer');
         setCustomer(null);
         
         // Clear admin session
@@ -79,6 +120,7 @@ export const AuthProvider = ({ children }) => {
 
     const logoutCustomer = () => {
         sessionStorage.removeItem('customer');
+        localStorage.removeItem('customer');
         localStorage.removeItem('customerToken');
         setCustomer(null);
     };
