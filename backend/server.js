@@ -38,9 +38,6 @@ const defaultAllowedOrigins = [
 // Merge both lists
 const allAllowedOrigins = [...new Set([...allowedOrigins, ...defaultAllowedOrigins])];
 
-// Handle preflight OPTIONS requests explicitly
-app.options('*', cors());
-
 app.use(
   cors({
     origin: function(origin, callback) {
