@@ -173,54 +173,81 @@ const Home = () => {
                         <span className="text-xl">🎉</span> Special Offers
                     </h3>
                     <div className="flex overflow-x-auto gap-3 hide-scrollbar pb-2 snap-x snap-mandatory -mx-2 px-2">
-                        {offers.map((offer, idx) => (
-                            <div 
-                                key={offer._id} 
-                                className={`relative flex-shrink-0 w-[85vw] max-w-[320px] rounded-3xl p-5 text-white shadow-xl snap-center active:scale-[0.98] transition-transform overflow-hidden ${
-                                    idx % 3 === 0 
-                                        ? 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500' 
-                                        : idx % 3 === 1
-                                        ? 'bg-gradient-to-br from-purple-500 via-pink-500 to-red-500'
-                                        : 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500'
-                                }`}
-                            >
-                                {/* Celebration Decorations */}
-                                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                    <div className="absolute top-3 right-8 w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></div>
-                                    <div className="absolute top-6 right-4 w-1.5 h-1.5 bg-white rounded-full opacity-80"></div>
-                                    <div className="absolute top-4 right-16 w-1 h-1 bg-pink-200 rounded-full"></div>
-                                    <div className="absolute bottom-8 left-6 w-2 h-2 bg-yellow-200 rounded-full opacity-70"></div>
-                                    <div className="absolute bottom-12 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-60"></div>
-                                    <span className="absolute top-2 right-3 text-lg opacity-80">✨</span>
-                                    <span className="absolute bottom-4 left-3 text-sm opacity-60">⭐</span>
-                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-                                    <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full"></div>
-                                </div>
-                                
-                                {/* Content */}
-                                <div className="relative z-10">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-2xl">🎊</span>
-                                        <p className="text-xs font-bold uppercase tracking-wider opacity-90">{offer.title}</p>
-                                    </div>
-                                    
-                                    <p className="text-5xl font-black drop-shadow-lg">
-                                        {offer.discountType === 'percentage' ? `${offer.discountValue}%` : `₹${offer.discountValue}`}
-                                        <span className="text-2xl ml-1">OFF</span>
-                                    </p>
-                                    
-                                    <p className="text-sm mt-2 opacity-90 line-clamp-2">{offer.description}</p>
-                                    
-                                    <div className="mt-4 bg-white rounded-2xl px-4 py-3 inline-flex items-center gap-3 shadow-lg">
-                                        <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg uppercase">
-                                            Code
+                        {offers.map((offer, idx) => {
+                            const isRepublic = offer.code?.startsWith('REP');
+                            return (
+                                <div 
+                                    key={offer._id} 
+                                    className={`relative flex-shrink-0 w-[85vw] max-w-[320px] rounded-3xl p-5 shadow-xl snap-center active:scale-[0.98] transition-transform overflow-hidden ${
+                                        isRepublic 
+                                            ? 'bg-gradient-to-br from-orange-600 via-white to-green-700 text-gray-800' 
+                                            : idx % 3 === 0 
+                                            ? 'bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 text-white' 
+                                            : idx % 3 === 1
+                                            ? 'bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 text-white'
+                                            : 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 text-white'
+                                    }`}
+                                >
+                                    {/* Republic Decorations */}
+                                    {isRepublic && (
+                                        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                                            <div className="absolute top-0 left-0 w-24 h-24 bg-blue-600 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                                            <div className="absolute top-1/2 left-1/2 w-32 h-32 border-4 border-blue-900/10 rounded-full -translate-x-1/2 -translate-y-1/2 spin-slow"></div>
                                         </div>
-                                        <span className="font-mono font-black text-gray-800 text-lg tracking-widest">{offer.code}</span>
-                                        <span className="text-lg">🎁</span>
+                                    )}
+
+                                    {/* Default Decorations */}
+                                    {!isRepublic && (
+                                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                            <div className="absolute top-3 right-8 w-2 h-2 bg-yellow-300 rounded-full animate-pulse"></div>
+                                            <div className="absolute top-6 right-4 w-1.5 h-1.5 bg-white rounded-full opacity-80"></div>
+                                            <div className="absolute top-4 right-16 w-1 h-1 bg-pink-200 rounded-full"></div>
+                                            <div className="absolute bottom-8 left-6 w-2 h-2 bg-yellow-200 rounded-full opacity-70"></div>
+                                            <div className="absolute bottom-12 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-60"></div>
+                                            <span className="absolute top-2 right-3 text-lg opacity-80">✨</span>
+                                            <span className="absolute bottom-4 left-3 text-sm opacity-60">⭐</span>
+                                            <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                                            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full"></div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Content */}
+                                    <div className="relative z-10">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-2xl">{isRepublic ? '🇮🇳' : '🎊'}</span>
+                                            <p className={`text-xs font-bold uppercase tracking-wider opacity-90 ${isRepublic ? 'text-blue-800' : ''}`}>
+                                                {offer.title}
+                                            </p>
+                                        </div>
+                                        
+                                        <p className="text-5xl font-black drop-shadow-sm leading-tight">
+                                            {isRepublic ? (
+                                                <span className="flex items-baseline gap-1">
+                                                    <span className="text-2xl">₹</span>
+                                                    {offer.discountValue}
+                                                </span>
+                                            ) : (
+                                                <>
+                                                    {offer.discountType === 'percentage' ? `${offer.discountValue}%` : `₹${offer.discountValue}`}
+                                                    <span className="text-2xl ml-1">OFF</span>
+                                                </>
+                                            )}
+                                        </p>
+                                        
+                                        <p className={`text-sm mt-2 font-medium line-clamp-2 ${isRepublic ? 'text-gray-700' : 'opacity-90'}`}>
+                                            {offer.description}
+                                        </p>
+                                        
+                                        <div className={`mt-4 rounded-2xl px-4 py-3 inline-flex items-center gap-3 shadow-lg ${isRepublic ? 'bg-blue-50 text-blue-900 border border-blue-100' : 'bg-white text-gray-800'}`}>
+                                            <div className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase ${isRepublic ? 'bg-orange-500 text-white' : 'bg-gradient-to-r from-orange-500 to-red-500 text-white'}`}>
+                                                Code
+                                            </div>
+                                            <span className="font-mono font-black text-lg tracking-widest">{offer.code}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             )}

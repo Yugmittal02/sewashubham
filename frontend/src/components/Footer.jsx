@@ -20,7 +20,7 @@ const Footer = memo(() => {
                 </div>
 
                 {/* Quick Links */}
-                <div className="flex justify-center gap-6 mb-4">
+                <div className="flex flex-wrap justify-center gap-4 mb-4">
                     <Link 
                         to="/terms" 
                         className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
@@ -32,6 +32,18 @@ const Footer = memo(() => {
                         className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
                     >
                         Privacy Policy
+                    </Link>
+                    <Link 
+                        to="/refund" 
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                    >
+                        Refund Policy
+                    </Link>
+                    <Link 
+                        to="/shipping" 
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                    >
+                        Shipping Policy
                     </Link>
                     <Link 
                         to="/contact" 

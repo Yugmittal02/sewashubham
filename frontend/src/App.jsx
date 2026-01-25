@@ -18,6 +18,8 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const UserDashboard = lazy(() => import('./pages/UserDashboard'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 
 // Protected Route for Admin
@@ -45,6 +47,8 @@ const App = () => {
                             {/* Static Pages */}
                             <Route path="/terms" element={<TermsConditions />} />
                             <Route path="/privacy" element={<PrivacyPolicy />} />
+                            <Route path="/refund" element={<RefundPolicy />} />
+                            <Route path="/shipping" element={<ShippingPolicy />} />
                             <Route path="/contact" element={<ContactUs />} />
                             
                             {/* Admin Routes */}
