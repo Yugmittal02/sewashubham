@@ -20,11 +20,19 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
       
       // Safely filter offers with defensive checks
       const activeOffers = Array.isArray(data) 
-        ? data.filter(offer => 
-            offer && 
-            offer.isActive && 
-            (!offer.minOrderValue || orderTotal >= offer.minOrderValue)
-          )
+        ? data.filter(offer => {
+            // Basic validation
+            if (!offer || !offer.isActive) return false;
+            
+            // Check minimum order value
+            if (offer.minOrderValue && orderTotal < offer.minOrderValue) return false;
+            
+            // Exclude promotional combo offers (REP = Republic Day combos)
+            // These are fixed-price deals, not discount codes
+            if (offer.code && offer.code.startsWith('REP')) return false;
+            
+            return true;
+          })
         : [];
       
       setOffers(activeOffers);
@@ -78,11 +86,19 @@ const OffersDropdown = ({ orderTotal = 0, onOfferSelect, selectedOffer = null })
       return;
     }
 
+    const code = couponCode.trim().toUpperCase();
+    
+    // Block promotional combo codes (not discount codes)
+    if (code.startsWith('REP')) {
+      setCouponError('This is a combo deal, not a discount code. Add the combo items to your cart.');
+      return;
+    }
+
     setCouponLoading(true);
     setCouponError('');
 
     try {
-      const response = await validateCoupon(couponCode.trim().toUpperCase(), orderTotal);
+      const response = await validateCoupon(code, orderTotal);
       const offer = response?.data?.offer;
       
       if (offer) {
