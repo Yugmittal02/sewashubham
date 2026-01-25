@@ -55,6 +55,11 @@ const OrderSuccess = () => {
   const [screenshotUploaded, setScreenshotUploaded] = useState(false);
   const [screenshotError, setScreenshotError] = useState("");
   const fileInputRef = useRef(null);
+  const [upiAppOpened, setUpiAppOpened] = useState(false);
+  
+  // Determine if we should show payment gate (UPI orders without screenshot)
+  const isUPIOrder = orderData?.paymentMethod === 'UPI' || state?.paymentMethod === 'UPI';
+  const showPaymentGate = isUPIOrder && !screenshotUploaded && orderStatus !== 'Cancelled';
 
   useEffect(() => {
     setTimeout(() => setShowContent(true), 100);
@@ -107,6 +112,17 @@ const OrderSuccess = () => {
       setScreenshotUploaded(true);
     }
   }, [orderData]);
+  
+  // Auto-open UPI app on mount for UPI orders
+  useEffect(() => {
+    if (isUPIOrder && state?.upiLink && !upiAppOpened && !screenshotUploaded) {
+      // Open UPI app automatically
+      setTimeout(() => {
+        window.location.href = state.upiLink;
+        setUpiAppOpened(true);
+      }, 500);
+    }
+  }, [isUPIOrder, state?.upiLink, upiAppOpened, screenshotUploaded]);
 
   // Cancellation countdown timer
   useEffect(() => {
@@ -244,9 +260,105 @@ const OrderSuccess = () => {
               : "opacity-0 translate-y-10"
           }`}
         >
-          {/* Status Header */}
-          <div className="text-center mb-6">
-            {!isAccepted && orderStatus === "Pending" ? (
+          {/* UPI Payment Gate - Shows FIRST for UPI orders until screenshot uploaded */}
+          {showPaymentGate ? (
+            <div className="text-center">
+              {/* Payment Header */}
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                <span className="text-4xl">💳</span>
+              </div>
+              
+              <h1 className="text-2xl font-black text-gray-800 mb-2">
+                Complete Your Payment
+              </h1>
+              <p className="text-gray-500 font-medium mb-6">
+                Pay ₹{orderData?.totalAmount || state?.totalAmount || 0} via UPI
+              </p>
+              
+              {/* Payment Card */}
+              <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 mb-6">
+                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-orange-100 mb-5">
+                  <p className="text-sm text-orange-600 font-medium mb-1">Amount to Pay</p>
+                  <p className="text-4xl font-black text-gray-900">
+                    ₹{(orderData?.totalAmount || state?.totalAmount || 0).toFixed(0)}
+                  </p>
+                </div>
+                
+                {/* Open UPI App Button */}
+                {!upiAppOpened && (
+                  <button
+                    onClick={() => {
+                      if (state?.upiLink) {
+                        window.location.href = state.upiLink;
+                        setUpiAppOpened(true);
+                      }
+                    }}
+                    className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg mb-4"
+                  >
+                    📱 Open UPI App to Pay
+                  </button>
+                )}
+                
+                {/* After UPI App Opened - Show Screenshot Upload */}
+                {upiAppOpened && (
+                  <div className="bg-green-50 rounded-2xl p-4 border border-green-100 mb-4">
+                    <FaCheckCircle className="text-green-500 text-2xl mx-auto mb-2" />
+                    <p className="font-bold text-green-700 text-sm">UPI App Opened!</p>
+                    <p className="text-xs text-green-600">Complete payment in your UPI app</p>
+                  </div>
+                )}
+                
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleScreenshotUpload}
+                  accept="image/*"
+                  className="hidden"
+                />
+                
+                {screenshotError && (
+                  <p className="text-red-500 text-sm mb-3">{screenshotError}</p>
+                )}
+                
+                {/* Screenshot Upload Button */}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={screenshotUploading}
+                  className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg disabled:opacity-50"
+                >
+                  {screenshotUploading ? (
+                    <>
+                      <FaSpinner className="animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <FaUpload />
+                      Upload Payment Screenshot
+                    </>
+                  )}
+                </button>
+                
+                <p className="text-xs text-gray-400 mt-3">
+                  📸 Take a screenshot of your successful payment and upload it
+                </p>
+              </div>
+              
+              {/* Skip Option (for testing/COD alternative) */}
+              <button
+                onClick={() => setScreenshotUploaded(true)}
+                className="text-sm text-gray-400 underline"
+              >
+                I'll upload later / Skip for now
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* Normal Order Status Content */}
+              {/* Status Header */}
+              <div className="text-center mb-6">
+                {!isAccepted && orderStatus === "Pending" ? (
               <>
                 <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-xl">
                   <FaClock className="text-yellow-600 text-3xl animate-pulse" />
@@ -711,6 +823,8 @@ const OrderSuccess = () => {
           >
             Return to Menu
           </button>
+            </>
+          )}
         </div>
       </div>
 

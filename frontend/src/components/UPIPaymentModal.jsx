@@ -73,6 +73,7 @@ const UPIPaymentModal = ({
   const [isMobile, setIsMobile] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [paymentMode, setPaymentMode] = useState("razorpay"); // 'razorpay' or 'manual'
+  const [paymentAppOpened, setPaymentAppOpened] = useState(false); // Track if UPI app was opened
 
   // Razorpay hook
   const {
@@ -158,20 +159,11 @@ const UPIPaymentModal = ({
     link.href = upiLink;
     link.click();
 
-    // Notify parent component
-    if (onPaymentInitiated) {
-      onPaymentInitiated({
-        app: app.name,
-        amount: amount,
-        upiLink: upiLink,
-      });
-    }
-
-    // Reset after a delay
+    // Mark that app was opened - DON'T create order yet
     setTimeout(() => {
       setIsProcessing(false);
-      setSelectedApp(null);
-    }, 3000);
+      setPaymentAppOpened(true);
+    }, 1500);
   };
 
   // Open any UPI app (uses device's native app picker)
@@ -186,11 +178,19 @@ const UPIPaymentModal = ({
     const upiLink = generateUPILink("upi://pay");
     window.location.href = upiLink;
 
+    // Mark that app was opened - DON'T create order yet
+    setTimeout(() => {
+      setPaymentAppOpened(true);
+    }, 1500);
+  };
+  
+  // User confirms they completed payment
+  const handleConfirmPayment = () => {
     if (onPaymentInitiated) {
       onPaymentInitiated({
-        app: "Any UPI App",
+        app: selectedApp || "UPI App",
         amount: amount,
-        upiLink: upiLink,
+        upiLink: generateUPILink("upi://pay"),
       });
     }
   };
@@ -493,15 +493,51 @@ const UPIPaymentModal = ({
         ) : (
           paymentMode === "manual" && (
             <>
-              {/* Warning about manual payments */}
-              <div className="px-6 pb-4">
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3">
-                  <p className="text-xs text-amber-700 text-center font-medium">
-                    ⚠️ Manual UPI payments require admin verification. For
-                    instant confirmation, use "Secure Pay" option.
+              {/* Payment Confirmation UI - After UPI app opened */}
+              {paymentAppOpened ? (
+                <div className="px-6 pb-6">
+                  <div className="bg-green-50 border-2 border-green-200 rounded-3xl p-6 text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaCheckCircle className="text-green-500 text-3xl" />
+                    </div>
+                    <h3 className="font-bold text-green-800 text-lg mb-2">
+                      UPI App Opened!
+                    </h3>
+                    <p className="text-sm text-green-700 mb-4">
+                      Complete the payment of <span className="font-bold">₹{amount.toFixed(0)}</span> in your UPI app, then confirm below.
+                    </p>
+                    
+                    <button
+                      onClick={handleConfirmPayment}
+                      className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg mb-3"
+                    >
+                      <FaCheckCircle size={18} />
+                      I've Completed Payment
+                    </button>
+                    
+                    <button
+                      onClick={() => setPaymentAppOpened(false)}
+                      className="w-full py-3 bg-gray-100 text-gray-600 font-bold rounded-xl text-sm"
+                    >
+                      ← Retry / Open Different App
+                    </button>
+                  </div>
+                  
+                  <p className="text-xs text-gray-400 text-center mt-3">
+                    Note: Please upload payment screenshot on the next page for verification
                   </p>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Warning about manual payments */}
+                  <div className="px-6 pb-4">
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3">
+                      <p className="text-xs text-amber-700 text-center font-medium">
+                        ⚠️ Manual UPI payments require admin verification. For
+                        instant confirmation, use "Secure Pay" option.
+                      </p>
+                    </div>
+                  </div>
 
               {/* UPI Apps Grid */}
               <div className="px-6 pb-4">
@@ -576,6 +612,8 @@ const UPIPaymentModal = ({
                   </p>
                 </div>
               </div>
+                </>
+              )}
             </>
           )
         )}
