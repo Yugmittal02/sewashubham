@@ -115,14 +115,12 @@ const Home = () => {
     }, []);
 
     const categories = [
-        { name: 'All', icon: '🍽️' },
-        { name: 'Pizza', icon: '🍕' },
+        { name: 'Cold Coffee and Shakes', icon: '🥤' },
+        { name: 'Pattis', icon: '🥟' },
         { name: 'Burger', icon: '🍔' },
-        { name: 'Sandwich', icon: '🥪' },
-        { name: 'Pasta', icon: '🍝' },
-        { name: 'Drinks', icon: '🥤' },
-        { name: 'Dessert', icon: '🧁' },
-        { name: 'Bakery', icon: '🥐' }
+        { name: 'Maggie', icon: '🍜' },
+        { name: 'Pizza', icon: '🍕' },
+        { name: 'Soft Drinks', icon: '🍹' }
     ];
 
     return (
@@ -130,9 +128,12 @@ const Home = () => {
             
             {/* Compact Mobile Header */}
             <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-orange-100/50 shadow-sm safe-area-top">
-                <div className="px-4 py-3">
-                    <div className="flex justify-between items-center">
-                        <div className="flex-1">
+                <div className="px-4 py-3 space-y-3">
+                    <div className="flex items-center justify-between relative">
+                        {/* Profile Button - Left aligned on mobile if needed, or keep right */}
+                        <div className="w-10"></div> {/* Spacer for centering */}
+                        
+                        <div className="text-center">
                             <h1 className="text-xl font-black text-gray-800 tracking-tight">
                                 Shubham<span className="text-orange-600">Pattis</span>
                             </h1>
@@ -140,38 +141,28 @@ const Home = () => {
                                 Hi, <span className="text-orange-600 font-semibold">{customer?.name || 'Guest'}</span> 👋
                             </p>
                         </div>
-                        <button 
-                            onClick={() => setShowSearch(!showSearch)}
-                            className="w-12 h-12 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center text-orange-600 active:scale-95 transition-transform shadow-sm"
-                        >
-                            {showSearch ? <FaTimes size={18} /> : <FaSearch size={18} />}
-                        </button>
-                        {customer && (
+
+                        {customer ? (
                             <button 
                                 onClick={() => navigate('/dashboard')}
-                                className="w-12 h-12 ml-2 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center text-orange-600 active:scale-95 transition-transform shadow-sm"
+                                className="w-10 h-10 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl flex items-center justify-center text-orange-600 active:scale-95 transition-transform shadow-sm"
                             >
-                                <span className="text-xl">👤</span>
+                                <span className="text-lg">👤</span>
                             </button>
-                        )}
+                        ) : <div className="w-10"></div>}
                     </div>
                     
-                    {/* Expandable Search */}
-                    {showSearch && (
-                        <div className="mt-3 animate-fade-in">
-                            <div className="relative">
-                                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                                <input 
-                                    type="text" 
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search for food..." 
-                                    autoFocus
-                                    className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl pl-12 pr-4 py-4 text-base font-medium placeholder:text-gray-400 focus:outline-none focus:border-orange-300 transition-all" 
-                                />
-                            </div>
-                        </div>
-                    )}
+                    {/* Persistent Search Bar - High Contrast */}
+                    <div className="relative">
+                        <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-orange-600" />
+                        <input 
+                            type="text" 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search for food..." 
+                            className="w-full bg-orange-100 border-2 border-orange-200 rounded-2xl pl-12 pr-4 py-3 text-sm font-bold text-gray-800 placeholder:text-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200/50 transition-all shadow-inner" 
+                        />
+                    </div>
                 </div>
             </header>
 
@@ -241,7 +232,7 @@ const Home = () => {
                     {categories.map(cat => (
                         <button 
                             key={cat.name} 
-                            onClick={() => setCategory(cat.name)}
+                            onClick={() => setCategory(cat.name === category ? 'All' : cat.name)}
                             className={`flex-shrink-0 h-14 px-5 rounded-2xl flex items-center gap-2.5 font-semibold text-base transition-all active:scale-95 ${
                                 category === cat.name 
                                     ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-300/50' 

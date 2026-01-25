@@ -44,7 +44,7 @@ const Footer = memo(() => {
                 {/* Social Links */}
                 <div className="flex justify-center gap-3 mb-4">
                     <a 
-                        href="https://wa.me/919876543210" 
+                        href="https://wa.me/919694034523" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center hover:bg-green-100 transition-colors"
@@ -52,7 +52,7 @@ const Footer = memo(() => {
                         <FaWhatsapp size={18} />
                     </a>
                     <a 
-                        href="https://instagram.com" 
+                        href="https://www.instagram.com/shubham_patties_bharatpur/" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center hover:bg-pink-100 transition-colors"
@@ -60,13 +60,13 @@ const Footer = memo(() => {
                         <FaInstagram size={18} />
                     </a>
                     <a 
-                        href="tel:+919876543210"
+                        href="tel:+919694034523"
                         className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-100 transition-colors"
                     >
                         <FaPhoneAlt size={16} />
                     </a>
                     <a 
-                        href="mailto:contact@shubhampattis.com"
+                        href="mailto:Shubhamashwani25@gmail.com"
                         className="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center hover:bg-orange-100 transition-colors"
                     >
                         <FaEnvelope size={16} />

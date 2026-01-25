@@ -179,6 +179,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
         {cart.length > 0 && (
           <div className="p-4 border-t border-gray-100 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
             {/* Total */}
+            {/* Total */}
             <div className="flex justify-between items-center mb-4">
               <div>
                 <p className="text-xs text-gray-500 uppercase font-medium">
@@ -188,9 +189,6 @@ const SideCart = memo(({ isOpen, onClose }) => {
                   ₹{total.toFixed(0)}
                 </p>
               </div>
-              <p className="text-xs text-gray-400">
-                + taxes calculated at checkout
-              </p>
             </div>
 
             {/* Checkout Button */}

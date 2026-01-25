@@ -47,8 +47,7 @@ const Cart = () => {
   };
 
   const subtotal = total;
-  const tax = subtotal * (feeSettings.taxRate / 100);
-  const estimatedTotal = subtotal + tax + feeSettings.platformFee;
+  const estimatedTotal = subtotal + feeSettings.platformFee;
 
   // Navigate to payment page
   const proceedToPayment = () => {
@@ -287,10 +286,6 @@ const Cart = () => {
               <div className="flex justify-between text-gray-600">
                 <span>Item Total</span>
                 <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-gray-500">
-                <span>GST ({feeSettings.taxRate}%)</span>
-                <span>₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-500">
                 <span>Platform Fee</span>
