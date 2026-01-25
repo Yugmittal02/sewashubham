@@ -95,6 +95,17 @@ const orderSchema = new mongoose.Schema({
   acceptedAt: {
     type: Date
   },
+  // Payment screenshot for manual verification (temporary while Razorpay under review)
+  paymentScreenshot: {
+    url: String,
+    uploadedAt: Date,
+    verified: {
+      type: Boolean,
+      default: false
+    },
+    verifiedAt: Date,
+    verifiedBy: String
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

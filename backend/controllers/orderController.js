@@ -134,3 +134,72 @@ exports.cancelOrder = async (req, res) => {
         res.status(500).json({ message: 'Error cancelling order', error: error.message });
     }
 };
+
+// Upload payment screenshot (for UPI manual verification)
+exports.uploadPaymentScreenshot = async (req, res) => {
+    try {
+        const { screenshotUrl } = req.body;
+        
+        if (!screenshotUrl) {
+            return res.status(400).json({ message: 'Screenshot URL is required' });
+        }
+        
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            {
+                paymentScreenshot: {
+                    url: screenshotUrl,
+                    uploadedAt: new Date(),
+                    verified: false
+                },
+                paymentStatus: 'Initiated' // Mark as initiated once screenshot is uploaded
+            },
+            { new: true }
+        );
+        
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        
+        res.json({ message: 'Payment screenshot uploaded successfully', order });
+    } catch (error) {
+        res.status(500).json({ message: 'Error uploading screenshot', error: error.message });
+    }
+};
+
+// Admin: Verify payment screenshot
+exports.verifyPaymentScreenshot = async (req, res) => {
+    try {
+        const { verified } = req.body;
+        const adminName = req.user?.name || 'Admin';
+        
+        const updateData = {
+            'paymentScreenshot.verified': verified,
+            'paymentScreenshot.verifiedAt': new Date(),
+            'paymentScreenshot.verifiedBy': adminName
+        };
+        
+        // If verified, also update payment status
+        if (verified) {
+            updateData.paymentStatus = 'Paid';
+        }
+        
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            { new: true }
+        ).populate('user', 'name phone');
+        
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        
+        res.json({ 
+            message: verified ? 'Payment verified successfully' : 'Payment marked as unverified', 
+            order 
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error verifying payment', error: error.message });
+    }
+};
+

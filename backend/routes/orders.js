@@ -17,5 +17,12 @@ router.put('/:id/accept', verifyToken, isAdmin, validateObjectId('id'), orderCon
 // Cancel order (customer can cancel within 30 seconds)
 router.put('/:id/cancel', validateObjectId('id'), orderController.cancelOrder);
 
+// Payment screenshot upload (customer - no auth required, uses order ID)
+router.put('/:id/screenshot', validateObjectId('id'), orderController.uploadPaymentScreenshot);
+
+// Admin: Verify payment screenshot
+router.put('/:id/verify-payment', verifyToken, isAdmin, validateObjectId('id'), orderController.verifyPaymentScreenshot);
+
 module.exports = router;
+
 
