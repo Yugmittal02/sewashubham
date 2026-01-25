@@ -88,4 +88,11 @@ export const getPaymentStatus = (orderId) =>
 export const manualVerifyPayment = (orderId, data) =>
   API.put(`/payments/manual-verify/${orderId}`, data);
 
+// Payment Screenshot (for manual UPI verification)
+export const uploadPaymentScreenshot = (orderId, screenshotUrl) =>
+  API.put(`/orders/${orderId}/screenshot`, { screenshotUrl });
+export const verifyPaymentScreenshotAdmin = (orderId, verified) =>
+  API.put(`/orders/${orderId}/verify-payment`, { verified });
+
 export default API;
+

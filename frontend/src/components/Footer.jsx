@@ -19,35 +19,35 @@ const Footer = memo(() => {
                     </p>
                 </div>
 
-                {/* Quick Links */}
-                <div className="flex flex-wrap justify-center gap-4 mb-4">
+                {/* Quick Links - Mobile optimized grid */}
+                <div className="grid grid-cols-2 gap-2 mb-4 px-2">
                     <Link 
                         to="/terms" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
                     >
                         Terms & Conditions
                     </Link>
                     <Link 
                         to="/privacy" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
                     >
                         Privacy Policy
                     </Link>
                     <Link 
                         to="/refund" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
                     >
                         Refund Policy
                     </Link>
                     <Link 
                         to="/shipping" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
                     >
                         Shipping Policy
                     </Link>
                     <Link 
                         to="/contact" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium"
+                        className="col-span-2 text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
                     >
                         Contact Us
                     </Link>

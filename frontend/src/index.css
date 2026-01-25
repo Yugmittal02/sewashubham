@@ -153,6 +153,54 @@ body {
   overscroll-behavior: none;
 }
 
+/* =========================================
+   MOBILE-FIRST ENHANCEMENTS
+   ========================================= */
+
+/* Ensure minimum tap target size for all interactive elements */
+button, a, input[type="checkbox"], input[type="radio"], select {
+  min-height: 44px;
+}
+
+/* Improve readability on small screens */
+@media (max-width: 380px) {
+  html {
+    font-size: 14px;
+  }
+  
+  /* Smaller padding on very small screens */
+  .px-4 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  /* Stack buttons that might overflow */
+  .flex-wrap-mobile {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+/* Larger touch target for quantity buttons and action buttons */
+.touch-action-button {
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Improve form input focus on mobile */
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Ensure fixed bottom buttons have enough padding */
+.fixed-bottom-action {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
 /* Safe Area Insets for notched phones */
 .safe-area-top {
   padding-top: env(safe-area-inset-top);

@@ -16,10 +16,8 @@ import {
   FaMapMarkerAlt,
   FaTruck,
   FaGift,
-  FaHeart,
 } from "react-icons/fa";
 import UPIPaymentModal from "../components/UPIPaymentModal";
-import DonationSection from "../components/DonationSection";
 import OffersDropdown from "../components/OffersDropdown";
 import CelebrationMessage from "../components/CelebrationMessage";
 import Footer from "../components/Footer";
@@ -40,8 +38,6 @@ const Payment = () => {
 
   // Fee states
   const [feeSettings, setFeeSettings] = useState({
-    platformFee: 0.98,
-    taxRate: 5,
     deliveryFeeBase: 30,
     deliveryFeePerKm: 5,
     freeDeliveryThreshold: 500,
@@ -49,22 +45,17 @@ const Payment = () => {
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [freeDelivery, setFreeDelivery] = useState(false);
 
-  // Offer & Donation states
+  // Offer states
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [discount, setDiscount] = useState(0);
-  const [donationAmount, setDonationAmount] = useState(0);
 
   // Celebration states
   const [showSavingsCelebration, setShowSavingsCelebration] = useState(false);
-  const [showDonationCelebration, setShowDonationCelebration] = useState(false);
   const [celebrationAmount, setCelebrationAmount] = useState(0);
 
-  // Calculations
+  // Calculations - No tax, no platform fee
   const subtotal = total;
-  const tax = subtotal * (feeSettings.taxRate / 100);
-  const platformFee = feeSettings.platformFee;
-  const grandTotal =
-    subtotal + tax + platformFee + deliveryFee + donationAmount - discount;
+  const grandTotal = subtotal + deliveryFee - discount;
 
   // Load fee settings on mount
   useEffect(() => {
@@ -147,17 +138,6 @@ const Payment = () => {
     }
   };
 
-  const handleDonationChange = (amount) => {
-    const previousAmount = donationAmount;
-    setDonationAmount(amount);
-
-    // Show celebration only for new donations
-    if (amount > 0 && amount !== previousAmount) {
-      setCelebrationAmount(amount);
-      setShowDonationCelebration(true);
-    }
-  };
-
   const handleCheckout = async () => {
     if (paymentMethod === "UPI") {
       setShowUPIModal(true);
@@ -196,7 +176,6 @@ const Payment = () => {
         paymentMethod,
         orderType,
         deliveryAddress: orderType === "Delivery" ? deliveryAddress : undefined,
-        donationAmount,
         appliedOffer: selectedOffer
           ? {
               offerId: selectedOffer._id,
@@ -205,8 +184,6 @@ const Payment = () => {
             }
           : undefined,
         deliveryFee,
-        platformFee,
-        taxAmount: tax,
       };
 
       const response = await createOrder(orderData);
@@ -222,7 +199,6 @@ const Payment = () => {
           orderDate: new Date().toISOString(),
           orderId: response.data._id,
           savedAmount: discount,
-          donationAmount,
         },
         replace: true,
       });
@@ -375,12 +351,6 @@ const Payment = () => {
           selectedOffer={selectedOffer}
         />
 
-        {/* Donation Section */}
-        <DonationSection
-          onDonationChange={handleDonationChange}
-          customerName={customer?.name}
-        />
-
         {/* Payment Methods */}
         <div>
           <h3 className="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">
@@ -428,7 +398,7 @@ const Payment = () => {
           </div>
         </div>
 
-        {/* Bill Summary */}
+        {/* Bill Summary - Simplified (No Tax, No Platform Fee) */}
         <div className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
           <h3 className="font-bold text-gray-800 text-base mb-4">
             🧾 Bill Details
@@ -436,15 +406,7 @@ const Payment = () => {
           <div className="space-y-3 text-base">
             <div className="flex justify-between text-gray-600">
               <span>Item Total</span>
-              <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-gray-500">
-              <span>GST ({feeSettings.taxRate}%)</span>
-              <span>₹{tax.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-gray-500">
-              <span>Platform Fee</span>
-              <span>₹{platformFee.toFixed(2)}</span>
+              <span className="font-semibold">₹{subtotal.toFixed(0)}</span>
             </div>
             {orderType === "Delivery" && (
               <div className="flex justify-between text-gray-500">
@@ -455,7 +417,7 @@ const Payment = () => {
                 {freeDelivery ? (
                   <span className="text-green-600 font-semibold">FREE</span>
                 ) : (
-                  <span>₹{deliveryFee.toFixed(2)}</span>
+                  <span>₹{deliveryFee.toFixed(0)}</span>
                 )}
               </div>
             )}
@@ -465,16 +427,7 @@ const Payment = () => {
                   <FaGift size={12} />
                   Discount
                 </span>
-                <span>- ₹{discount.toFixed(2)}</span>
-              </div>
-            )}
-            {donationAmount > 0 && (
-              <div className="flex justify-between text-pink-600 font-semibold">
-                <span className="flex items-center gap-1">
-                  <FaHeart size={12} />
-                  Donation
-                </span>
-                <span>+ ₹{donationAmount.toFixed(2)}</span>
+                <span>- ₹{discount.toFixed(0)}</span>
               </div>
             )}
             <div className="border-t-2 border-dashed border-gray-200 pt-4 mt-4">
@@ -531,15 +484,6 @@ const Payment = () => {
           type="savings"
           amount={celebrationAmount}
           onClose={() => setShowSavingsCelebration(false)}
-          autoCloseDelay={2500}
-        />
-      )}
-      {showDonationCelebration && (
-        <CelebrationMessage
-          type="donation"
-          amount={celebrationAmount}
-          customerName={customer?.name}
-          onClose={() => setShowDonationCelebration(false)}
           autoCloseDelay={2500}
         />
       )}

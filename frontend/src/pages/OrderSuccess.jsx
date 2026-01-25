@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaCheckCircle,
@@ -13,8 +13,10 @@ import {
   FaTruck,
   FaStar,
   FaTimes,
+  FaCamera,
+  FaUpload,
 } from "react-icons/fa";
-import { fetchOrderStatus, getStoreSettings, cancelOrder, submitRating } from "../services/api";
+import { fetchOrderStatus, getStoreSettings, cancelOrder, submitRating, uploadImage, uploadPaymentScreenshot } from "../services/api";
 import Footer from "../components/Footer";
 
 const OrderSuccess = () => {
@@ -47,6 +49,12 @@ const OrderSuccess = () => {
   const [ratingComment, setRatingComment] = useState("");
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [ratingLoading, setRatingLoading] = useState(false);
+  
+  // Payment screenshot state
+  const [screenshotUploading, setScreenshotUploading] = useState(false);
+  const [screenshotUploaded, setScreenshotUploaded] = useState(false);
+  const [screenshotError, setScreenshotError] = useState("");
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => setShowContent(true), 100);
@@ -92,6 +100,13 @@ const OrderSuccess = () => {
       return () => clearInterval(interval);
     }
   }, [state?.orderId, ratingSubmitted]);
+  
+  // Check if screenshot already uploaded
+  useEffect(() => {
+    if (orderData?.paymentScreenshot?.url) {
+      setScreenshotUploaded(true);
+    }
+  }, [orderData]);
 
   // Cancellation countdown timer
   useEffect(() => {
@@ -150,6 +165,46 @@ const OrderSuccess = () => {
       alert("Failed to submit rating. Please try again.");
     } finally {
       setRatingLoading(false);
+    }
+  };
+  
+  // Handle payment screenshot upload
+  const handleScreenshotUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setScreenshotError('Please select an image file');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setScreenshotError('Image size should be less than 5MB');
+      return;
+    }
+    
+    setScreenshotUploading(true);
+    setScreenshotError('');
+    
+    try {
+      // Upload image to Cloudinary
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const uploadRes = await uploadImage(formData);
+      const imageUrl = uploadRes.data.url;
+      
+      // Link screenshot to order
+      await uploadPaymentScreenshot(state.orderId, imageUrl);
+      
+      setScreenshotUploaded(true);
+    } catch (error) {
+      console.error('Failed to upload screenshot:', error);
+      setScreenshotError(error.response?.data?.message || 'Failed to upload screenshot');
+    } finally {
+      setScreenshotUploading(false);
     }
   };
 
@@ -483,6 +538,83 @@ const OrderSuccess = () => {
               </div>
             </div>
           </div>
+
+          {/* Payment Screenshot Upload - Only for UPI orders */}
+          {orderData?.paymentMethod === 'UPI' && orderStatus !== 'Cancelled' && (
+            <div className="bg-white rounded-3xl p-5 shadow-lg border border-gray-100 mb-4">
+              <h3 className="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">
+                <FaCamera className="text-blue-500" />
+                Payment Screenshot
+              </h3>
+              
+              {/* Hidden file input */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleScreenshotUpload}
+                accept="image/*"
+                className="hidden"
+              />
+              
+              {screenshotUploaded || orderData?.paymentScreenshot?.url ? (
+                <div className="text-center">
+                  {orderData?.paymentScreenshot?.verified ? (
+                    <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+                      <FaCheckCircle className="text-green-500 text-2xl mx-auto mb-2" />
+                      <p className="font-bold text-green-700">Payment Verified! ✅</p>
+                      <p className="text-sm text-green-600">Your payment has been confirmed by the store.</p>
+                    </div>
+                  ) : (
+                    <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                      <FaClock className="text-blue-500 text-2xl mx-auto mb-2" />
+                      <p className="font-bold text-blue-700">Screenshot Uploaded</p>
+                      <p className="text-sm text-blue-600">Waiting for store to verify your payment...</p>
+                    </div>
+                  )}
+                  
+                  {orderData?.paymentScreenshot?.url && (
+                    <div className="mt-3">
+                      <img 
+                        src={orderData.paymentScreenshot.url} 
+                        alt="Payment Screenshot" 
+                        className="max-h-40 mx-auto rounded-lg border border-gray-200"
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center">
+                  <div className="bg-amber-50 rounded-xl p-4 border border-amber-100 mb-4">
+                    <p className="text-sm text-amber-700">
+                      📸 Please upload a screenshot of your UPI payment to verify your order.
+                    </p>
+                  </div>
+                  
+                  {screenshotError && (
+                    <p className="text-red-500 text-sm mb-3">{screenshotError}</p>
+                  )}
+                  
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={screenshotUploading}
+                    className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {screenshotUploading ? (
+                      <>
+                        <FaSpinner className="animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <FaUpload />
+                        Upload Payment Screenshot
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Admin Contact Button */}
           <a
