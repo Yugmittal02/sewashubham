@@ -27,6 +27,20 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
   : [];
 
+// Always allow these origins (hardcoded fallback)
+const defaultAllowedOrigins = [
+  'https://sewashubhambakery.com',
+  'https://www.sewashubhambakery.com',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+// Merge both lists
+const allAllowedOrigins = [...new Set([...allowedOrigins, ...defaultAllowedOrigins])];
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors());
+
 app.use(
   cors({
     origin: function(origin, callback) {
@@ -36,10 +50,12 @@ app.use(
       // In development, allow all origins
       if (!isProduction) return callback(null, true);
       
-      // In production, check against whitelist
-      if (allowedOrigins.includes(origin)) {
+      // Check against combined whitelist
+      if (allAllowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log(`CORS blocked origin: ${origin}`);
+        console.log(`Allowed origins: ${allAllowedOrigins.join(', ')}`);
         callback(new Error('Not allowed by CORS'));
       }
     },
