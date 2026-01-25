@@ -103,10 +103,24 @@ const Home = () => {
 
     // Memoized filtered products for performance
     const filteredProducts = useMemo(() => {
-        return products.filter(p => 
+        const filtered = products.filter(p => 
             p.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
             p.description?.toLowerCase().includes(debouncedSearch.toLowerCase())
         );
+        
+        // Sort Republic Day specials to the top
+        return filtered.sort((a, b) => {
+            const aIsSpecial = a.name?.toLowerCase().includes('pizza paneer') || 
+                               a.name?.toLowerCase().includes('paneer pizza') ||
+                               a.name?.toLowerCase().includes('double cheese');
+            const bIsSpecial = b.name?.toLowerCase().includes('pizza paneer') || 
+                               b.name?.toLowerCase().includes('paneer pizza') ||
+                               b.name?.toLowerCase().includes('double cheese');
+            
+            if (aIsSpecial && !bIsSpecial) return -1;
+            if (!aIsSpecial && bIsSpecial) return 1;
+            return 0;
+        });
     }, [products, debouncedSearch]);
 
     // Callback for when item is added to cart
@@ -237,13 +251,6 @@ const Home = () => {
                                         <p className={`text-sm mt-2 font-medium line-clamp-2 ${isRepublic ? 'text-gray-700' : 'opacity-90'}`}>
                                             {offer.description}
                                         </p>
-                                        
-                                        <div className={`mt-4 rounded-2xl px-4 py-3 inline-flex items-center gap-3 shadow-lg ${isRepublic ? 'bg-blue-50 text-blue-900 border border-blue-100' : 'bg-white text-gray-800'}`}>
-                                            <div className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase ${isRepublic ? 'bg-orange-500 text-white' : 'bg-gradient-to-r from-orange-500 to-red-500 text-white'}`}>
-                                                Code
-                                            </div>
-                                            <span className="font-mono font-black text-lg tracking-widest">{offer.code}</span>
-                                        </div>
                                     </div>
                                 </div>
                             );
