@@ -7,6 +7,7 @@ import {
   registerCustomer,
   getFeeSettings,
   calculateDeliveryFee,
+  getUPISettings,
 } from "../services/api";
 import {
   FaArrowLeft,
@@ -52,15 +53,36 @@ const Payment = () => {
   // Celebration states
   const [showSavingsCelebration, setShowSavingsCelebration] = useState(false);
   const [celebrationAmount, setCelebrationAmount] = useState(0);
+  
+  // UPI settings
+  const [upiSettings, setUpiSettings] = useState({
+    upiId: "",
+    merchantName: "ShubhamPattis",
+  });
 
   // Calculations - No tax, no platform fee
   const subtotal = total;
   const grandTotal = subtotal + deliveryFee - discount;
 
-  // Load fee settings on mount
+  // Load fee settings and UPI settings on mount
   useEffect(() => {
     loadFeeSettings();
+    loadUPISettings();
   }, []);
+  
+  const loadUPISettings = async () => {
+    try {
+      const { data } = await getUPISettings();
+      if (data.upiId) {
+        setUpiSettings({
+          upiId: data.upiId,
+          merchantName: data.merchantName || "ShubhamPattis",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load UPI settings:", error);
+    }
+  };
 
   // Dynamically load Razorpay script only on Payment page (performance optimization)
   useEffect(() => {
@@ -192,6 +214,11 @@ const Payment = () => {
       setIsProcessingOrder(true);
       clearCart();
       
+      // Generate UPI link if UPI payment
+      const upiLink = paymentMethod === "UPI" && upiSettings.upiId
+        ? `upi://pay?pa=${upiSettings.upiId}&pn=${upiSettings.merchantName.replace(/\s+/g, '%20')}&am=${grandTotal.toFixed(2)}&cu=INR&tn=Order%20${response.data._id}`
+        : null;
+      
       // Navigate with replace to prevent going back to payment page
       navigate("/order-success", {
         state: {
@@ -199,6 +226,9 @@ const Payment = () => {
           orderDate: new Date().toISOString(),
           orderId: response.data._id,
           savedAmount: discount,
+          paymentMethod: paymentMethod,
+          totalAmount: grandTotal,
+          upiLink: upiLink,
         },
         replace: true,
       });
