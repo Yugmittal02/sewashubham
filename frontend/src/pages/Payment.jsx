@@ -89,8 +89,8 @@ const Payment = () => {
               isProcessingRef.current = true;
               setIsProcessingOrder(true);
               setCheckingPendingPayment(false);
-              clearCart();
 
+              // IMPORTANT: Navigate FIRST, then clear cart
               navigate("/order-success", {
                 state: {
                   customerName: customer?.name,
@@ -102,6 +102,11 @@ const Payment = () => {
                 },
                 replace: true,
               });
+
+              // Clear cart after navigation initiated
+              setTimeout(() => {
+                clearCart();
+              }, 100);
               return true;
             } else if (data.paymentStatus === "Failed") {
               // Payment failed, clear pending order
@@ -336,10 +341,8 @@ const Payment = () => {
     // Mark successful payment in sessionStorage to prevent redirect on any re-renders
     sessionStorage.setItem("payment_success", Date.now().toString());
 
-    // Clear cart first (since we're navigating away)
-    clearCart();
-
-    // Navigate to order success with replace to prevent back navigation
+    // IMPORTANT: Navigate FIRST, then clear cart
+    // This prevents race condition where cart clear triggers empty cart redirect
     navigate("/order-success", {
       state: {
         customerName: customer?.name,
@@ -353,6 +356,12 @@ const Payment = () => {
       },
       replace: true,
     });
+
+    // Clear cart AFTER navigation is initiated
+    // Use setTimeout to ensure navigation is processed first
+    setTimeout(() => {
+      clearCart();
+    }, 100);
   };
 
   const paymentMethods = [
