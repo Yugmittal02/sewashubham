@@ -7,6 +7,7 @@ import {
   registerCustomer,
   getFeeSettings,
   calculateDeliveryFee,
+  getPaymentStatus,
 } from "../services/api";
 import {
   FaArrowLeft,
@@ -57,6 +58,44 @@ const Payment = () => {
   // Calculations - No tax, no platform fee
   const subtotal = total;
   const grandTotal = subtotal + deliveryFee - discount;
+
+  // Check for pending payment on page load (for UPI app return)
+  useEffect(() => {
+    const checkPendingPayment = async () => {
+      const pendingOrderId = sessionStorage.getItem("pending_order_id");
+      if (pendingOrderId) {
+        try {
+          console.log("Checking pending payment for order:", pendingOrderId);
+          const { data } = await getPaymentStatus(pendingOrderId);
+
+          if (data.paymentStatus === "Paid") {
+            console.log("Payment confirmed! Redirecting to order success...");
+            // Payment was successful, clear pending order and redirect
+            sessionStorage.removeItem("pending_order_id");
+            sessionStorage.setItem("payment_success", Date.now().toString());
+            isProcessingRef.current = true;
+            setIsProcessingOrder(true);
+            clearCart();
+
+            navigate("/order-success", {
+              state: {
+                customerName: customer?.name,
+                orderDate: new Date().toISOString(),
+                orderId: pendingOrderId,
+                paymentVerified: true,
+                paymentMethod: "Razorpay",
+              },
+              replace: true,
+            });
+          }
+        } catch (error) {
+          console.error("Error checking payment status:", error);
+        }
+      }
+    };
+
+    checkPendingPayment();
+  }, [navigate, customer, clearCart]);
 
   // Load fee settings on mount
   useEffect(() => {

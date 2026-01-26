@@ -82,6 +82,9 @@ export const useRazorpay = () => {
           customerNote,
         });
 
+        // Store pending order ID in sessionStorage for UPI app return detection
+        sessionStorage.setItem("pending_order_id", data.orderId);
+
         // Configure Razorpay options
         const options = {
           key: key,
@@ -129,6 +132,9 @@ export const useRazorpay = () => {
                 orderId: data.orderId,
               });
 
+              // Clear pending order from sessionStorage on success
+              sessionStorage.removeItem("pending_order_id");
+
               setLoading(false);
               if (onSuccess) {
                 onSuccess({
@@ -140,6 +146,9 @@ export const useRazorpay = () => {
             } catch (err) {
               console.error("Payment verification error:", err);
               setLoading(false);
+
+              // Clear pending order since we're handling it now
+              sessionStorage.removeItem("pending_order_id");
 
               // Even if verification fails, if we have payment_id, the payment likely succeeded
               // The webhook will handle the actual verification
