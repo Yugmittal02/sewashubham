@@ -492,14 +492,15 @@ const AdminDashboard = () => {
                         {order.orderType} • {order.paymentMethod}
                       </p>
 
-                      {/* Payment Status Badge */}
-                      {order.paymentMethod === "Razorpay" && (
+                      {/* Payment Status Badge - Show for all payment methods */}
                         <div
                           className={`mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
                             order.paymentStatus === "Paid"
                               ? "bg-green-100 text-green-700"
                               : order.paymentStatus === "Failed"
                               ? "bg-red-100 text-red-700"
+                              : order.paymentMethod === "Cash"
+                              ? "bg-gray-100 text-gray-600"
                               : "bg-yellow-100 text-yellow-700"
                           }`}
                         >
@@ -507,9 +508,10 @@ const AdminDashboard = () => {
                             ? "✓ Payment Verified"
                             : order.paymentStatus === "Failed"
                             ? "✗ Payment Failed"
+                            : order.paymentMethod === "Cash"
+                            ? "💵 Cash on Delivery"
                             : "⏳ Payment Pending"}
                         </div>
-                      )}
 
                       {order.deliveryAddress && (
                         <div className="mt-2 p-2 bg-gray-50 rounded-lg text-xs">
@@ -557,15 +559,14 @@ const AdminDashboard = () => {
                     ₹{order.totalAmount?.toFixed(0)}
                   </p>
 
-                  {/* Manual Payment Verification Button */}
-                  {(order.paymentMethod === "UPI" ||
-                    order.paymentMethod === "Online") &&
+                  {/* Manual Payment Verification Button - Only for Cash orders */}
+                  {order.paymentMethod === "Cash" &&
                     order.paymentStatus !== "Paid" && (
                       <button
                         onClick={() => handleManualVerifyPayment(order._id)}
                         className="w-full mb-3 py-2.5 bg-green-50 text-green-700 font-bold rounded-xl flex items-center justify-center gap-2 text-sm active:bg-green-100"
                       >
-                        ✓ Verify Payment Received
+                        ✓ Mark Cash Received
                       </button>
                     )}
 

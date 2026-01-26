@@ -57,9 +57,11 @@ const OrderSuccess = () => {
   const fileInputRef = useRef(null);
   const [upiAppOpened, setUpiAppOpened] = useState(false);
   
-  // Determine if we should show payment gate (UPI orders without screenshot)
+  // Determine if we should show payment gate (only for legacy UPI orders without screenshot)
+  // Razorpay orders are auto-verified and don't need screenshot
+  const isRazorpayOrder = orderData?.paymentMethod === 'Razorpay' || state?.paymentMethod === 'Razorpay' || state?.paymentVerified;
   const isUPIOrder = orderData?.paymentMethod === 'UPI' || state?.paymentMethod === 'UPI';
-  const showPaymentGate = isUPIOrder && !screenshotUploaded && orderStatus !== 'Cancelled';
+  const showPaymentGate = isUPIOrder && !isRazorpayOrder && !screenshotUploaded && orderStatus !== 'Cancelled';
 
   useEffect(() => {
     setTimeout(() => setShowContent(true), 100);
@@ -113,16 +115,7 @@ const OrderSuccess = () => {
     }
   }, [orderData]);
   
-  // Auto-open UPI app on mount for UPI orders
-  useEffect(() => {
-    if (isUPIOrder && state?.upiLink && !upiAppOpened && !screenshotUploaded) {
-      // Open UPI app automatically
-      setTimeout(() => {
-        window.location.href = state.upiLink;
-        setUpiAppOpened(true);
-      }, 500);
-    }
-  }, [isUPIOrder, state?.upiLink, upiAppOpened, screenshotUploaded]);
+  // Note: Removed auto-open UPI app - now using Razorpay which handles payment in-app
 
   // Cancellation countdown timer
   useEffect(() => {

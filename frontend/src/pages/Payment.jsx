@@ -7,12 +7,11 @@ import {
   registerCustomer,
   getFeeSettings,
   calculateDeliveryFee,
-  getUPISettings,
 } from "../services/api";
 import {
   FaArrowLeft,
   FaMoneyBillWave,
-  FaMobileAlt,
+  FaCreditCard,
   FaCheckCircle,
   FaMapMarkerAlt,
   FaTruck,
@@ -33,7 +32,7 @@ const Payment = () => {
   const { orderType, deliveryAddress } = location.state || {};
 
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("Cash");
+  const [paymentMethod, setPaymentMethod] = useState("Razorpay");
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
 
@@ -54,35 +53,18 @@ const Payment = () => {
   const [showSavingsCelebration, setShowSavingsCelebration] = useState(false);
   const [celebrationAmount, setCelebrationAmount] = useState(0);
   
-  // UPI settings
-  const [upiSettings, setUpiSettings] = useState({
-    upiId: "",
-    merchantName: "ShubhamPattis",
-  });
+
 
   // Calculations - No tax, no platform fee
   const subtotal = total;
   const grandTotal = subtotal + deliveryFee - discount;
 
-  // Load fee settings and UPI settings on mount
+  // Load fee settings on mount
   useEffect(() => {
     loadFeeSettings();
-    loadUPISettings();
   }, []);
   
-  const loadUPISettings = async () => {
-    try {
-      const { data } = await getUPISettings();
-      if (data.upiId) {
-        setUpiSettings({
-          upiId: data.upiId,
-          merchantName: data.merchantName || "ShubhamPattis",
-        });
-      }
-    } catch (error) {
-      console.error("Failed to load UPI settings:", error);
-    }
-  };
+
 
   // Dynamically load Razorpay script only on Payment page (performance optimization)
   useEffect(() => {
@@ -161,7 +143,7 @@ const Payment = () => {
   };
 
   const handleCheckout = async () => {
-    if (paymentMethod === "UPI") {
+    if (paymentMethod === "Razorpay") {
       setShowUPIModal(true);
       return;
     }
@@ -214,10 +196,7 @@ const Payment = () => {
       setIsProcessingOrder(true);
       clearCart();
       
-      // Generate UPI link if UPI payment
-      const upiLink = paymentMethod === "UPI" && upiSettings.upiId
-        ? `upi://pay?pa=${upiSettings.upiId}&pn=${upiSettings.merchantName.replace(/\s+/g, '%20')}&am=${grandTotal.toFixed(2)}&cu=INR&tn=Order%20${response.data._id}`
-        : null;
+
       
       // Navigate with replace to prevent going back to payment page
       navigate("/order-success", {
@@ -228,7 +207,6 @@ const Payment = () => {
           savedAmount: discount,
           paymentMethod: paymentMethod,
           totalAmount: grandTotal,
-          upiLink: upiLink,
         },
         replace: true,
       });
@@ -267,16 +245,16 @@ const Payment = () => {
 
   const paymentMethods = [
     {
+      id: "Razorpay",
+      label: "Pay Online",
+      icon: FaCreditCard,
+      desc: "UPI • Cards • Netbanking",
+    },
+    {
       id: "Cash",
       label: "Cash on Delivery",
       icon: FaMoneyBillWave,
       desc: "Pay when order arrives",
-    },
-    {
-      id: "UPI",
-      label: "UPI Payment",
-      icon: FaMobileAlt,
-      desc: "GPay • PhonePe • Paytm",
     },
   ];
 
@@ -478,13 +456,13 @@ const Payment = () => {
           className="w-full h-16 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-white font-bold text-lg rounded-2xl shadow-xl shadow-orange-300/50 active:scale-[0.98] transition-all flex justify-between items-center px-6 disabled:opacity-50"
         >
           <div className="flex items-center gap-3">
-            {paymentMethod === "UPI" ? (
-              <FaMobileAlt size={22} />
+            {paymentMethod === "Razorpay" ? (
+              <FaCreditCard size={22} />
             ) : (
               <FaMoneyBillWave size={22} />
             )}
             <span>
-              {loading ? "Placing Order..." : `Pay via ${paymentMethod}`}
+              {loading ? "Placing Order..." : paymentMethod === "Razorpay" ? "Pay Securely" : "Place Order (COD)"}
             </span>
           </div>
           <span className="bg-white/25 px-5 py-2 rounded-xl font-black text-xl">
