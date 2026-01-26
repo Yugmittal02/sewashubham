@@ -37,6 +37,7 @@ const Payment = () => {
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const [checkingPendingPayment, setCheckingPendingPayment] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false); // Show loader while redirecting
   const isProcessingRef = useRef(false); // Ref for immediate check
 
   // Fee states
@@ -89,24 +90,28 @@ const Payment = () => {
               isProcessingRef.current = true;
               setIsProcessingOrder(true);
               setCheckingPendingPayment(false);
+              setIsRedirecting(true); // Show redirecting loader
 
-              // IMPORTANT: Navigate FIRST, then clear cart
-              navigate("/order-success", {
-                state: {
-                  customerName: customer?.name,
-                  orderDate: new Date().toISOString(),
-                  orderId: pendingOrderId,
-                  paymentVerified: true,
-                  paymentMethod: "Razorpay",
-                  totalAmount: data.totalAmount,
-                },
-                replace: true,
-              });
-
-              // Clear cart after navigation initiated
+              // Small delay to show the redirecting animation
               setTimeout(() => {
-                clearCart();
-              }, 100);
+                // IMPORTANT: Navigate FIRST, then clear cart
+                navigate("/order-success", {
+                  state: {
+                    customerName: customer?.name,
+                    orderDate: new Date().toISOString(),
+                    orderId: pendingOrderId,
+                    paymentVerified: true,
+                    paymentMethod: "Razorpay",
+                    totalAmount: data.totalAmount,
+                  },
+                  replace: true,
+                });
+
+                // Clear cart after navigation initiated
+                setTimeout(() => {
+                  clearCart();
+                }, 100);
+              }, 500);
               return true;
             } else if (data.paymentStatus === "Failed") {
               // Payment failed, clear pending order
@@ -337,31 +342,35 @@ const Payment = () => {
     // Set both ref (immediate) and state to prevent redirect race condition
     isProcessingRef.current = true;
     setIsProcessingOrder(true);
+    setShowUPIModal(false); // Close the payment modal
+    setIsRedirecting(true); // Show redirecting loader
 
     // Mark successful payment in sessionStorage to prevent redirect on any re-renders
     sessionStorage.setItem("payment_success", Date.now().toString());
 
-    // IMPORTANT: Navigate FIRST, then clear cart
-    // This prevents race condition where cart clear triggers empty cart redirect
-    navigate("/order-success", {
-      state: {
-        customerName: customer?.name,
-        orderDate: new Date().toISOString(),
-        orderId: result.orderId,
-        paymentId: result.paymentId,
-        paymentVerified: !result.paymentPending,
-        paymentMethod: "Razorpay",
-        savedAmount: discount,
-        donationAmount,
-      },
-      replace: true,
-    });
-
-    // Clear cart AFTER navigation is initiated
-    // Use setTimeout to ensure navigation is processed first
+    // Small delay to show the redirecting animation
     setTimeout(() => {
-      clearCart();
-    }, 100);
+      // IMPORTANT: Navigate FIRST, then clear cart
+      // This prevents race condition where cart clear triggers empty cart redirect
+      navigate("/order-success", {
+        state: {
+          customerName: customer?.name,
+          orderDate: new Date().toISOString(),
+          orderId: result.orderId,
+          paymentId: result.paymentId,
+          paymentVerified: !result.paymentPending,
+          paymentMethod: "Razorpay",
+          savedAmount: discount,
+          totalAmount: grandTotal,
+        },
+        replace: true,
+      });
+
+      // Clear cart AFTER navigation is initiated
+      setTimeout(() => {
+        clearCart();
+      }, 100);
+    }, 500); // Show loader for 500ms before redirecting
   };
 
   const paymentMethods = [
@@ -391,6 +400,26 @@ const Payment = () => {
           <p className="text-gray-500 text-sm">
             Please wait while we confirm your payment status
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show redirecting loader after successful payment
+  if (isRedirecting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-orange-50/30 flex items-center justify-center">
+        <div className="bg-white rounded-3xl p-8 shadow-xl text-center max-w-sm mx-4">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaCheckCircle className="text-green-500 text-4xl" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">
+            Payment Successful!
+          </h2>
+          <p className="text-gray-500 text-sm mb-4">
+            Redirecting to your order status...
+          </p>
+          <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
