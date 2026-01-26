@@ -100,12 +100,25 @@ export const useRazorpay = () => {
           theme: {
             color: "#f97316", // Orange theme
           },
+          // Store order info for recovery after UPI app redirect
+          remember_customer: false,
+          retry: {
+            enabled: true,
+            max_count: 3,
+          },
           modal: {
+            confirm_close: true,
             ondismiss: () => {
               setLoading(false);
               if (onDismiss) onDismiss();
             },
+            // Handle when modal loses focus (UPI app switch)
+            escape: false,
+            animation: true,
           },
+          // Callback URL for redirect-based payments (UPI intent)
+          callback_url: `${window.location.origin}/order-success?orderId=${data.orderId}&razorpay_order_id=${data.razorpayOrderId}`,
+          redirect: false, // Keep in same page, handle via handler
           handler: async function (response) {
             try {
               // Verify payment on backend
@@ -165,7 +178,7 @@ export const useRazorpay = () => {
         }
       }
     },
-    [loadRazorpayScript, fetchRazorpayKey, razorpayKey]
+    [loadRazorpayScript, fetchRazorpayKey, razorpayKey],
   );
 
   return {
