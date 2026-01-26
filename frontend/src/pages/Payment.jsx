@@ -88,18 +88,30 @@ const Payment = () => {
     // Use ref for immediate check to prevent race condition
     if (isProcessingOrder || isProcessingRef.current) return; // Don't redirect during order processing
 
+    // Don't redirect if we just completed a successful payment
+    // Check sessionStorage for recent successful payment
+    const recentPayment = sessionStorage.getItem("payment_success");
+    if (recentPayment) {
+      const paymentTime = parseInt(recentPayment, 10);
+      // If payment was within last 10 seconds, don't redirect
+      if (Date.now() - paymentTime < 10000) {
+        return;
+      }
+      sessionStorage.removeItem("payment_success");
+    }
+
     // Small delay to ensure state is settled after payment flow
     const timer = setTimeout(() => {
       // Double-check ref hasn't been set during timeout
       if (isProcessingRef.current) return;
 
-      if (cart.length === 0) {
+      if (cart.length === 0 && !isProcessingOrder) {
         navigate("/cart");
       }
-      if (!orderType) {
+      if (!orderType && !isProcessingOrder) {
         navigate("/cart");
       }
-    }, 100);
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [cart, orderType, navigate, isProcessingOrder]);
@@ -206,7 +218,13 @@ const Payment = () => {
       isProcessingRef.current = true;
       setIsProcessingOrder(true);
 
-      // Navigate FIRST, then clear cart to prevent race condition
+      // Mark successful order in sessionStorage to prevent redirect on any re-renders
+      sessionStorage.setItem("payment_success", Date.now().toString());
+
+      // Clear cart first
+      clearCart();
+
+      // Navigate to order success with replace to prevent back navigation
       navigate("/order-success", {
         state: {
           customerName: customer.name,
@@ -218,9 +236,6 @@ const Payment = () => {
         },
         replace: true,
       });
-
-      // Clear cart after navigation is initiated
-      clearCart();
     } catch (error) {
       console.error(error);
       const msg = error.response?.data?.message;
@@ -239,23 +254,26 @@ const Payment = () => {
     isProcessingRef.current = true;
     setIsProcessingOrder(true);
 
-    // Navigate FIRST, then clear cart to prevent race condition
+    // Mark successful payment in sessionStorage to prevent redirect on any re-renders
+    sessionStorage.setItem("payment_success", Date.now().toString());
+
+    // Clear cart first (since we're navigating away)
+    clearCart();
+
+    // Navigate to order success with replace to prevent back navigation
     navigate("/order-success", {
       state: {
         customerName: customer?.name,
         orderDate: new Date().toISOString(),
         orderId: result.orderId,
         paymentId: result.paymentId,
-        paymentVerified: true,
+        paymentVerified: !result.paymentPending,
         paymentMethod: "Razorpay",
         savedAmount: discount,
         donationAmount,
       },
       replace: true,
     });
-
-    // Clear cart after navigation is initiated
-    clearCart();
   };
 
   const paymentMethods = [
