@@ -42,7 +42,8 @@ const RazorpayPaymentModal = ({
         if (onRazorpaySuccess) {
           onRazorpaySuccess(result);
         }
-        onClose();
+        // Don't call onClose() here - navigation will unmount the component
+        // Calling onClose could trigger state changes that cause race conditions
       },
       onFailure: (error) => {
         console.error("Payment failed:", error);

@@ -87,12 +87,21 @@ const Payment = () => {
   useEffect(() => {
     // Use ref for immediate check to prevent race condition
     if (isProcessingOrder || isProcessingRef.current) return; // Don't redirect during order processing
-    if (cart.length === 0) {
-      navigate("/cart");
-    }
-    if (!orderType) {
-      navigate("/cart");
-    }
+    
+    // Small delay to ensure state is settled after payment flow
+    const timer = setTimeout(() => {
+      // Double-check ref hasn't been set during timeout
+      if (isProcessingRef.current) return;
+      
+      if (cart.length === 0) {
+        navigate("/cart");
+      }
+      if (!orderType) {
+        navigate("/cart");
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [cart, orderType, navigate, isProcessingOrder]);
 
   const loadFeeSettings = async () => {
