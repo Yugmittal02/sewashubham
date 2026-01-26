@@ -36,6 +36,7 @@ const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState("Razorpay");
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
+  const [checkingPendingPayment, setCheckingPendingPayment] = useState(false);
   const isProcessingRef = useRef(false); // Ref for immediate check
 
   // Fee states
@@ -64,32 +65,71 @@ const Payment = () => {
     const checkPendingPayment = async () => {
       const pendingOrderId = sessionStorage.getItem("pending_order_id");
       if (pendingOrderId) {
+        // Close modal and show loading immediately
+        setShowUPIModal(false);
+        setCheckingPendingPayment(true);
+
         try {
           console.log("Checking pending payment for order:", pendingOrderId);
-          const { data } = await getPaymentStatus(pendingOrderId);
 
-          if (data.paymentStatus === "Paid") {
-            console.log("Payment confirmed! Redirecting to order success...");
-            // Payment was successful, clear pending order and redirect
+          // Poll a few times in case payment is processing
+          let attempts = 0;
+          const maxAttempts = 5;
+          const pollInterval = 2000; // 2 seconds
+
+          const pollPaymentStatus = async () => {
+            attempts++;
+            const { data } = await getPaymentStatus(pendingOrderId);
+
+            if (data.paymentStatus === "Paid") {
+              console.log("Payment confirmed! Redirecting to order success...");
+              // Payment was successful
+              sessionStorage.removeItem("pending_order_id");
+              sessionStorage.setItem("payment_success", Date.now().toString());
+              isProcessingRef.current = true;
+              setIsProcessingOrder(true);
+              setCheckingPendingPayment(false);
+              clearCart();
+
+              navigate("/order-success", {
+                state: {
+                  customerName: customer?.name,
+                  orderDate: new Date().toISOString(),
+                  orderId: pendingOrderId,
+                  paymentVerified: true,
+                  paymentMethod: "Razorpay",
+                  totalAmount: data.totalAmount,
+                },
+                replace: true,
+              });
+              return true;
+            } else if (data.paymentStatus === "Failed") {
+              // Payment failed, clear pending order
+              console.log("Payment failed");
+              sessionStorage.removeItem("pending_order_id");
+              setCheckingPendingPayment(false);
+              return true;
+            } else if (attempts < maxAttempts) {
+              // Still initiated, poll again
+              console.log(
+                `Payment still processing, polling again (${attempts}/${maxAttempts})...`,
+              );
+              await new Promise((resolve) => setTimeout(resolve, pollInterval));
+              return pollPaymentStatus();
+            }
+
+            // Max attempts reached, payment might not have been completed
+            console.log("Max polling attempts reached, clearing pending order");
             sessionStorage.removeItem("pending_order_id");
-            sessionStorage.setItem("payment_success", Date.now().toString());
-            isProcessingRef.current = true;
-            setIsProcessingOrder(true);
-            clearCart();
+            setCheckingPendingPayment(false);
+            return false;
+          };
 
-            navigate("/order-success", {
-              state: {
-                customerName: customer?.name,
-                orderDate: new Date().toISOString(),
-                orderId: pendingOrderId,
-                paymentVerified: true,
-                paymentMethod: "Razorpay",
-              },
-              replace: true,
-            });
-          }
+          await pollPaymentStatus();
         } catch (error) {
           console.error("Error checking payment status:", error);
+          sessionStorage.removeItem("pending_order_id");
+          setCheckingPendingPayment(false);
         }
       }
     };
@@ -329,6 +369,23 @@ const Payment = () => {
       desc: "Pay when order arrives",
     },
   ];
+
+  // Show loading overlay when checking pending payment
+  if (checkingPendingPayment) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-orange-50/30 flex items-center justify-center">
+        <div className="bg-white rounded-3xl p-8 shadow-xl text-center max-w-sm mx-4">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">
+            Verifying Payment...
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Please wait while we confirm your payment status
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-orange-50/30 pb-32">
