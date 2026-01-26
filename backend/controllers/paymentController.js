@@ -157,6 +157,28 @@ exports.verifyPayment = async (req, res) => {
         .json({ message: "Missing payment verification parameters" });
     }
 
+    // First check if payment was already verified (by webhook)
+    const existingOrder = await Order.findOne({
+      razorpayOrderId: razorpay_order_id,
+    });
+    if (existingOrder && existingOrder.paymentStatus === "Paid") {
+      // Payment already verified by webhook, return success
+      console.log(
+        "Payment already verified by webhook for order:",
+        razorpay_order_id,
+      );
+      return res.json({
+        success: true,
+        message: "Payment already verified",
+        order: {
+          _id: existingOrder._id,
+          totalAmount: existingOrder.totalAmount,
+          paymentStatus: existingOrder.paymentStatus,
+          status: existingOrder.status,
+        },
+      });
+    }
+
     // Generate signature for verification
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
@@ -167,6 +189,40 @@ exports.verifyPayment = async (req, res) => {
     const isValid = expectedSignature === razorpay_signature;
 
     if (!isValid) {
+      // Check if payment actually succeeded via Razorpay API before marking as failed
+      try {
+        const payment = await razorpay.payments.fetch(razorpay_payment_id);
+        if (payment.status === "captured") {
+          // Payment was successful, update order even if signature mismatch
+          console.log(
+            "Signature mismatch but payment captured, updating order",
+          );
+          const order = await Order.findOneAndUpdate(
+            { razorpayOrderId: razorpay_order_id },
+            {
+              razorpayPaymentId: razorpay_payment_id,
+              paymentStatus: "Paid",
+              paymentVerifiedAt: new Date(),
+              status: "Pending",
+            },
+            { new: true },
+          ).populate("user", "name phone");
+
+          return res.json({
+            success: true,
+            message: "Payment verified via Razorpay API",
+            order: {
+              _id: order._id,
+              totalAmount: order.totalAmount,
+              paymentStatus: order.paymentStatus,
+              status: order.status,
+            },
+          });
+        }
+      } catch (fetchError) {
+        console.error("Error fetching payment from Razorpay:", fetchError);
+      }
+
       // Update order status to failed
       await Order.findOneAndUpdate(
         { razorpayOrderId: razorpay_order_id },

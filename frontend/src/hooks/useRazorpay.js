@@ -138,13 +138,29 @@ export const useRazorpay = () => {
                 });
               }
             } catch (err) {
+              console.error("Payment verification error:", err);
               setLoading(false);
-              setError("Payment verification failed");
-              if (onFailure) {
-                onFailure({
-                  error: "Payment verification failed",
-                  orderId: data.orderId,
-                });
+              
+              // Even if verification fails, if we have payment_id, the payment likely succeeded
+              // The webhook will handle the actual verification
+              // Navigate to success page and let it poll for status
+              if (response.razorpay_payment_id) {
+                console.log("Payment completed, navigating to success page despite verification error");
+                if (onSuccess) {
+                  onSuccess({
+                    orderId: data.orderId,
+                    paymentId: response.razorpay_payment_id,
+                    paymentPending: true, // Flag that verification is pending
+                  });
+                }
+              } else {
+                setError("Payment verification failed");
+                if (onFailure) {
+                  onFailure({
+                    error: "Payment verification failed",
+                    orderId: data.orderId,
+                  });
+                }
               }
             }
           },
