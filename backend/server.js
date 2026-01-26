@@ -15,7 +15,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // Trust proxy for accurate IP detection behind Nginx/Load Balancer
 if (isProduction) {
-  app.set('trust proxy', 1);
+  app.set("trust proxy", 1);
 }
 
 // ===================
@@ -23,37 +23,39 @@ if (isProduction) {
 // ===================
 
 // Parse allowed origins from environment variable
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
   : [];
 
 // Always allow these origins (hardcoded fallback)
 const defaultAllowedOrigins = [
-  'https://sewashubhambakery.com',
-  'https://www.sewashubhambakery.com',
-  'http://localhost:5173',
-  'http://localhost:3000'
+  "https://sewashubhambakery.com",
+  "https://www.sewashubhambakery.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
 ];
 
 // Merge both lists
-const allAllowedOrigins = [...new Set([...allowedOrigins, ...defaultAllowedOrigins])];
+const allAllowedOrigins = [
+  ...new Set([...allowedOrigins, ...defaultAllowedOrigins]),
+];
 
 app.use(
   cors({
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
       // Allow requests with no origin (mobile apps, curl, Postman)
       if (!origin) return callback(null, true);
-      
+
       // In development, allow all origins
       if (!isProduction) return callback(null, true);
-      
+
       // Check against combined whitelist
       if (allAllowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         console.log(`CORS blocked origin: ${origin}`);
-        console.log(`Allowed origins: ${allAllowedOrigins.join(', ')}`);
-        callback(new Error('Not allowed by CORS'));
+        console.log(`Allowed origins: ${allAllowedOrigins.join(", ")}`);
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
@@ -65,7 +67,7 @@ app.use(
       "Accept",
       "Origin",
     ],
-  })
+  }),
 );
 
 // ===================
@@ -76,16 +78,18 @@ app.use(
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: isProduction ? {
-      directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "blob:"],
-        scriptSrc: ["'self'"],
-        connectSrc: ["'self'"],
-      },
-    } : false,
-  })
+    contentSecurityPolicy: isProduction
+      ? {
+          directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "blob:"],
+            scriptSrc: ["'self'"],
+            connectSrc: ["'self'"],
+          },
+        }
+      : false,
+  }),
 );
 
 // Rate limiting - prevent brute force attacks
@@ -111,6 +115,8 @@ app.use("/api/auth/admin/login", authLimiter);
 // CORS configuration moved to top
 
 // Body parser with limits
+// Use raw body for webhook route (required for signature verification)
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -137,10 +143,12 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
-    
+
     // Check Razorpay Config
     if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-      console.log(`✅ Razorpay Configured: ${process.env.RAZORPAY_KEY_ID.substring(0, 8)}...`);
+      console.log(
+        `✅ Razorpay Configured: ${process.env.RAZORPAY_KEY_ID.substring(0, 8)}...`,
+      );
     } else {
       console.error("❌ Razorpay Configuration MISSING");
     }
