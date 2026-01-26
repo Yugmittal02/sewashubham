@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaTimes,
-  FaLock,
-  FaCreditCard,
-  FaCheckCircle,
-} from "react-icons/fa";
+import { FaTimes, FaLock, FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import useRazorpay from "../hooks/useRazorpay";
 
 const RazorpayPaymentModal = ({
