@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -35,6 +35,7 @@ const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState("Razorpay");
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
+  const isProcessingRef = useRef(false); // Ref for immediate check
 
   // Fee states
   const [feeSettings, setFeeSettings] = useState({
@@ -52,8 +53,6 @@ const Payment = () => {
   // Celebration states
   const [showSavingsCelebration, setShowSavingsCelebration] = useState(false);
   const [celebrationAmount, setCelebrationAmount] = useState(0);
-  
-
 
   // Calculations - No tax, no platform fee
   const subtotal = total;
@@ -63,14 +62,15 @@ const Payment = () => {
   useEffect(() => {
     loadFeeSettings();
   }, []);
-  
-
 
   // Dynamically load Razorpay script only on Payment page (performance optimization)
   useEffect(() => {
-    if (!window.Razorpay && !document.querySelector('script[src*="razorpay"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    if (
+      !window.Razorpay &&
+      !document.querySelector('script[src*="razorpay"]')
+    ) {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.async = true;
       document.body.appendChild(script);
     }
@@ -85,7 +85,8 @@ const Payment = () => {
 
   // Redirect if no cart or order type (but not during order processing)
   useEffect(() => {
-    if (isProcessingOrder) return; // Don't redirect during order processing
+    // Use ref for immediate check to prevent race condition
+    if (isProcessingOrder || isProcessingRef.current) return; // Don't redirect during order processing
     if (cart.length === 0) {
       navigate("/cart");
     }
@@ -108,7 +109,7 @@ const Payment = () => {
       const { data } = await calculateDeliveryFee(
         deliveryAddress.coordinates.lat,
         deliveryAddress.coordinates.lng,
-        subtotal
+        subtotal,
       );
       if (data.deliverable) {
         setDeliveryFee(data.deliveryFee);
@@ -191,14 +192,12 @@ const Payment = () => {
       };
 
       const response = await createOrder(orderData);
-      
-      // Set flag before clearing cart to prevent redirect
-      setIsProcessingOrder(true);
-      clearCart();
-      
 
-      
-      // Navigate with replace to prevent going back to payment page
+      // Set both ref (immediate) and state to prevent redirect race condition
+      isProcessingRef.current = true;
+      setIsProcessingOrder(true);
+
+      // Navigate FIRST, then clear cart to prevent race condition
       navigate("/order-success", {
         state: {
           customerName: customer.name,
@@ -210,6 +209,9 @@ const Payment = () => {
         },
         replace: true,
       });
+
+      // Clear cart after navigation is initiated
+      clearCart();
     } catch (error) {
       console.error(error);
       const msg = error.response?.data?.message;
@@ -224,11 +226,11 @@ const Payment = () => {
   };
 
   const handleRazorpaySuccess = (result) => {
-    // Set flag before clearing cart to prevent redirect
+    // Set both ref (immediate) and state to prevent redirect race condition
+    isProcessingRef.current = true;
     setIsProcessingOrder(true);
-    clearCart();
-    
-    // Navigate with replace to prevent going back to payment page
+
+    // Navigate FIRST, then clear cart to prevent race condition
     navigate("/order-success", {
       state: {
         customerName: customer?.name,
@@ -236,11 +238,15 @@ const Payment = () => {
         orderId: result.orderId,
         paymentId: result.paymentId,
         paymentVerified: true,
+        paymentMethod: "Razorpay",
         savedAmount: discount,
         donationAmount,
       },
       replace: true,
     });
+
+    // Clear cart after navigation is initiated
+    clearCart();
   };
 
   const paymentMethods = [
@@ -441,7 +447,9 @@ const Payment = () => {
             <div className="border-t-2 border-dashed border-gray-200 pt-4 mt-4">
               <div className="flex justify-between text-xl font-black text-gray-900">
                 <span>To Pay</span>
-                <span className="text-orange-600">₹{grandTotal.toFixed(0)}</span>
+                <span className="text-orange-600">
+                  ₹{grandTotal.toFixed(0)}
+                </span>
               </div>
             </div>
           </div>
@@ -462,7 +470,11 @@ const Payment = () => {
               <FaMoneyBillWave size={22} />
             )}
             <span>
-              {loading ? "Placing Order..." : paymentMethod === "Razorpay" ? "Pay Securely" : "Place Order (COD)"}
+              {loading
+                ? "Placing Order..."
+                : paymentMethod === "Razorpay"
+                  ? "Pay Securely"
+                  : "Place Order (COD)"}
             </span>
           </div>
           <span className="bg-white/25 px-5 py-2 rounded-xl font-black text-xl">
