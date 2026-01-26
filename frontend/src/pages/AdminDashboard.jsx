@@ -93,7 +93,7 @@ const AdminDashboard = () => {
     deliveryFeePerKm: 5,
     freeDeliveryThreshold: 500,
     deliveryRadiusKm: 10,
-    storeLocation: { lat: 28.6139, lng: 77.2090 },
+    storeLocation: { lat: 28.6139, lng: 77.209 },
   });
   const [feeLoading, setFeeLoading] = useState(false);
   const [feeMsg, setFeeMsg] = useState({ type: "", text: "" });
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
   // Revenue Calendar State
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarMonth, setCalendarMonth] = useState(new Date());
-  
+
   // Map Picker State
   const [showMapPicker, setShowMapPicker] = useState(false);
 
@@ -112,10 +112,10 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   // Order notification hook with Hindi voice alerts
-  const { 
-    formatPendingTime, 
-    getUrgencyLevel,
-  } = useOrderNotification(orders, activeTab === "orders");
+  const { formatPendingTime, getUrgencyLevel } = useOrderNotification(
+    orders,
+    activeTab === "orders",
+  );
 
   useEffect(() => {
     if (!isAdmin) {
@@ -347,19 +347,23 @@ const AdminDashboard = () => {
   };
 
   // Memoized Stats - prevents recalculation on every render
-  const todayOrders = useMemo(() => 
-    orders.filter((o) => new Date(o.createdAt).toDateString() === new Date().toDateString()),
-    [orders]
+  const todayOrders = useMemo(
+    () =>
+      orders.filter(
+        (o) =>
+          new Date(o.createdAt).toDateString() === new Date().toDateString(),
+      ),
+    [orders],
   );
-  
-  const todayRevenue = useMemo(() => 
-    todayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0),
-    [todayOrders]
+
+  const todayRevenue = useMemo(
+    () => todayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0),
+    [todayOrders],
   );
-  
-  const pendingOrders = useMemo(() => 
-    orders.filter((o) => o.status === "Pending").length,
-    [orders]
+
+  const pendingOrders = useMemo(
+    () => orders.filter((o) => o.status === "Pending").length,
+    [orders],
   );
 
   // Tabs for bottom navigation - 5 tabs for mobile (removed ratings, moved to revenue)
@@ -454,27 +458,38 @@ const AdminDashboard = () => {
             {orders.map((order) => {
               const config =
                 statusConfig[order.status] || statusConfig["Pending"];
-              const urgency = getUrgencyLevel(order.createdAt, order.status, order.isAccepted);
+              const urgency = getUrgencyLevel(
+                order.createdAt,
+                order.status,
+                order.isAccepted,
+              );
               const pendingTime = formatPendingTime(order.createdAt);
-              
+
               return (
                 <div
                   key={order._id}
                   className={`bg-white p-4 rounded-2xl shadow-sm border ${
-                    urgency === 'critical' ? 'border-red-300 bg-red-50/30' :
-                    urgency === 'high' ? 'border-orange-200 bg-orange-50/30' :
-                    'border-gray-100'
+                    urgency === "critical"
+                      ? "border-red-300 bg-red-50/30"
+                      : urgency === "high"
+                        ? "border-orange-200 bg-orange-50/30"
+                        : "border-gray-100"
                   }`}
                 >
                   {/* Timer Badge - Top Right */}
-                  {order.status === 'Pending' && (
+                  {order.status === "Pending" && (
                     <div className={`flex justify-end -mt-1 -mr-1 mb-2`}>
-                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
-                        urgency === 'critical' ? 'bg-red-500 text-white animate-pulse' :
-                        urgency === 'high' ? 'bg-orange-500 text-white' :
-                        urgency === 'medium' ? 'bg-yellow-500 text-white' :
-                        'bg-gray-200 text-gray-600'
-                      }`}>
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
+                          urgency === "critical"
+                            ? "bg-red-500 text-white animate-pulse"
+                            : urgency === "high"
+                              ? "bg-orange-500 text-white"
+                              : urgency === "medium"
+                                ? "bg-yellow-500 text-white"
+                                : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
                         <FaClock size={10} />
                         {pendingTime}
                       </span>
@@ -493,25 +508,25 @@ const AdminDashboard = () => {
                       </p>
 
                       {/* Payment Status Badge - Show for all payment methods */}
-                        <div
-                          className={`mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
-                            order.paymentStatus === "Paid"
-                              ? "bg-green-100 text-green-700"
-                              : order.paymentStatus === "Failed"
+                      <div
+                        className={`mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
+                          order.paymentStatus === "Paid"
+                            ? "bg-green-100 text-green-700"
+                            : order.paymentStatus === "Failed"
                               ? "bg-red-100 text-red-700"
                               : order.paymentMethod === "Cash"
-                              ? "bg-gray-100 text-gray-600"
-                              : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
-                          {order.paymentStatus === "Paid"
-                            ? "✓ Payment Verified"
-                            : order.paymentStatus === "Failed"
+                                ? "bg-gray-100 text-gray-600"
+                                : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
+                        {order.paymentStatus === "Paid"
+                          ? "✓ Payment Verified"
+                          : order.paymentStatus === "Failed"
                             ? "✗ Payment Failed"
                             : order.paymentMethod === "Cash"
-                            ? "💵 Cash on Delivery"
-                            : "⏳ Payment Pending"}
-                        </div>
+                              ? "💵 Cash on Delivery"
+                              : "⏳ Payment Pending"}
+                      </div>
 
                       {order.deliveryAddress && (
                         <div className="mt-2 p-2 bg-gray-50 rounded-lg text-xs">
@@ -571,15 +586,24 @@ const AdminDashboard = () => {
                     )}
 
                   {/* Accept Order Button - Show for Pending orders that haven't been accepted */}
-                  {order.status === "Pending" && !order.isAccepted && (
-                    <button
-                      onClick={() => handleAcceptOrder(order._id)}
-                      className="w-full mb-3 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-base shadow-lg shadow-green-200 active:scale-[0.98] transition-transform"
-                    >
-                      <FaCheckCircle size={16} />
-                      Accept Order
-                    </button>
-                  )}
+                  {/* Only allow accepting if: Cash order OR Razorpay with Paid status */}
+                  {order.status === "Pending" &&
+                    !order.isAccepted &&
+                    (order.paymentMethod === "Cash" ||
+                    order.paymentStatus === "Paid" ? (
+                      <button
+                        onClick={() => handleAcceptOrder(order._id)}
+                        className="w-full mb-3 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-base shadow-lg shadow-green-200 active:scale-[0.98] transition-transform"
+                      >
+                        <FaCheckCircle size={16} />
+                        Accept Order
+                      </button>
+                    ) : (
+                      <div className="w-full mb-3 py-3 bg-yellow-50 border-2 border-yellow-200 text-yellow-700 font-bold rounded-xl flex items-center justify-center gap-2 text-sm">
+                        <FaSpinner className="animate-spin" size={14} />
+                        Waiting for Payment...
+                      </div>
+                    ))}
 
                   {/* Status Buttons - Improved with colors */}
                   <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
@@ -601,10 +625,10 @@ const AdminDashboard = () => {
                             ? color === "yellow"
                               ? "bg-yellow-500 text-white shadow-lg shadow-yellow-200"
                               : color === "blue"
-                              ? "bg-blue-500 text-white shadow-lg shadow-blue-200"
-                              : color === "green"
-                              ? "bg-green-500 text-white shadow-lg shadow-green-200"
-                              : "bg-gray-700 text-white shadow-lg shadow-gray-200"
+                                ? "bg-blue-500 text-white shadow-lg shadow-blue-200"
+                                : color === "green"
+                                  ? "bg-green-500 text-white shadow-lg shadow-green-200"
+                                  : "bg-gray-700 text-white shadow-lg shadow-gray-200"
                             : "bg-gray-100 text-gray-500 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         }`}
                       >
@@ -768,20 +792,37 @@ const AdminDashboard = () => {
                 <FaCalendarAlt className="text-green-600" />
                 Revenue Calendar
               </h3>
-              
+
               {/* Month Navigation */}
               <div className="flex items-center justify-between mb-4">
                 <button
-                  onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1))}
+                  onClick={() =>
+                    setCalendarMonth(
+                      new Date(
+                        calendarMonth.getFullYear(),
+                        calendarMonth.getMonth() - 1,
+                      ),
+                    )
+                  }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
                   <FaChevronLeft />
                 </button>
                 <h4 className="font-bold text-gray-700">
-                  {calendarMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                  {calendarMonth.toLocaleDateString("en-IN", {
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </h4>
                 <button
-                  onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1))}
+                  onClick={() =>
+                    setCalendarMonth(
+                      new Date(
+                        calendarMonth.getFullYear(),
+                        calendarMonth.getMonth() + 1,
+                      ),
+                    )
+                  }
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
                   <FaChevronRight />
@@ -790,8 +831,10 @@ const AdminDashboard = () => {
 
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2">
-                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                  <div key={day} className="font-bold text-gray-400 py-1">{day}</div>
+                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                  <div key={day} className="font-bold text-gray-400 py-1">
+                    {day}
+                  </div>
                 ))}
               </div>
               <div className="grid grid-cols-7 gap-1">
@@ -801,42 +844,54 @@ const AdminDashboard = () => {
                   const firstDay = new Date(year, month, 1).getDay();
                   const daysInMonth = new Date(year, month + 1, 0).getDate();
                   const days = [];
-                  
+
                   // Empty cells for days before first day of month
                   for (let i = 0; i < firstDay; i++) {
                     days.push(<div key={`empty-${i}`} className="p-2"></div>);
                   }
-                  
+
                   // Calendar days
                   for (let day = 1; day <= daysInMonth; day++) {
                     const date = new Date(year, month, day);
                     const dateStr = date.toDateString();
-                    const dayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === dateStr);
-                    const dayRevenue = dayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+                    const dayOrders = orders.filter(
+                      (o) => new Date(o.createdAt).toDateString() === dateStr,
+                    );
+                    const dayRevenue = dayOrders.reduce(
+                      (sum, o) => sum + (o.totalAmount || 0),
+                      0,
+                    );
                     const isSelected = selectedDate.toDateString() === dateStr;
                     const isToday = new Date().toDateString() === dateStr;
                     const hasOrders = dayOrders.length > 0;
-                    
+
                     days.push(
                       <button
                         key={day}
                         onClick={() => setSelectedDate(date)}
                         className={`p-2 rounded-lg text-sm transition-all ${
-                          isSelected ? 'bg-green-500 text-white font-bold' :
-                          isToday ? 'bg-green-100 text-green-700 font-bold' :
-                          hasOrders ? 'bg-gray-50 hover:bg-gray-100' : 'hover:bg-gray-50'
+                          isSelected
+                            ? "bg-green-500 text-white font-bold"
+                            : isToday
+                              ? "bg-green-100 text-green-700 font-bold"
+                              : hasOrders
+                                ? "bg-gray-50 hover:bg-gray-100"
+                                : "hover:bg-gray-50"
                         }`}
                       >
                         <div>{day}</div>
                         {hasOrders && !isSelected && (
                           <div className="text-[9px] text-green-600 font-bold mt-0.5">
-                            ₹{dayRevenue >= 1000 ? `${(dayRevenue/1000).toFixed(1)}k` : dayRevenue}
+                            ₹
+                            {dayRevenue >= 1000
+                              ? `${(dayRevenue / 1000).toFixed(1)}k`
+                              : dayRevenue}
                           </div>
                         )}
-                      </button>
+                      </button>,
                     );
                   }
-                  
+
                   return days;
                 })()}
               </div>
@@ -844,18 +899,32 @@ const AdminDashboard = () => {
               {/* Selected Day Summary */}
               <div className="mt-4 p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
                 <p className="text-xs text-gray-500 mb-1">
-                  {selectedDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })}
+                  {selectedDate.toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </p>
                 {(() => {
                   const dateStr = selectedDate.toDateString();
-                  const dayOrders = orders.filter(o => new Date(o.createdAt).toDateString() === dateStr);
-                  const dayRevenue = dayOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
-                  
+                  const dayOrders = orders.filter(
+                    (o) => new Date(o.createdAt).toDateString() === dateStr,
+                  );
+                  const dayRevenue = dayOrders.reduce(
+                    (sum, o) => sum + (o.totalAmount || 0),
+                    0,
+                  );
+
                   return (
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-2xl font-black text-green-700">₹{dayRevenue.toFixed(0)}</p>
-                        <p className="text-xs text-gray-500">{dayOrders.length} orders</p>
+                        <p className="text-2xl font-black text-green-700">
+                          ₹{dayRevenue.toFixed(0)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {dayOrders.length} orders
+                        </p>
                       </div>
                       <FaRupeeSign className="text-4xl text-green-200" />
                     </div>
@@ -882,7 +951,7 @@ const AdminDashboard = () => {
                         existing.totalSpent += order.totalAmount || 0;
                       } else {
                         customerMap.set(phone, {
-                          name: order.user.name || 'Customer',
+                          name: order.user.name || "Customer",
                           phone,
                           orderCount: 1,
                           totalSpent: order.totalAmount || 0,
@@ -890,22 +959,39 @@ const AdminDashboard = () => {
                       }
                     }
                   });
-                  
+
                   return Array.from(customerMap.values())
                     .sort((a, b) => b.totalSpent - a.totalSpent)
                     .slice(0, 5)
                     .map((customer, idx) => (
-                      <div key={customer.phone} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
-                          idx === 0 ? 'bg-amber-500' : idx === 1 ? 'bg-gray-400' : idx === 2 ? 'bg-orange-400' : 'bg-gray-300'
-                        }`}>
+                      <div
+                        key={customer.phone}
+                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl"
+                      >
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
+                            idx === 0
+                              ? "bg-amber-500"
+                              : idx === 1
+                                ? "bg-gray-400"
+                                : idx === 2
+                                  ? "bg-orange-400"
+                                  : "bg-gray-300"
+                          }`}
+                        >
                           {idx + 1}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-gray-800 truncate">{customer.name}</p>
-                          <p className="text-xs text-gray-500">{customer.phone} • {customer.orderCount} orders</p>
+                          <p className="font-bold text-gray-800 truncate">
+                            {customer.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {customer.phone} • {customer.orderCount} orders
+                          </p>
                         </div>
-                        <p className="font-bold text-green-600">₹{customer.totalSpent.toFixed(0)}</p>
+                        <p className="font-bold text-green-600">
+                          ₹{customer.totalSpent.toFixed(0)}
+                        </p>
                       </div>
                     ));
                 })()}
@@ -920,17 +1006,18 @@ const AdminDashboard = () => {
               </h3>
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {ratings.map((r) => (
-                  <div
-                    key={r._id}
-                    className="p-3 bg-gray-50 rounded-xl"
-                  >
+                  <div key={r._id} className="p-3 bg-gray-50 rounded-xl">
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-gray-800 text-sm">
                           {r.customer?.name}
                         </p>
-                        <p className="text-xs text-gray-500">{r.product?.name}</p>
-                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{r.comment}</p>
+                        <p className="text-xs text-gray-500">
+                          {r.product?.name}
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          {r.comment}
+                        </p>
                       </div>
                       <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full ml-2">
                         <FaStar className="text-amber-500" size={10} />
@@ -1137,7 +1224,7 @@ const AdminDashboard = () => {
                     Store Address
                   </label>
                   <textarea
-                    value={storeSettings.storeAddress || ''}
+                    value={storeSettings.storeAddress || ""}
                     onChange={(e) =>
                       setStoreSettings({
                         ...storeSettings,
@@ -1148,20 +1235,22 @@ const AdminDashboard = () => {
                     rows="3"
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-base resize-none"
                   />
-                  
+
                   {/* Additional Address Details */}
                   <div className="mt-4 bg-blue-50 p-4 rounded-xl border border-blue-200">
                     <p className="text-sm font-bold text-blue-800 mb-3 flex items-center gap-2">
                       <FaMapMarkerAlt size={14} />
                       📍 Please enter your complete store address details
                     </p>
-                    
+
                     {/* Landmark */}
                     <div className="mb-3">
-                      <label className="text-xs font-medium text-gray-700 mb-1 block">Landmark</label>
+                      <label className="text-xs font-medium text-gray-700 mb-1 block">
+                        Landmark
+                      </label>
                       <input
                         type="text"
-                        value={storeSettings.storeLandmark || ''}
+                        value={storeSettings.storeLandmark || ""}
                         onChange={(e) =>
                           setStoreSettings({
                             ...storeSettings,
@@ -1172,13 +1261,15 @@ const AdminDashboard = () => {
                         className="w-full bg-white border border-gray-200 rounded-lg p-2.5 text-sm"
                       />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-xs font-medium text-gray-700 mb-1 block">City</label>
+                        <label className="text-xs font-medium text-gray-700 mb-1 block">
+                          City
+                        </label>
                         <input
                           type="text"
-                          value={storeSettings.storeCity || ''}
+                          value={storeSettings.storeCity || ""}
                           onChange={(e) =>
                             setStoreSettings({
                               ...storeSettings,
@@ -1190,10 +1281,12 @@ const AdminDashboard = () => {
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-medium text-gray-700 mb-1 block">Pincode</label>
+                        <label className="text-xs font-medium text-gray-700 mb-1 block">
+                          Pincode
+                        </label>
                         <input
                           type="text"
-                          value={storeSettings.storePincode || ''}
+                          value={storeSettings.storePincode || ""}
                           onChange={(e) =>
                             setStoreSettings({
                               ...storeSettings,
@@ -1205,10 +1298,11 @@ const AdminDashboard = () => {
                         />
                       </div>
                     </div>
-                    
+
                     {storeSettings.storeAddress && storeSettings.storeCity && (
                       <div className="mt-3 text-xs text-green-600 bg-green-50 p-2 rounded-lg border border-green-200">
-                        ✓ Address saved: {storeSettings.storeAddress}, {storeSettings.storeCity}
+                        ✓ Address saved: {storeSettings.storeAddress},{" "}
+                        {storeSettings.storeCity}
                       </div>
                     )}
                   </div>
@@ -1285,7 +1379,7 @@ const AdminDashboard = () => {
                         const val = e.target.value;
                         setFeeSettings({
                           ...feeSettings,
-                          platformFee: val === '' ? '' : parseFloat(val),
+                          platformFee: val === "" ? "" : parseFloat(val),
                         });
                       }}
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1303,7 +1397,7 @@ const AdminDashboard = () => {
                         const val = e.target.value;
                         setFeeSettings({
                           ...feeSettings,
-                          taxRate: val === '' ? '' : parseFloat(val),
+                          taxRate: val === "" ? "" : parseFloat(val),
                         });
                       }}
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1327,7 +1421,7 @@ const AdminDashboard = () => {
                           const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryFeeBase: val === '' ? '' : parseFloat(val),
+                            deliveryFeeBase: val === "" ? "" : parseFloat(val),
                           });
                         }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1344,7 +1438,7 @@ const AdminDashboard = () => {
                           const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryFeePerKm: val === '' ? '' : parseFloat(val),
+                            deliveryFeePerKm: val === "" ? "" : parseFloat(val),
                           });
                         }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1361,7 +1455,8 @@ const AdminDashboard = () => {
                           const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            freeDeliveryThreshold: val === '' ? '' : parseFloat(val),
+                            freeDeliveryThreshold:
+                              val === "" ? "" : parseFloat(val),
                           });
                         }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1378,7 +1473,7 @@ const AdminDashboard = () => {
                           const val = e.target.value;
                           setFeeSettings({
                             ...feeSettings,
-                            deliveryRadiusKm: val === '' ? '' : parseFloat(val),
+                            deliveryRadiusKm: val === "" ? "" : parseFloat(val),
                           });
                         }}
                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-base"
@@ -1434,7 +1529,8 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    Get coordinates from Google Maps. This is used to calculate delivery distance.
+                    Get coordinates from Google Maps. This is used to calculate
+                    delivery distance.
                   </p>
                 </div>
 
@@ -1503,7 +1599,9 @@ const AdminDashboard = () => {
                       const existing = customerMap.get(phone);
                       existing.orderCount += 1;
                       existing.totalSpent += order.totalAmount || 0;
-                      if (new Date(order.createdAt) > new Date(existing.lastOrder)) {
+                      if (
+                        new Date(order.createdAt) > new Date(existing.lastOrder)
+                      ) {
                         existing.lastOrder = order.createdAt;
                         existing.name = order.user.name || existing.name;
                       }
@@ -1520,7 +1618,7 @@ const AdminDashboard = () => {
                 });
 
                 const customers = Array.from(customerMap.values()).sort(
-                  (a, b) => b.orderCount - a.orderCount
+                  (a, b) => b.orderCount - a.orderCount,
                 );
 
                 if (customers.length === 0) {
@@ -1545,14 +1643,19 @@ const AdminDashboard = () => {
                           </span>
                         </div>
                         <div>
-                          <p className="font-bold text-gray-800">{customer.name}</p>
-                          <p className="text-sm text-gray-500">{customer.phone}</p>
+                          <p className="font-bold text-gray-800">
+                            {customer.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {customer.phone}
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="flex items-center gap-1 text-sm font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">
                           <FaClipboardList size={12} />
-                          {customer.orderCount} order{customer.orderCount !== 1 ? "s" : ""}
+                          {customer.orderCount} order
+                          {customer.orderCount !== 1 ? "s" : ""}
                         </div>
                       </div>
                     </div>
@@ -1566,10 +1669,13 @@ const AdminDashboard = () => {
                       <div>
                         <span className="text-gray-400">Last Order:</span>
                         <span className="ml-1 text-gray-600">
-                          {new Date(customer.lastOrder).toLocaleDateString("en-IN", {
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {new Date(customer.lastOrder).toLocaleDateString(
+                            "en-IN",
+                            {
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
                         </span>
                       </div>
                     </div>
@@ -1647,7 +1753,7 @@ const AdminDashboard = () => {
         onClose={() => setShowMapPicker(false)}
         initialLocation={{
           lat: storeSettings.storeLatitude || 28.6139,
-          lng: storeSettings.storeLongitude || 77.2090
+          lng: storeSettings.storeLongitude || 77.209,
         }}
         onSave={(location) => {
           setStoreSettings({
@@ -1656,8 +1762,8 @@ const AdminDashboard = () => {
             storeLongitude: location.lng,
           });
           setStoreMsg({
-            type: 'success',
-            text: `Location set: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`
+            type: "success",
+            text: `Location set: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`,
           });
         }}
       />
@@ -1667,20 +1773,30 @@ const AdminDashboard = () => {
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
             <div className="text-center mb-6">
-              <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
-                showStockConfirm.isAvailable ? 'bg-red-100' : 'bg-green-100'
-              }`}>
+              <div
+                className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
+                  showStockConfirm.isAvailable ? "bg-red-100" : "bg-green-100"
+                }`}
+              >
                 <span className="text-3xl">
-                  {showStockConfirm.isAvailable ? '⚠️' : '✅'}
+                  {showStockConfirm.isAvailable ? "⚠️" : "✅"}
                 </span>
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">
-                {showStockConfirm.isAvailable ? 'Mark as Out of Stock?' : 'Mark as In Stock?'}
+                {showStockConfirm.isAvailable
+                  ? "Mark as Out of Stock?"
+                  : "Mark as In Stock?"}
               </h3>
               <p className="text-gray-500 text-sm">
-                Are you sure you want to {showStockConfirm.isAvailable ? 'mark' : 'restore'} 
-                <span className="font-bold text-gray-700"> "{showStockConfirm.name}"</span>
-                {showStockConfirm.isAvailable ? ' as Out of Stock?' : ' to In Stock?'}
+                Are you sure you want to{" "}
+                {showStockConfirm.isAvailable ? "mark" : "restore"}
+                <span className="font-bold text-gray-700">
+                  {" "}
+                  "{showStockConfirm.name}"
+                </span>
+                {showStockConfirm.isAvailable
+                  ? " as Out of Stock?"
+                  : " to In Stock?"}
               </p>
             </div>
             <div className="flex gap-3">
@@ -1694,11 +1810,13 @@ const AdminDashboard = () => {
                 onClick={confirmToggleStock}
                 className={`flex-1 py-3 font-bold rounded-xl active:scale-[0.98] transition-transform ${
                   showStockConfirm.isAvailable
-                    ? 'bg-red-500 text-white shadow-lg shadow-red-200'
-                    : 'bg-green-500 text-white shadow-lg shadow-green-200'
+                    ? "bg-red-500 text-white shadow-lg shadow-red-200"
+                    : "bg-green-500 text-white shadow-lg shadow-green-200"
                 }`}
               >
-                {showStockConfirm.isAvailable ? 'Yes, Mark Out' : 'Yes, In Stock'}
+                {showStockConfirm.isAvailable
+                  ? "Yes, Mark Out"
+                  : "Yes, In Stock"}
               </button>
             </div>
           </div>
