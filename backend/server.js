@@ -135,7 +135,16 @@ for (const envVar of requiredEnvVars) {
 
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
+  .then(() => {
+    console.log("✅ MongoDB Connected");
+    
+    // Check Razorpay Config
+    if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+      console.log(`✅ Razorpay Configured: ${process.env.RAZORPAY_KEY_ID.substring(0, 8)}...`);
+    } else {
+      console.error("❌ Razorpay Configuration MISSING");
+    }
+  })
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err.message);
     process.exit(1);

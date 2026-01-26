@@ -6,6 +6,11 @@ const User = require("../models/User");
 // Create Razorpay order for payment
 exports.createPaymentOrder = async (req, res) => {
   try {
+    console.log("Create payment order request received:", {
+      body: { ...req.body, items: req.body.items?.length + " items" },
+      user: req.user?.userId || "guest",
+    });
+
     const {
       amount,
       currency = "INR",
@@ -42,6 +47,11 @@ exports.createPaymentOrder = async (req, res) => {
       return res.status(400).json({ message: "Customer information required" });
     }
 
+    // Validate items before creating order
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "No items provided for order" });
+    }
+
     // Create order in our database first with pending payment status
     const orderData = {
       user: userId,
@@ -62,10 +72,20 @@ exports.createPaymentOrder = async (req, res) => {
       deliveryAddress: orderType === "Delivery" ? deliveryAddress : undefined,
     };
 
-    const newOrder = new Order(orderData);
-    await newOrder.save();
+    let newOrder;
+    try {
+      newOrder = new Order(orderData);
+      await newOrder.save();
+    } catch (dbError) {
+      console.error("Order save error:", dbError);
+      return res.status(500).json({
+        message: "Error saving order to database",
+        error: dbError.message,
+      });
+    }
 
     // Create Razorpay order
+    let razorpayOrder;
     const razorpayOptions = {
       amount: Math.round(amount * 100), // Razorpay expects amount in paise
       currency: currency,
@@ -77,7 +97,22 @@ exports.createPaymentOrder = async (req, res) => {
       },
     };
 
-    const razorpayOrder = await razorpay.orders.create(razorpayOptions);
+    try {
+      razorpayOrder = await razorpay.orders.create(razorpayOptions);
+    } catch (razorpayError) {
+      console.error("Razorpay order creation error:", razorpayError);
+      // Update order status to failed
+      newOrder.paymentStatus = "Failed";
+      await newOrder.save();
+      return res.status(500).json({
+        message: "Error creating Razorpay order",
+        error: razorpayError.message,
+        details:
+          razorpayError.error?.description ||
+          razorpayError.description ||
+          "Razorpay API error",
+      });
+    }
 
     // Update our order with Razorpay order ID
     newOrder.razorpayOrderId = razorpayOrder.id;
@@ -93,9 +128,15 @@ exports.createPaymentOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Create payment order error:", error);
+    console.error("Error details:", {
+      message: error.message,
+      statusCode: error.statusCode,
+      error: error.error,
+    });
     res.status(500).json({
       message: "Error creating payment order",
       error: error.message,
+      details: error.error?.description || error.error || "Unknown error",
     });
   }
 };
@@ -132,7 +173,7 @@ exports.verifyPayment = async (req, res) => {
         {
           paymentStatus: "Failed",
           razorpayPaymentId: razorpay_payment_id,
-        }
+        },
       );
       return res.status(400).json({
         success: false,
@@ -153,7 +194,7 @@ exports.verifyPayment = async (req, res) => {
         paymentVerifiedAt: new Date(),
         status: "Pending", // Order is now confirmed, ready for processing
       },
-      { new: true }
+      { new: true },
     ).populate("user", "name phone");
 
     if (!order) {
@@ -236,7 +277,7 @@ async function handlePaymentCaptured(payload) {
       razorpayPaymentId: payment.id,
       paymentStatus: "Paid",
       paymentVerifiedAt: new Date(),
-    }
+    },
   );
 
   console.log(`Payment captured for order: ${razorpayOrderId}`);
@@ -252,7 +293,7 @@ async function handlePaymentFailed(payload) {
     {
       razorpayPaymentId: payment.id,
       paymentStatus: "Failed",
-    }
+    },
   );
 
   console.log(`Payment failed for order: ${razorpayOrderId}`);
@@ -267,7 +308,7 @@ async function handleOrderPaid(payload) {
     {
       paymentStatus: "Paid",
       paymentVerifiedAt: new Date(),
-    }
+    },
   );
 
   console.log(`Order paid: ${order.id}`);
@@ -279,7 +320,7 @@ exports.getPaymentStatus = async (req, res) => {
     const { orderId } = req.params;
 
     const order = await Order.findById(orderId).select(
-      "paymentStatus paymentMethod razorpayPaymentId paymentVerifiedAt totalAmount status"
+      "paymentStatus paymentMethod razorpayPaymentId paymentVerifiedAt totalAmount status",
     );
 
     if (!order) {
@@ -317,7 +358,7 @@ exports.manualVerifyPayment = async (req, res) => {
             } | Admin verified: ${verificationNote}`.trim()
           : undefined,
       },
-      { new: true }
+      { new: true },
     ).populate("user", "name phone");
 
     if (!order) {
