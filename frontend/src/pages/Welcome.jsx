@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaUtensils, FaUserShield, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaStar, FaClock, FaShieldAlt } from 'react-icons/fa';
 
 const Welcome = () => {
     const navigate = useNavigate();
-    const { customer } = useAuth(); // Assuming useAuth is exported from context
+    const { customer } = useAuth();
 
     useEffect(() => {
         if (customer) {
@@ -14,88 +14,120 @@ const Welcome = () => {
     }, [customer, navigate]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex flex-col items-center justify-center p-6 text-gray-800 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #FAF7F2 0%, #F5F0E8 50%, #EDE5DA 100%)' }}>
+
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {/* Floating food icons with animations */}
-                {/* Floating food images with animations - Optimized for Mobile */}
-                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Food" className="absolute top-[5%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-60 animate-float-slow shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute top-[15%] right-[5%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-medium shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Bun" className="absolute top-[45%] left-[-5%] md:left-[5%] w-20 h-20 md:w-28 md:h-28 object-cover rounded-full opacity-60 animate-float-fast shadow-lg" />
-                
-                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute bottom-[15%] right-[5%] w-24 h-24 md:w-32 md:h-32 object-cover rounded-full opacity-50 animate-float-slow shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/drinks?updatedAt=1768506197569" alt="Drinks" loading="lazy" className="absolute bottom-[35%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-full opacity-40 animate-float-medium shadow-lg" />
-                <img src="https://ik.imagekit.io/ayushrathore1/bun?updatedAt=1768506241846" alt="Bun" loading="lazy" className="absolute top-[55%] right-[-10%] md:right-[25%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-full opacity-50 animate-float-fast shadow-lg" />
-                
+                {/* Floating food images */}
+                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=120&h=120&fit=crop"
+                    alt="Cake"
+                    className="absolute top-[5%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-2xl opacity-70 shadow-lg"
+                    style={{ animation: 'float 6s ease-in-out infinite', border: '3px solid #E8E3DB' }} />
+                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=120&h=120&fit=crop"
+                    alt="Coffee"
+                    className="absolute top-[15%] right-[5%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-2xl opacity-60 shadow-lg"
+                    style={{ animation: 'float 5s ease-in-out infinite 0.5s', border: '3px solid #E8E3DB' }} />
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=120&h=120&fit=crop"
+                    alt="Burger"
+                    className="absolute top-[45%] left-[2%] md:left-[8%] w-18 h-18 md:w-24 md:h-24 object-cover rounded-2xl opacity-65 shadow-lg"
+                    style={{ animation: 'float 7s ease-in-out infinite 1s', border: '3px solid #E8E3DB' }} />
+                <img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=120&h=120&fit=crop"
+                    alt="Birthday Cake"
+                    className="absolute bottom-[20%] right-[3%] w-20 h-20 md:w-28 md:h-28 object-cover rounded-2xl opacity-60 shadow-lg"
+                    style={{ animation: 'float 6s ease-in-out infinite 1.5s', border: '3px solid #E8E3DB' }} />
+
                 {/* Glowing orbs */}
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-orange-200/20 rounded-full blur-[80px] md:blur-[100px]"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-amber-200/20 rounded-full blur-[80px] md:blur-[100px]"></div>
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 rounded-full blur-[100px]"
+                    style={{ background: 'rgba(201, 169, 98, 0.2)' }}></div>
+                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 rounded-full blur-[100px]"
+                    style={{ background: 'rgba(107, 68, 35, 0.15)' }}></div>
             </div>
-            
+
             {/* Main Content */}
-            <div className="relative z-10 text-center max-w-md animate-fade-in-up px-4">
-                {/* Logo with glassmorphism */}
-                <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-6 md:mb-8 shadow-2xl shadow-orange-100 border-4 border-orange-50 animate-bounce-gentle">
-                    <FaUtensils className="text-4xl md:text-5xl text-orange-500" />
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 text-center px-6 py-12">
+                {/* Logo */}
+                <div className="w-28 h-28 md:w-36 md:h-36 rounded-3xl flex items-center justify-center mb-6 md:mb-8"
+                    style={{
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FAF7F2 100%)',
+                        border: '4px solid #C9A962',
+                        boxShadow: '0 20px 60px rgba(107, 68, 35, 0.2), 0 0 0 8px rgba(201, 169, 98, 0.1)',
+                        animation: 'float 4s ease-in-out infinite'
+                    }}>
+                    <span className="text-6xl md:text-7xl">🧁</span>
                 </div>
-                
+
                 {/* Branding */}
-                <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-2 drop-shadow-sm text-gray-800">
-                    Shubham<span className="text-orange-500">Pattis</span>
+                <h1 className="text-5xl md:text-7xl font-script mb-2" style={{ color: '#6B4423' }}>
+                    Bakery Delight
                 </h1>
-                <p className="text-xl font-bold tracking-widest uppercase text-gray-400 mb-3">
+                <p className="text-lg font-semibold tracking-[0.3em] uppercase mb-2" style={{ color: '#A89580' }}>
                     Bakery & Cafe
                 </p>
-                <p className="text-base text-gray-500 mb-10 font-medium">
+
+                {/* Tagline */}
+                <p className="text-base mb-8 max-w-sm" style={{ color: '#8B7355' }}>
                     ✨ Fresh Bakes • Delicious Moments • Happy Memories ✨
                 </p>
-                
-                {/* CTA Buttons */}
-                <div className="space-y-4">
-                    <button 
-                        onClick={() => navigate('/menu')}
-                        className="group w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-lg py-4 px-8 rounded-2xl shadow-xl shadow-orange-200 hover:shadow-2xl hover:shadow-orange-300 transition-all duration-300 active:scale-95 flex items-center justify-center gap-3 hover:gap-5"
-                    >
-                        <span>Browse Our Menu</span>
-                        <FaArrowRight className="transition-transform group-hover:translate-x-1" />
-                    </button>
-                    
-{/* Admin Login button removed as per redesign */}
+
+                {/* Trust Badges */}
+                <div className="flex flex-wrap justify-center gap-4 mb-10">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.8)', border: '2px solid #E8E3DB' }}>
+                        <FaStar size={14} color="#F5A623" />
+                        <span className="text-sm font-semibold" style={{ color: '#6B4423' }}>4.9 Rating</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.8)', border: '2px solid #E8E3DB' }}>
+                        <FaClock size={14} color="#6B4423" />
+                        <span className="text-sm font-semibold" style={{ color: '#6B4423' }}>30min Delivery</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.8)', border: '2px solid #E8E3DB' }}>
+                        <FaShieldAlt size={14} color="#22C55E" />
+                        <span className="text-sm font-semibold" style={{ color: '#6B4423' }}>Safe Payment</span>
+                    </div>
                 </div>
-                
-                {/* Footer */}
-                <p className="mt-14 text-sm text-gray-400 font-medium">
+
+                {/* CTA Button */}
+                <button
+                    onClick={() => navigate('/menu')}
+                    className="group w-full max-w-xs text-white font-bold text-lg py-5 px-10 rounded-2xl shadow-xl transition-all duration-300 active:scale-95 flex items-center justify-center gap-3"
+                    style={{
+                        background: 'linear-gradient(135deg, #6B4423 0%, #5C4033 100%)',
+                        boxShadow: '0 16px 48px rgba(107, 68, 35, 0.35)'
+                    }}
+                >
+                    <span>🍰 Browse Our Menu</span>
+                    <FaArrowRight className="transition-transform group-hover:translate-x-2" />
+                </button>
+
+                {/* Secondary CTA */}
+                <button
+                    onClick={() => navigate('/login')}
+                    className="mt-4 text-sm font-semibold transition-all hover:underline"
+                    style={{ color: '#6B4423' }}
+                >
+                    Already a customer? Login →
+                </button>
+            </div>
+
+            {/* Footer */}
+            <div className="relative z-10 text-center pb-8 px-6">
+                <p className="text-sm font-medium" style={{ color: '#A89580' }}>
                     Made with ❤️ for our lovely customers
+                </p>
+                <p className="text-xs mt-2" style={{ color: '#C4B5A0' }}>
+                    © 2024 Bakery Delight. All rights reserved.
                 </p>
             </div>
 
-            {/* Custom CSS for animations */}
+            {/* CSS for animations */}
             <style>{`
-                @keyframes float-slow {
+                @keyframes float {
                     0%, 100% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-20px) rotate(5deg); }
+                    50% { transform: translateY(-15px) rotate(2deg); }
                 }
-                @keyframes float-medium {
-                    0%, 100% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-15px) rotate(-5deg); }
-                }
-                @keyframes float-fast {
-                    0%, 100% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-10px) rotate(3deg); }
-                }
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(30px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes bounce-gentle {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-8px); }
-                }
-                .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
-                .animate-float-medium { animation: float-medium 4s ease-in-out infinite; }
-                .animate-float-fast { animation: float-fast 3s ease-in-out infinite; }
-                .animate-fade-in-up { animation: fade-in-up 0.8s ease-out; }
-                .animate-bounce-gentle { animation: bounce-gentle 3s ease-in-out infinite; }
             `}</style>
         </div>
     );

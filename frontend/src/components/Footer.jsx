@@ -1,99 +1,68 @@
 import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPhoneAlt, FaEnvelope, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaPhoneAlt, FaEnvelope, FaInstagram, FaWhatsapp, FaHeart } from 'react-icons/fa';
 
 const Footer = memo(() => {
     const currentYear = useMemo(() => new Date().getFullYear(), []);
-    
+
     return (
-        <footer className="w-full bg-white border-t border-gray-100 mt-auto">
-            {/* Main Footer Content */}
-            <div className="px-4 py-6">
-                {/* Brand */}
-                <div className="text-center mb-4">
-                    <h3 className="text-lg font-black text-gray-800">
-                        Shubham<span className="text-orange-600">Pattis</span>
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                        Delicious food, delivered fresh
-                    </p>
+        <footer className="bakery-footer">
+            {/* Logo */}
+            <div className="footer-logo">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                    <span className="text-3xl animate-float" style={{ animationDuration: '3s' }}>🍰</span>
+                    <h3>Sewa Shubham Bakery</h3>
                 </div>
+                <p>Crafting sweet memories since 2002</p>
+            </div>
 
-                {/* Quick Links - Mobile optimized grid */}
-                <div className="grid grid-cols-2 gap-2 mb-4 px-2">
-                    <Link 
-                        to="/terms" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
-                    >
-                        Terms & Conditions
-                    </Link>
-                    <Link 
-                        to="/privacy" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
-                    >
-                        Privacy Policy
-                    </Link>
-                    <Link 
-                        to="/refund" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
-                    >
-                        Refund Policy
-                    </Link>
-                    <Link 
-                        to="/shipping" 
-                        className="text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
-                    >
-                        Shipping Policy
-                    </Link>
-                    <Link 
-                        to="/contact" 
-                        className="col-span-2 text-xs text-gray-500 hover:text-orange-600 transition-colors font-medium text-center py-2"
-                    >
-                        Contact Us
-                    </Link>
+            {/* Quick Stats */}
+            <div className="flex justify-center gap-8 mb-8 opacity-80">
+                <div className="text-center">
+                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>500+</p>
+                    <p className="text-xs opacity-60">Happy Customers</p>
                 </div>
-
-                {/* Social Links */}
-                <div className="flex justify-center gap-3 mb-4">
-                    <a 
-                        href="https://wa.me/919694034523" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center hover:bg-green-100 transition-colors"
-                    >
-                        <FaWhatsapp size={18} />
-                    </a>
-                    <a 
-                        href="https://www.instagram.com/shubham_patties_bharatpur/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center hover:bg-pink-100 transition-colors"
-                    >
-                        <FaInstagram size={18} />
-                    </a>
-                    <a 
-                        href="tel:+919694034523"
-                        className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-100 transition-colors"
-                    >
-                        <FaPhoneAlt size={16} />
-                    </a>
-                    <a 
-                        href="mailto:Shubhamashwani25@gmail.com"
-                        className="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center hover:bg-orange-100 transition-colors"
-                    >
-                        <FaEnvelope size={16} />
-                    </a>
+                <div className="text-center">
+                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>50+</p>
+                    <p className="text-xs opacity-60">Unique Items</p>
+                </div>
+                <div className="text-center">
+                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>4.9★</p>
+                    <p className="text-xs opacity-60">Rating</p>
                 </div>
             </div>
 
-            {/* Bottom Bar */}
-            <div className="bg-gray-50 px-4 py-4 text-center border-t border-gray-100">
-                <p className="text-gray-400 text-xs font-medium tracking-wide">
-                    Powered by <span className="text-gray-500 font-bold">ElectronWays</span>
+            {/* Links */}
+            <div className="footer-links">
+                <Link to="/terms">Terms</Link>
+                <Link to="/privacy">Privacy</Link>
+                <Link to="/refund">Refund</Link>
+                <Link to="/shipping">Shipping</Link>
+                <Link to="/contact">Contact</Link>
+            </div>
+
+            {/* Social */}
+            <div className="footer-social">
+                <a href="https://wa.me/919694034523" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                    <FaWhatsapp size={22} />
+                </a>
+                <a href="https://www.instagram.com/bakery_delight/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <FaInstagram size={22} />
+                </a>
+                <a href="tel:+919694034523" aria-label="Phone">
+                    <FaPhoneAlt size={19} />
+                </a>
+                <a href="mailto:hello@bakerydelight.com" aria-label="Email">
+                    <FaEnvelope size={19} />
+                </a>
+            </div>
+
+            {/* Bottom */}
+            <div className="footer-bottom">
+                <p className="flex items-center justify-center gap-2">
+                    Made with <FaHeart size={12} style={{ color: '#E57373' }} className="animate-pulse" /> in Bharatpur
                 </p>
-                <p className="text-[10px] text-gray-300 mt-1">
-                    © {currentYear} ShubhamPattis. All rights reserved.
-                </p>
+                <p className="mt-2">© {currentYear} Bakery Delight. All rights reserved.</p>
             </div>
         </footer>
     );
@@ -102,4 +71,3 @@ const Footer = memo(() => {
 Footer.displayName = 'Footer';
 
 export default Footer;
-

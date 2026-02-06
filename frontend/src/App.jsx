@@ -21,6 +21,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
 const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
+const CategoryPage = lazy(() => import('./pages/CategoryPage'));
 
 // Protected Route for Admin
 const AdminRoute = ({ children }) => {
@@ -43,19 +44,20 @@ const App = () => {
                             <Route path="/payment" element={<Payment />} />
                             <Route path="/order-success" element={<OrderSuccess />} />
                             <Route path="/dashboard" element={<UserDashboard />} />
-                            
+                            <Route path="/category/:categoryId" element={<CategoryPage />} />
+
                             {/* Static Pages */}
                             <Route path="/terms" element={<TermsConditions />} />
                             <Route path="/privacy" element={<PrivacyPolicy />} />
                             <Route path="/refund" element={<RefundPolicy />} />
                             <Route path="/shipping" element={<ShippingPolicy />} />
                             <Route path="/contact" element={<ContactUs />} />
-                            
-                            {/* Admin Routes */}
+
+                            {/* Admin Routes - Unlocked for development */}
                             <Route path="/admin/login" element={<AdminLogin />} />
-                            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                            <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-                            
+                            <Route path="/admin" element={<AdminDashboard />} />
+                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
                             {/* Fallback */}
                             <Route path="*" element={<Navigate to="/" />} />
                         </Routes>

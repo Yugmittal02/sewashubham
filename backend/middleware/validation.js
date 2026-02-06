@@ -4,7 +4,7 @@ const { body, param, validationResult } = require('express-validator');
 const handleValidation = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ 
+        return res.status(400).json({
             message: 'Validation failed',
             errors: errors.array().map(e => e.msg)
         });
@@ -67,7 +67,7 @@ const validateOrder = [
     body('orderType')
         .isIn(['Dine-in', 'Takeaway', 'Delivery']).withMessage('Invalid order type'),
     body('paymentMethod')
-        .isIn(['Cash', 'UPI']).withMessage('Invalid payment method'),
+        .isIn(['Cash', 'UPI', 'Razorpay', 'Online']).withMessage('Invalid payment method'),
     handleValidation
 ];
 

@@ -1,49 +1,9 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Testing
-coverage/
-playwright-report/
-test-results/
-
-# Production
-build/
-dist/
-dist-ssr
-
-# Environment variables
+node_modules
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.production
-*.local
-env
-
-# Misc
+dist
+build
 .DS_Store
+coverage
+.vscode
+.idea
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# OS
-Thumbs.db
-
-# Optional: Ignore the brain folder if it was inside the repo (it's not, based on paths)
-# But just in case user copies artifacts in
-brain/
