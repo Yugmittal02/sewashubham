@@ -32,32 +32,32 @@ const FeaturedBanner = ({ product, onAddSuccess }) => {
     return (
         <div className="mx-5 mb-6 p-5 rounded-2xl animate-fade-in-up"
             style={{
-                background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8CC 100%)',
-                border: '2px solid #C9A962',
-                boxShadow: '0 8px 32px rgba(201, 169, 98, 0.2)'
+                background: 'linear-gradient(135deg, #FFF5EE 0%, #FFE8D6 100%)',
+                border: '2px solid #FC8019',
+                boxShadow: '0 8px 32px rgba(252, 128, 25, 0.15)'
             }}>
             <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ background: 'linear-gradient(135deg, #C9A962 0%, #D4B87A 100%)' }}>
-                    <FaCrown size={14} color="#3D2B1F" />
+                    style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}>
+                    <FaCrown size={14} color="#FFFFFF" />
                 </div>
-                <span className="font-bold text-sm" style={{ color: '#6B4423' }}>TODAY'S SPECIAL</span>
+                <span className="font-bold text-sm" style={{ color: '#FC8019' }}>TODAY'S SPECIAL</span>
             </div>
             <div className="flex gap-4">
                 <img
                     src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop'}
                     alt={product.name}
                     className="w-24 h-24 rounded-xl object-cover"
-                    style={{ border: '2px solid #C9A962' }}
+                    style={{ border: '2px solid #FC8019' }}
                 />
                 <div className="flex-1">
-                    <h4 className="font-bold" style={{ color: '#4A3728' }}>{product.name}</h4>
+                    <h4 className="font-bold" style={{ color: '#1C1C1C' }}>{product.name}</h4>
                     <div className="flex items-center gap-1 my-1">
-                        {[1, 2, 3, 4, 5].map(i => <FaStar key={i} size={10} color="#F5A623" />)}
-                        <span className="text-xs ml-1" style={{ color: '#8B7355' }}>(98 reviews)</span>
+                        {[1, 2, 3, 4, 5].map(i => <FaStar key={i} size={10} color="#FC8019" />)}
+                        <span className="text-xs ml-1" style={{ color: '#7E7E7E' }}>(98 reviews)</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <span className="font-bold text-lg" style={{ color: '#6B4423' }}>₹{product.price}</span>
+                        <span className="font-bold text-lg" style={{ color: '#FC8019' }}>₹{product.price}</span>
                         <span className="text-sm line-through" style={{ color: '#A0A0A0' }}>₹{Math.round(product.price * 1.3)}</span>
                         <span className="px-2 py-0.5 rounded text-xs font-bold text-white"
                             style={{ background: '#22C55E' }}>30% OFF</span>
@@ -71,20 +71,20 @@ const FeaturedBanner = ({ product, onAddSuccess }) => {
 // Quick Stats Bar
 const QuickStats = () => (
     <div className="mx-5 mb-6 p-4 rounded-2xl flex justify-around animate-fade-in"
-        style={{ background: 'linear-gradient(135deg, #3D2B1F 0%, #4A3728 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}>
         <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#C9A962' }}>⚡ 30min</p>
-            <p className="text-[10px] text-white/60">Delivery</p>
+            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>⚡ 30min</p>
+            <p className="text-[10px] text-white/80">Delivery</p>
         </div>
-        <div className="w-px bg-white/10"></div>
+        <div className="w-px bg-white/20"></div>
         <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#C9A962' }}>🔥 Fresh</p>
-            <p className="text-[10px] text-white/60">Daily Made</p>
+            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>🔥 Fresh</p>
+            <p className="text-[10px] text-white/80">Daily Made</p>
         </div>
-        <div className="w-px bg-white/10"></div>
+        <div className="w-px bg-white/20"></div>
         <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#C9A962' }}>💯 Quality</p>
-            <p className="text-[10px] text-white/60">Guaranteed</p>
+            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>💯 Quality</p>
+            <p className="text-[10px] text-white/80">Guaranteed</p>
         </div>
     </div>
 );
@@ -168,7 +168,7 @@ const Home = () => {
     }, [activeCategory]);
 
     return (
-        <div style={{ background: 'linear-gradient(180deg, #F5F0E8 0%, #FAF7F2 100%)', minHeight: '100vh' }}>
+        <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
             {/* Header */}
             <Header
                 activeCategory={activeCategory}

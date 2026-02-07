@@ -83,19 +83,19 @@ const RazorpayPaymentModal = ({
 
         {/* Amount Display */}
         <div className="px-6 py-5">
-          <div className="bg-[#FEF3E2] rounded-2xl p-5 border border-[var(--accent-gold)] shadow-sm">
+          <div className="bg-[#FFF5EE] rounded-2xl p-5 border-2 border-[#FC8019] shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[var(--accent-brown)] font-bold mb-1 uppercase tracking-wide opacity-80">
+                <p className="text-sm font-bold mb-1 uppercase tracking-wide" style={{ color: '#FC8019' }}>
                   Amount to Pay
                 </p>
-                <p className="text-4xl font-black text-[var(--text-dark)]">
+                <p className="text-4xl font-black" style={{ color: '#1C1C1C' }}>
                   ₹{amount.toFixed(0)}
                 </p>
               </div>
-              <div className="flex items-center gap-2 bg-[var(--accent-gold)]/10 text-[var(--accent-brown)] px-3 py-1.5 rounded-full border border-[var(--accent-gold)]/20">
-                <FaLock size={12} />
-                <span className="text-xs font-bold">SECURE</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(252, 128, 25, 0.1)', border: '1px solid rgba(252, 128, 25, 0.2)' }}>
+                <FaLock size={12} color="#FC8019" />
+                <span className="text-xs font-bold" style={{ color: '#FC8019' }}>SECURE</span>
               </div>
             </div>
           </div>
@@ -121,19 +121,19 @@ const RazorpayPaymentModal = ({
             </h3>
             <ul className="space-y-2 text-sm text-[var(--text-brown)] relative z-10">
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[var(--accent-gold)] rounded-full"></span>
+                <span className="w-1.5 h-1.5 bg-[#FC8019] rounded-full"></span>
                 Instant payment confirmation
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[var(--accent-gold)] rounded-full"></span>
+                <span className="w-1.5 h-1.5 bg-[#FC8019] rounded-full"></span>
                 UPI, Cards, Netbanking supported
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[var(--accent-gold)] rounded-full"></span>
+                <span className="w-1.5 h-1.5 bg-[#FC8019] rounded-full"></span>
                 100% secure & verified
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[var(--accent-gold)] rounded-full"></span>
+                <span className="w-1.5 h-1.5 bg-[#FC8019] rounded-full"></span>
                 Faster order processing
               </li>
             </ul>
@@ -143,7 +143,11 @@ const RazorpayPaymentModal = ({
           <button
             onClick={handleRazorpayPayment}
             disabled={razorpayLoading}
-            className="w-full py-4 bg-[var(--gradient-brown)] text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-lg shadow-[#6B4423]/30 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-4 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+            style={{
+              background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+              boxShadow: '0 8px 24px rgba(252, 128, 25, 0.35)'
+            }}
           >
             {razorpayLoading ? (
               <>

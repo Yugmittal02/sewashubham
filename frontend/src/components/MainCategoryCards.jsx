@@ -10,36 +10,36 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
             id: 'cake',
             name: 'Cake',
             icon: '🎂',
-            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop',
+            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
         },
         {
             id: 'fastfood',
             name: 'Fastfood',
             icon: '🍔',
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop',
+            image: 'https://images.unsplash.com/photo-1603064752734-4c48eff53d05?w=400&h=400&fit=crop&q=80',
             gradient: 'from-amber-100 to-orange-50'
         },
         {
-            id: 'flower',
-            name: 'Flower',
-            icon: '🌸',
-            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=300&h=300&fit=crop',
-            gradient: 'from-rose-100 to-pink-50'
+            id: 'bakery',
+            name: 'Bakery',
+            icon: '🥐',
+            image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop&q=80',
+            gradient: 'from-amber-100 to-yellow-50'
         },
         {
             id: 'beverages',
             name: 'Beverages',
             icon: '☕',
-            image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=300&h=300&fit=crop',
+            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop&q=80',
             gradient: 'from-amber-100 to-yellow-50'
         },
         {
-            id: 'anniversary',
-            name: 'Anniversary',
+            id: 'flowers',
+            name: 'Flowers',
             icon: '💐',
-            image: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300&h=300&fit=crop',
-            gradient: 'from-red-100 to-rose-50'
+            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop&q=80',
+            gradient: 'from-pink-100 to-rose-50'
         }
     ];
 
@@ -72,7 +72,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                             <div
                                 className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
                                 style={{
-                                    background: 'linear-gradient(180deg, transparent 50%, rgba(107, 68, 35, 0.3) 100%)'
+                                    background: 'linear-gradient(180deg, transparent 50%, rgba(252, 128, 25, 0.3) 100%)'
                                 }}
                             />
                         </div>

@@ -19,8 +19,8 @@ const CATEGORY_CONFIG = {
         name: 'Cakes',
         icon: '🎂',
         banner: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=300&fit=crop',
-        subcategories: ['All', 'Birthday', 'Anniversary', 'Custom', 'Cupcakes', 'Pastries'],
-        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate cake', 'vanilla']
+        subcategories: ['All', 'Birthday', 'Anniversary', 'First Birthday', 'Photo Cake', 'Custom', 'Cupcakes'],
+        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate cake', 'vanilla', 'photo cake']
     },
     beverages: {
         name: 'Beverages',
@@ -29,19 +29,33 @@ const CATEGORY_CONFIG = {
         subcategories: ['All', 'Cold Coffee', 'Tea', 'Shakes', 'Mocktails', 'Juice'],
         keywords: ['beverages', 'beverage', 'coffee', 'tea', 'shake', 'juice', 'mocktail', 'drink', 'cold coffee', 'milkshake']
     },
-    flower: {
-        name: 'Flowers',
-        icon: '🌸',
-        banner: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&h=300&fit=crop',
-        subcategories: ['All', 'Bouquets', 'Roses', 'Mixed', 'Premium'],
-        keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral']
+    bakery: {
+        name: 'Bakery',
+        icon: '🥐',
+        banner: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&h=300&fit=crop',
+        subcategories: ['All', 'Bread', 'Cookies', 'Croissants', 'Pastries', 'Biscuits'],
+        keywords: ['bakery', 'bread', 'cookies', 'croissant', 'biscuit', 'pastry', 'baked']
     },
-    anniversary: {
-        name: 'Anniversary',
+    flowers: {
+        name: 'Flowers',
         icon: '💐',
-        banner: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&h=300&fit=crop',
-        subcategories: ['All', 'Gifts', 'Combos', 'Special'],
-        keywords: ['anniversary', 'gift', 'combo', 'special', 'celebration']
+        banner: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&h=300&fit=crop',
+        subcategories: ['All', 'Bouquets', 'Roses', 'Mixed', 'Premium', 'Gift Combos'],
+        keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral', 'arrangement']
+    },
+    patties: {
+        name: 'Patties',
+        icon: '🥟',
+        banner: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800&h=300&fit=crop',
+        subcategories: ['All', 'Veg Patties', 'Paneer Patties', 'Aloo Patties', 'Special'],
+        keywords: ['patties', 'pattis', 'patty', 'patti', 'samosa', 'snack']
+    },
+    pizza: {
+        name: 'Pizza',
+        icon: '🍕',
+        banner: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=300&fit=crop',
+        subcategories: ['All', 'Veg Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
+        keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza']
     }
 };
 
@@ -118,20 +132,20 @@ const CategoryPage = () => {
         <div className="min-h-screen pb-20" style={{ background: '#F5F0E8' }}>
             {/* Header */}
             <header className="sticky top-0 z-20 px-4 py-3"
-                style={{ background: 'linear-gradient(180deg, #2D1F16 0%, #3D2B1F 100%)', borderBottom: '3px solid #C9A962' }}>
+                style={{ background: 'linear-gradient(180deg, #FC8019 0%, #FF9A3C 100%)', borderBottom: '3px solid #FC8019' }}>
                 <div className="flex items-center justify-between">
                     {/* Left: Back + Logo */}
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => navigate(-1)}
                             className="w-10 h-10 rounded-xl flex items-center justify-center active:scale-95 transition-transform"
-                            style={{ background: 'rgba(255,255,255,0.1)' }}
+                            style={{ background: 'rgba(255,255,255,0.2)' }}
                         >
-                            <FaArrowLeft size={16} color="#D4B896" />
+                            <FaArrowLeft size={16} color="#FFFFFF" />
                         </button>
                         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/menu')}>
                             <span className="text-xl">{category.icon}</span>
-                            <h1 className="text-lg font-script" style={{ color: '#D4B896' }}>{category.name}</h1>
+                            <h1 className="text-lg font-bold text-white">{category.name}</h1>
                         </div>
                     </div>
 
@@ -140,19 +154,19 @@ const CategoryPage = () => {
                         <button
                             onClick={() => setShowSearch(!showSearch)}
                             className="w-10 h-10 rounded-xl flex items-center justify-center"
-                            style={{ background: 'rgba(255,255,255,0.1)' }}
+                            style={{ background: 'rgba(255,255,255,0.2)' }}
                         >
-                            <FaSearch size={16} color="#D4B896" />
+                            <FaSearch size={16} color="#FFFFFF" />
                         </button>
                         <button
                             onClick={() => navigate('/cart')}
                             className="w-10 h-10 rounded-xl flex items-center justify-center relative"
-                            style={{ background: 'rgba(255,255,255,0.1)' }}
+                            style={{ background: 'rgba(255,255,255,0.2)' }}
                         >
-                            <FaShoppingCart size={16} color="#D4B896" />
+                            <FaShoppingCart size={16} color="#FFFFFF" />
                             {cartCount > 0 && (
                                 <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
-                                    style={{ background: '#C9A962' }}>
+                                    style={{ background: '#E57312' }}>
                                     {cartCount}
                                 </span>
                             )}
@@ -170,9 +184,9 @@ const CategoryPage = () => {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl text-sm"
                             style={{
-                                background: 'rgba(255,255,255,0.1)',
-                                border: '1px solid rgba(212, 184, 150, 0.3)',
-                                color: '#D4B896'
+                                background: 'rgba(255,255,255,0.9)',
+                                border: '2px solid rgba(255, 255, 255, 0.5)',
+                                color: '#1C1C1C'
                             }}
                             autoFocus
                         />
@@ -182,15 +196,15 @@ const CategoryPage = () => {
 
             {/* Promo Banner */}
             <div className="mx-4 mt-4">
-                <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 16px rgba(74, 55, 40, 0.1)' }}>
+                <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 16px rgba(252, 128, 25, 0.2)' }}>
                     <img
                         src={category.banner}
                         alt={`${category.name} Banner`}
                         className="w-full h-36 object-cover"
                     />
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(45, 31, 22, 0.8) 0%, transparent 70%)' }}>
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(252, 128, 25, 0.9) 0%, transparent 70%)' }}>
                         <div className="p-4 h-full flex flex-col justify-center">
-                            <p className="text-xs uppercase tracking-wider" style={{ color: '#C9A962' }}>Special Offer</p>
+                            <p className="text-xs uppercase tracking-wider text-white/80">Special Offer</p>
                             <h2 className="text-xl font-bold text-white mt-1">{category.name}</h2>
                             <p className="text-sm text-white/80 mt-1">Freshly made daily</p>
                         </div>
@@ -208,11 +222,11 @@ const CategoryPage = () => {
                             className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
                             style={{
                                 background: activeSubcategory === sub
-                                    ? 'linear-gradient(135deg, #6B4423 0%, #5C4033 100%)'
+                                    ? 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)'
                                     : 'white',
-                                color: activeSubcategory === sub ? 'white' : '#6B4423',
-                                border: activeSubcategory === sub ? 'none' : '2px solid #E8E3DB',
-                                boxShadow: activeSubcategory === sub ? '0 4px 12px rgba(107, 68, 35, 0.3)' : 'none'
+                                color: activeSubcategory === sub ? 'white' : '#FC8019',
+                                border: activeSubcategory === sub ? 'none' : '2px solid #FC8019',
+                                boxShadow: activeSubcategory === sub ? '0 4px 12px rgba(252, 128, 25, 0.3)' : 'none'
                             }}
                         >
                             {sub}
@@ -233,8 +247,8 @@ const CategoryPage = () => {
                     <>
                         {/* Results count */}
                         <div className="flex items-center gap-2 mb-3">
-                            <FaFire size={14} color="#C9A962" />
-                            <span className="text-sm font-medium" style={{ color: '#8B7355' }}>
+                            <FaFire size={14} color="#FC8019" />
+                            <span className="text-sm font-medium" style={{ color: '#7E7E7E' }}>
                                 {filteredProducts.length} items found
                             </span>
                         </div>
@@ -250,14 +264,14 @@ const CategoryPage = () => {
                 ) : (
                     <div className="text-center py-12">
                         <span className="text-5xl mb-4 block">🔍</span>
-                        <h3 className="text-lg font-bold" style={{ color: '#4A3728' }}>No items found</h3>
-                        <p className="text-sm mt-2" style={{ color: '#8B7355' }}>
+                        <h3 className="text-lg font-bold" style={{ color: '#1C1C1C' }}>No items found</h3>
+                        <p className="text-sm mt-2" style={{ color: '#7E7E7E' }}>
                             No products available in this category yet
                         </p>
                         <button
                             onClick={() => navigate('/menu')}
                             className="mt-4 px-6 py-2 rounded-xl text-white font-medium"
-                            style={{ background: 'linear-gradient(135deg, #6B4423 0%, #5C4033 100%)' }}
+                            style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}
                         >
                             Browse All Items
                         </button>

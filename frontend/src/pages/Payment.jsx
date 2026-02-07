@@ -25,9 +25,13 @@ import Footer from "../components/Footer";
 
 const Payment = () => {
   const { cart, total, clearCart } = useCart();
-  const { customer } = useAuth();
+  const { customer, enterAsCustomer } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Customer form state
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
 
   // Get data passed from Cart page - default to Takeaway if not provided
   const passedOrderType = location.state?.orderType;
@@ -262,18 +266,28 @@ const Payment = () => {
   };
 
   const processOrder = async () => {
-    if (!customer || !customer.name || !customer.phone) {
-      alert("Customer information is required. Please go back to cart.");
-      navigate("/cart");
+    // Use form data if customer is not set
+    const orderCustomer = customer || { name: customerName, phone: customerPhone };
+
+    if (!orderCustomer.name || !orderCustomer.phone) {
       return;
+    }
+
+    // If no customer in context, register them first
+    if (!customer) {
+      const result = await enterAsCustomer(customerName, customerPhone);
+      if (!result.success) {
+        alert('Failed to save customer info. Please try again.');
+        return;
+      }
     }
 
     setLoading(true);
 
     try {
       const customerRes = await registerCustomer({
-        name: customer.name,
-        phone: customer.phone,
+        name: orderCustomer.name,
+        phone: orderCustomer.phone,
       });
       const userId = customerRes.data.user._id;
 
@@ -437,22 +451,22 @@ const Payment = () => {
           <button
             onClick={() => navigate(-1)}
             className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-95 transition-all"
-            style={{ background: 'rgba(255, 255, 255, 0.1)' }}
+            style={{ background: 'rgba(252, 128, 25, 0.1)' }}
           >
-            <FaArrowLeft size={18} color="#D4B896" />
+            <FaArrowLeft size={18} color="#FC8019" />
           </button>
           <div>
-            <h1 className="text-xl font-black text-[#D4B896]">Payment</h1>
-            <p className="text-sm text-[#D4B896] opacity-80">Complete your order</p>
+            <h1 className="text-xl font-black" style={{ color: '#FC8019' }}>Payment</h1>
+            <p className="text-sm" style={{ color: '#7E7E7E' }}>Complete your order</p>
           </div>
         </div>
         {customer && (
           <div className="flex flex-col items-end">
-            <div className="text-[10px] uppercase font-bold text-[#D4B896] opacity-70 tracking-wider mb-0.5">
+            <div className="text-[10px] uppercase font-bold tracking-wider mb-0.5" style={{ color: '#FC8019' }}>
               {orderType}
             </div>
-            <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-[#C9A962]/30 bg-[#C9A962]/10">
-              <span className="text-xs font-bold text-[#D4B896] max-w-[80px] truncate">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-lg" style={{ border: '1px solid rgba(252, 128, 25, 0.3)', background: 'rgba(252, 128, 25, 0.1)' }}>
+              <span className="text-xs font-bold max-w-[80px] truncate" style={{ color: '#FC8019' }}>
                 {customer.name}
               </span>
             </div>
@@ -494,6 +508,68 @@ const Payment = () => {
             ))}
           </div>
         </div>
+
+        {/* Customer Info Form - Show when customer not logged in */}
+        {!customer && (
+          <div className="bg-white p-5 rounded-3xl shadow-sm border-2 border-[#FC8019] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 rounded-full -mr-12 -mt-12 opacity-20" style={{ background: 'linear-gradient(135deg, #FC8019, #FF9A3C)' }}></div>
+            <div className="flex items-center gap-3 mb-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FFF5EE, #FFE8D6)' }}>
+                <span style={{ fontSize: '20px' }}>👤</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg" style={{ color: '#FC8019' }}>Customer Information</h3>
+                <p className="text-xs" style={{ color: '#7E7E7E' }}>Enter your details to continue</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#1C1C1C' }}>Your Name *</label>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Enter your name"
+                  className="w-full px-4 py-3 rounded-xl border-2 text-base transition-all focus:outline-none"
+                  style={{
+                    borderColor: customerName ? '#FC8019' : '#E8E8E8',
+                    background: customerName ? '#FFF9F5' : 'white'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#FC8019'}
+                  onBlur={(e) => e.target.style.borderColor = customerName ? '#FC8019' : '#E8E8E8'}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#1C1C1C' }}>Phone Number *</label>
+                <input
+                  type="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  placeholder="Enter 10-digit phone number"
+                  className="w-full px-4 py-3 rounded-xl border-2 text-base transition-all focus:outline-none"
+                  style={{
+                    borderColor: customerPhone.length === 10 ? '#FC8019' : '#E8E8E8',
+                    background: customerPhone.length === 10 ? '#FFF9F5' : 'white'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#FC8019'}
+                  onBlur={(e) => e.target.style.borderColor = customerPhone.length === 10 ? '#FC8019' : '#E8E8E8'}
+                />
+                {customerPhone && customerPhone.length !== 10 && (
+                  <p className="text-xs mt-1" style={{ color: '#EF4444' }}>Please enter 10 digits</p>
+                )}
+              </div>
+            </div>
+
+            {(!customerName || customerPhone.length !== 10) && (
+              <div className="mt-4 p-3 rounded-xl flex items-center gap-2" style={{ background: '#FEF3C7' }}>
+                <span>⚠️</span>
+                <p className="text-xs font-medium" style={{ color: '#92400E' }}>Please fill in all required fields to proceed</p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Delivery Address Display */}
         {orderType === "Delivery" && deliveryAddress && (
@@ -642,14 +718,14 @@ const Payment = () => {
 
       {/* Checkout Button - Fixed */}
       <div className="fixed bottom-0 left-0 right-0 p-4 z-20 safe-area-bottom"
-        style={{ background: 'linear-gradient(180deg, transparent 0%, #F5F0E8 20%, #F5F0E8 100%)' }}>
+        style={{ background: 'linear-gradient(180deg, transparent 0%, #FFFFFF 20%, #FFFFFF 100%)' }}>
         <button
           onClick={handleCheckout}
-          disabled={loading}
+          disabled={loading || (!customer && (!customerName || customerPhone.length !== 10))}
           className="w-full h-16 text-white font-bold text-lg rounded-2xl active:scale-[0.98] transition-all flex justify-between items-center px-6 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
-            background: 'linear-gradient(135deg, #6B4423 0%, #5C4033 100%)',
-            boxShadow: '0 8px 32px rgba(107, 68, 35, 0.4)'
+            background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+            boxShadow: '0 8px 32px rgba(252, 128, 25, 0.4)'
           }}
         >
           <div className="flex items-center gap-3">

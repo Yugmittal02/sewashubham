@@ -17,18 +17,18 @@ const Footer = memo(() => {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex justify-center gap-8 mb-8 opacity-80">
-                <div className="text-center">
-                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>500+</p>
-                    <p className="text-xs opacity-60">Happy Customers</p>
+            <div className="flex justify-center gap-8 mb-8">
+                <div className="text-center px-4 py-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>
+                    <p className="text-2xl font-bold text-white">500+</p>
+                    <p className="text-xs text-white opacity-80">Happy Customers</p>
                 </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>50+</p>
-                    <p className="text-xs opacity-60">Unique Items</p>
+                <div className="text-center px-4 py-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>
+                    <p className="text-2xl font-bold text-white">50+</p>
+                    <p className="text-xs text-white opacity-80">Unique Items</p>
                 </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold" style={{ color: '#D4B896' }}>4.9★</p>
-                    <p className="text-xs opacity-60">Rating</p>
+                <div className="text-center px-4 py-3 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>
+                    <p className="text-2xl font-bold text-white">4.9★</p>
+                    <p className="text-xs text-white opacity-80">Rating</p>
                 </div>
             </div>
 
@@ -59,10 +59,10 @@ const Footer = memo(() => {
 
             {/* Bottom */}
             <div className="footer-bottom">
-                <p className="flex items-center justify-center gap-2">
-                    Made with <FaHeart size={12} style={{ color: '#E57373' }} className="animate-pulse" /> in Bharatpur
+                <p className="flex items-center justify-center gap-2 text-white">
+                    Made with <FaHeart size={12} style={{ color: '#FFFFFF' }} className="animate-pulse" /> in Bharatpur
                 </p>
-                <p className="mt-2">© {currentYear} Bakery Delight. All rights reserved.</p>
+                <p className="mt-2 text-white opacity-80">© {currentYear} Sewa Shubham Bakery. All rights reserved.</p>
             </div>
         </footer>
     );

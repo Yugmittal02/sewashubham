@@ -5,47 +5,63 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
     const navigate = useNavigate();
 
     const subCategories = [
+        // Row 1
+        {
+            id: 'first-birthday-cake',
+            name: 'First Birthday',
+            icon: '🎉',
+            image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=200&h=200&fit=crop&q=80',
+            color: '#FC8019'
+        },
         {
             id: 'anniversary-cake',
-            name: 'Anniversary Cake',
+            name: 'Anniversary',
             icon: '💍',
-            image: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=150&h=150&fit=crop',
-            color: '#FF6B6B'
+            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=200&h=200&fit=crop&q=80',
+            color: '#FC8019'
         },
         {
             id: 'birthday-cake',
-            name: 'Birthday Cake',
+            name: 'Birthday',
             icon: '🎂',
-            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=150&h=150&fit=crop',
-            color: '#4ECDC4'
-        },
-        {
-            id: 'wedding-cake',
-            name: 'Wedding Cake',
-            icon: '💒',
-            image: 'https://images.unsplash.com/photo-1522767131822-6df8ddb15a8d?w=150&h=150&fit=crop',
-            color: '#FFE66D'
+            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=200&h=200&fit=crop&q=80',
+            color: '#FC8019'
         },
         {
             id: 'photo-cake',
             name: 'Photo Cake',
             icon: '📸',
-            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=150&h=150&fit=crop',
-            color: '#A78BFA'
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop&q=80',
+            color: '#FF9A3C'
+        },
+        // Row 2
+        {
+            id: 'patties',
+            name: 'Patties',
+            icon: '🥟',
+            image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=200&h=200&fit=crop&q=80',
+            color: '#FC8019'
         },
         {
-            id: 'custom-cake',
-            name: 'Custom Cake',
-            icon: '✨',
-            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=150&h=150&fit=crop',
-            color: '#F472B6'
+            id: 'beverages',
+            name: 'Beverages',
+            icon: '☕',
+            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop&q=80',
+            color: '#FF9A3C'
         },
         {
-            id: 'cupcakes',
-            name: 'Cupcakes',
-            icon: '🧁',
-            image: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=150&h=150&fit=crop',
-            color: '#FB923C'
+            id: 'flowers',
+            name: 'Flowers',
+            icon: '💐',
+            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=200&h=200&fit=crop&q=80',
+            color: '#FC8019'
+        },
+        {
+            id: 'pizza',
+            name: 'Pizza',
+            icon: '🍕',
+            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop&q=80',
+            color: '#FF9A3C'
         }
     ];
 
@@ -53,32 +69,101 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
         if (onSubCategorySelect) {
             onSubCategorySelect(id);
         }
-        navigate(`/category/cake?sub=${id}`);
+        navigate(`/category/${id}`);
     };
 
     return (
-        <div className="subcategory-row">
-            <div className="subcategory-scroll hide-scrollbar">
+        <div className="subcategory-section" style={{
+            padding: '20px 16px',
+            background: 'linear-gradient(135deg, rgba(252, 128, 25, 0.08) 0%, rgba(255, 154, 60, 0.12) 100%)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '20px',
+            margin: '16px',
+            border: '1px solid rgba(252, 128, 25, 0.15)'
+        }}>
+            {/* Section Title */}
+            <h3 style={{
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#FC8019',
+                marginBottom: '16px',
+                textAlign: 'center'
+            }}>✨ Quick Picks</h3>
+
+            {/* 2x4 Grid Layout */}
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '12px',
+                maxWidth: '100%'
+            }}>
                 {subCategories.map((sub, index) => (
                     <button
                         key={sub.id}
                         onClick={() => handleClick(sub.id)}
-                        className="subcategory-item animate-fade-in"
-                        style={{ animationDelay: `${index * 0.08}s` }}
+                        className="animate-fade-in"
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '12px 8px',
+                            background: 'white',
+                            borderRadius: '16px',
+                            border: `2px solid ${sub.color}30`,
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            animationDelay: `${index * 0.05}s`
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-4px)';
+                            e.currentTarget.style.boxShadow = `0 8px 20px ${sub.color}30`;
+                            e.currentTarget.style.borderColor = sub.color;
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = `${sub.color}30`;
+                        }}
                     >
                         <div
-                            className="subcategory-icon"
                             style={{
-                                background: `linear-gradient(135deg, ${sub.color}20 0%, ${sub.color}40 100%)`,
-                                borderColor: sub.color
+                                width: '56px',
+                                height: '56px',
+                                borderRadius: '12px',
+                                overflow: 'hidden',
+                                border: `2px solid ${sub.color}`,
+                                position: 'relative'
                             }}
                         >
-                            <img src={sub.image} alt={sub.name} />
-                            <div className="subcategory-overlay">
-                                <span className="text-2xl">{sub.icon}</span>
+                            <img
+                                src={sub.image}
+                                alt={sub.name}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                            <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'rgba(0,0,0,0.1)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <span style={{ fontSize: '20px' }}>{sub.icon}</span>
                             </div>
                         </div>
-                        <p className="subcategory-label">{sub.name}</p>
+                        <p style={{
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            color: '#1C1C1C',
+                            textAlign: 'center',
+                            lineHeight: '1.2',
+                            margin: 0
+                        }}>{sub.name}</p>
                     </button>
                 ))}
             </div>
