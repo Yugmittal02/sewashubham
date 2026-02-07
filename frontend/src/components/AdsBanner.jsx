@@ -10,7 +10,7 @@ const AdsBanner = () => {
     const [loading, setLoading] = useState(true);
 
     const gradients = [
-        'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)',
+        'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
         'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
         'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
@@ -19,25 +19,80 @@ const AdsBanner = () => {
 
     const icons = ['🎂', '🥟', '💍', '🎁', '🍕', '🍪'];
 
+    // Default fallback ads - always show these if API fails or returns empty
+    const defaultAds = [
+        {
+            id: 'default-1',
+            title: 'Fresh Cakes Daily',
+            subtitle: 'Made with love & premium ingredients',
+            description: 'Order Now & Get 10% OFF',
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+            bgGradient: gradients[0],
+            link: '/category/cake',
+            badge: '🔥 HOT',
+            icon: '🎂'
+        },
+        {
+            id: 'default-2',
+            title: 'Birthday Specials',
+            subtitle: 'Make celebrations memorable',
+            description: 'Custom Cakes Available',
+            image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=600&h=400&fit=crop',
+            bgGradient: gradients[1],
+            link: '/category/cake',
+            badge: '🎉 SPECIAL',
+            icon: '🎁'
+        },
+        {
+            id: 'default-3',
+            title: 'Crispy Patties',
+            subtitle: 'Hot & Fresh from the oven',
+            description: 'Starting at just ₹20',
+            image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&h=400&fit=crop',
+            bgGradient: gradients[4],
+            link: '/category/fastfood',
+            badge: '⚡ QUICK',
+            icon: '🥟'
+        },
+        {
+            id: 'default-4',
+            title: 'Beautiful Flowers',
+            subtitle: 'Perfect for every occasion',
+            description: 'Fresh Bouquets Daily',
+            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&h=400&fit=crop',
+            bgGradient: gradients[2],
+            link: '/category/flowers',
+            badge: '💐 NEW',
+            icon: '💐'
+        }
+    ];
+
     useEffect(() => {
         const loadOffers = async () => {
             try {
                 const { data } = await fetchOffers();
                 // Transform offers to ads format
-                const formattedAds = data.map((offer, index) => ({
-                    id: offer._id,
-                    title: offer.title,
-                    subtitle: offer.description || 'Special Deal For You',
-                    description: `Use Code: ${offer.code}`,
-                    image: offer.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
-                    bgGradient: gradients[index % gradients.length],
-                    link: '/category/all', // Default link
-                    badge: offer.discountType === 'percentage' ? `${offer.discountValue}% OFF` : `₹${offer.discountValue} OFF`,
-                    icon: icons[index % icons.length]
-                }));
-                setAds(formattedAds);
+                if (data && data.length > 0) {
+                    const formattedAds = data.map((offer, index) => ({
+                        id: offer._id,
+                        title: offer.title,
+                        subtitle: offer.description || 'Special Deal For You',
+                        description: `Use Code: ${offer.code}`,
+                        image: offer.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+                        bgGradient: gradients[index % gradients.length],
+                        link: '/category/all',
+                        badge: offer.discountType === 'percentage' ? `${offer.discountValue}% OFF` : `₹${offer.discountValue} OFF`,
+                        icon: icons[index % icons.length]
+                    }));
+                    setAds(formattedAds);
+                } else {
+                    // Use default ads if no offers from API
+                    setAds(defaultAds);
+                }
             } catch (error) {
                 console.error("Failed to fetch ads:", error);
+                // Use default ads on error
+                setAds(defaultAds);
             } finally {
                 setLoading(false);
             }
@@ -74,7 +129,6 @@ const AdsBanner = () => {
     };
 
     if (loading) return null; // Or a skeleton
-    if (ads.length === 0) return null; // Don't show if no ads
 
     return (
         <section className="ads-banner-section">
