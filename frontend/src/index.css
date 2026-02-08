@@ -52,8 +52,6 @@
    ========================================= */
 
 html {
-  zoom: 0.9;
-  /* Global scale via zoom */
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
