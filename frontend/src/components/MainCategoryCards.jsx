@@ -45,7 +45,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
             id: 'anniversary',
             name: 'Anniversary',
             icon: '💑',
-            image: 'https://images.unsplash.com/photo-1530103862676-de3c9da59af7?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1626803775151-61d756612f97?w=400&h=400&fit=crop&q=80', // Better anniversary image
             gradient: 'from-pink-100 to-rose-50'
         }
     ];
@@ -61,8 +61,8 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                 <h2>Our Categories</h2>
                 <p>Explore our delicious collection</p>
             </div>
-            {/* 3x3 Grid Layout (Mobile First) */}
-            <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 px-4 max-w-lg md:max-w-4xl mx-auto justify-items-center">
+            {/* 3x3 Grid Layout (Mobile First) - Tighter gap for less 'zoomed' feel */}
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-2 md:gap-6 px-3 max-w-lg md:max-w-4xl mx-auto justify-items-center">
                 {categories.map((category, index) => (
                     <button
                         key={category.id}
@@ -70,7 +70,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                         className={`category-card animate-fade-in-up w-full aspect-square flex flex-col items-center justify-between p-0 overflow-hidden ${activeCategory === category.id ? 'ring-2 ring-[#C9A962] ring-offset-2' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                        <div className="relative w-full h-[75%] overflow-hidden">
+                        <div className="relative w-full h-[70%] overflow-hidden">
                             <img
                                 src={category.image}
                                 alt={category.name}
@@ -85,9 +85,9 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                                 }}
                             />
                         </div>
-                        <div className="w-full h-[25%] flex flex-col items-center justify-center bg-gradient-to-b from-white to-[#FAF7F2] z-10 relative">
-                            <p className="text-[10px] md:text-sm font-bold text-[#3D3D3D] m-0 leading-tight">{category.name}</p>
-                            <span className="text-xs md:text-base leading-none mt-0.5">{category.icon}</span>
+                        <div className="w-full h-[30%] flex flex-col items-center justify-center bg-gradient-to-b from-white to-[#FAF7F2] z-10 relative px-1">
+                            <p className="text-[10px] md:text-sm font-bold text-[#3D3D3D] m-0 leading-tight text-center">{category.name}</p>
+                            <span className="text-[10px] md:text-base leading-none mt-0.5">{category.icon}</span>
                         </div>
                     </button>
                 ))}

@@ -73,102 +73,34 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
     };
 
     return (
-        <div className="subcategory-section" style={{
-            padding: '24px 16px',
-            background: 'linear-gradient(135deg, rgba(248, 243, 238, 0.8) 0%, rgba(240, 230, 218, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '24px',
-            margin: '20px 16px',
-            border: '1px solid rgba(232, 222, 200, 0.6)',
-            boxShadow: '0 4px 20px rgba(74, 44, 26, 0.03)'
-        }}>
+        <div className="mx-4 my-5 bg-white/60 backdrop-blur-md rounded-2xl border border-[#E8DEC8]/60 shadow-sm overflow-hidden">
             {/* Section Title */}
-            <h3 style={{
-                fontSize: '16px',
-                fontWeight: '700',
-                color: '#FC8019',
-                marginBottom: '16px',
-                textAlign: 'center'
-            }}>✨ Quick Picks</h3>
+            <h3 className="text-center text-[#FC8019] font-bold text-sm py-3 border-b border-[#E8DEC8]/40">
+                ✨ Quick Picks
+            </h3>
 
-            {/* 2x4 Grid Layout */}
-            <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                gap: '12px',
-                maxWidth: '100%'
-            }}>
+            {/* 4x2 Grid Layout */}
+            <div className="grid grid-cols-4 gap-3 p-3">
                 {subCategories.map((sub, index) => (
                     <button
                         key={sub.id}
                         onClick={() => handleClick(sub.id)}
-                        className="animate-fade-in"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '12px 8px',
-                            width: '80px', // Fixed width for consistent look
-                            background: 'rgba(255, 255, 255, 0.6)',
-                            borderRadius: '16px',
-                            border: '1px solid rgba(232, 222, 200, 0.5)',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            animationDelay: `${index * 0.05}s`
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(74, 44, 26, 0.1)';
-                            e.currentTarget.style.borderColor = '#C9A962';
-                            e.currentTarget.style.background = '#FFFFFF';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = 'none';
-                            e.currentTarget.style.borderColor = 'rgba(232, 222, 200, 0.5)';
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)';
-                        }}
+                        className="animate-fade-in flex flex-col items-center gap-2 group"
+                        style={{ animationDelay: `${index * 0.05}s` }}
                     >
-                        <div
-                            style={{
-                                width: '56px',
-                                height: '56px',
-                                borderRadius: '12px',
-                                overflow: 'hidden',
-                                border: '2px solid #E8DEC8',
-                                position: 'relative'
-                            }}
-                        >
+                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden border border-[#E8DEC8] relative shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300">
                             <img
                                 src={sub.image}
                                 alt={sub.name}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover'
-                                }}
+                                className="w-full h-full object-cover"
                             />
-                            <div style={{
-                                position: 'absolute',
-                                inset: 0,
-                                background: 'rgba(74, 44, 26, 0.05)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <span style={{ fontSize: '20px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}>{sub.icon}</span>
+                            <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
+                                <span className="text-xl drop-shadow-md filter">{sub.icon}</span>
                             </div>
                         </div>
-                        <p style={{
-                            fontSize: '11px',
-                            fontWeight: '600',
-                            color: '#5C3A21',
-                            textAlign: 'center',
-                            lineHeight: '1.2',
-                            margin: 0
-                        }}>{sub.name}</p>
+                        <p className="text-[10px] md:text-xs font-semibold text-[#5C3A21] text-center leading-tight">
+                            {sub.name}
+                        </p>
                     </button>
                 ))}
             </div>
