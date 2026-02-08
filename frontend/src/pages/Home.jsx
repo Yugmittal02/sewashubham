@@ -168,7 +168,7 @@ const Home = () => {
     }, [activeCategory]);
 
     return (
-        <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+        <div style={{ background: '#F8F3EE', minHeight: '100vh' }}>
             {/* Header */}
             <Header
                 activeCategory={activeCategory}

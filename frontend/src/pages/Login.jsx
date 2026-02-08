@@ -1,172 +1,167 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { FaArrowRight, FaUser, FaPhone } from 'react-icons/fa';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaArrowRight, FaUser, FaPhone, FaBirthdayCake } from 'react-icons/fa';
 
 const Login = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
-    const { login, register } = useAuth();
+    const { enterAsCustomer } = useAuth();
     const navigate = useNavigate();
-    const [isRegistering, setIsRegistering] = useState(true);
+    const location = useLocation();
     const [loading, setLoading] = useState(false);
+    const [step, setStep] = useState(1); // 1: Intro/Phone, 2: Name (if new)
+    const { customer } = useAuth();
+
+    useEffect(() => {
+        if (customer) {
+            const from = location.state?.from || '/dashboard';
+            navigate(from, { replace: true });
+        }
+    }, [customer, navigate, location]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            if (isRegistering) {
-                const res = await register(name, phone);
-                if (res.success) navigate('/home');
-                else {
-                    if (res.message === 'User already exists') {
-                        const loginRes = await login(phone);
-                        if (loginRes.success) navigate('/home');
-                        else alert(loginRes.message);
-                    } else {
-                        alert(res.message);
-                    }
-                }
+            // enterAsCustomer handles both login and registration in the backend
+            // It searches by phone, if exists -> logs in, if not -> creates new
+            const res = await enterAsCustomer(name, phone);
+
+            if (res.success) {
+                const from = location.state?.from || '/dashboard';
+                navigate(from, { replace: true });
             } else {
-                const res = await login(phone);
-                if (res.success) navigate('/home');
-                else alert(res.message);
+                alert(res.message);
             }
+        } catch (err) {
+            console.error(err);
+            alert("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #FAF7F2 0%, #F5F0E8 50%, #EDE5DA 100%)' }}>
+        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[#FAF7F2]">
 
-            {/* Background decorations */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-10 left-10 text-6xl opacity-20 animate-float" style={{ animationDuration: '6s' }}>🧁</div>
-                <div className="absolute top-20 right-16 text-5xl opacity-15 animate-float" style={{ animationDuration: '5s', animationDelay: '1s' }}>🎂</div>
-                <div className="absolute bottom-20 left-16 text-5xl opacity-15 animate-float" style={{ animationDuration: '7s', animationDelay: '0.5s' }}>☕</div>
-                <div className="absolute bottom-10 right-10 text-6xl opacity-20 animate-float" style={{ animationDuration: '5.5s', animationDelay: '1.5s' }}>🍰</div>
+            {/* Background Elements */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FC8019] opacity-5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#C9A962] opacity-5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4"></div>
 
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-[100px]"
-                    style={{ background: 'rgba(201, 169, 98, 0.15)' }}></div>
-                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-[100px]"
-                    style={{ background: 'rgba(107, 68, 35, 0.1)' }}></div>
+                {/* Floating Icons Pattern */}
+                <div className="absolute inset-0 opacity-[0.03]"
+                    style={{ backgroundImage: 'radial-gradient(#4A2C1A 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+                </div>
             </div>
 
-            {/* Login Card */}
-            <div className="w-full max-w-sm rounded-3xl p-8 relative animate-fade-in-up"
-                style={{
-                    background: 'white',
-                    border: '2px solid #E8E3DB',
-                    boxShadow: '0 20px 60px rgba(107, 68, 35, 0.15)'
-                }}>
+            <div className="w-full max-w-4xl bg-white rounded-[40px] shadow-2xl overflow-hidden relative z-10 flex flex-col md:flex-row min-h-[600px] animate-fade-in-up">
 
-                {/* Top accent line */}
-                <div className="absolute top-0 left-0 w-full h-1.5 rounded-t-3xl"
-                    style={{ background: 'linear-gradient(90deg, #6B4423 0%, #C9A962 50%, #6B4423 100%)' }}></div>
+                {/* Left Side - Visual/Brand */}
+                <div className="md:w-1/2 bg-gradient-to-br from-[#1C1C1C] to-[#2D1F16] p-12 text-white flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full opacity-20">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&fit=crop"
+                            alt="Bakery Background"
+                            className="w-full h-full object-cover" />
+                    </div>
 
-                {/* Logo */}
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 mx-auto"
-                    style={{
-                        background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8CC 100%)',
-                        border: '3px solid #C9A962',
-                        boxShadow: '0 8px 24px rgba(201, 169, 98, 0.3)'
-                    }}>
-                    <span className="text-4xl">🧁</span>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-8">
+                            <span className="text-4xl">🧁</span>
+                            <h1 className="text-2xl font-bold tracking-wide">Sewa Shubham</h1>
+                        </div>
+
+                        <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                            Taste the <span className="text-[#FC8019]">Magic</span> <br />
+                            in Every Bite
+                        </h2>
+
+                        <p className="text-white/70 text-lg leading-relaxed max-w-sm">
+                            Join our community of food lovers. Order seamlessly, track deliveries, and enjoy exclusive member perks.
+                        </p>
+                    </div>
+
+                    <div className="relative z-10 mt-12 flex gap-4">
+                        <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex-1 border border-white/20">
+                            <h3 className="text-2xl font-bold text-[#FC8019]">500+</h3>
+                            <p className="text-xs text-white/60 uppercase tracking-wider mt-1">Daily Happy Customers</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex-1 border border-white/20">
+                            <h3 className="text-2xl font-bold text-[#FC8019]">4.9★</h3>
+                            <p className="text-xs text-white/60 uppercase tracking-wider mt-1">Average Rating</p>
+                        </div>
+                    </div>
                 </div>
 
-                <h2 className="text-3xl font-script mb-2 text-center" style={{ color: '#6B4423' }}>
-                    Welcome!
-                </h2>
-                <p className="text-sm mb-8 text-center" style={{ color: '#8B7355' }}>
-                    Enter your details to continue
-                </p>
+                {/* Right Side - Form */}
+                <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white relative">
+                    <div className="max-w-xs mx-auto w-full">
+                        <div className="mb-8 text-center md:text-left">
+                            <h3 className="text-2xl font-bold text-[#1C1C1C] mb-2">Welcome Back!</h3>
+                            <p className="text-[#7E7E7E]">Please enter your details to continue</p>
+                        </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label className="text-xs font-bold uppercase ml-2 flex items-center gap-1 mb-2"
-                            style={{ color: '#8B7355' }}>
-                            <FaUser size={10} /> Your Name
-                        </label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full rounded-xl px-5 py-4 font-semibold text-base outline-none transition-all"
-                            style={{
-                                background: '#FAF7F2',
-                                border: '2px solid #E8E3DB',
-                                color: '#4A3728'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#C9A962'}
-                            onBlur={(e) => e.target.style.borderColor = '#E8E3DB'}
-                            placeholder="e.g. Rahul"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs font-bold uppercase ml-2 flex items-center gap-1 mb-2"
-                            style={{ color: '#8B7355' }}>
-                            <FaPhone size={10} /> Phone Number
-                        </label>
-                        <input
-                            type="tel"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="w-full rounded-xl px-5 py-4 font-semibold text-base outline-none transition-all"
-                            style={{
-                                background: '#FAF7F2',
-                                border: '2px solid #E8E3DB',
-                                color: '#4A3728'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#C9A962'}
-                            onBlur={(e) => e.target.style.borderColor = '#E8E3DB'}
-                            placeholder="9876543210"
-                            maxLength="10"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full text-white font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50"
-                        style={{
-                            background: 'linear-gradient(135deg, #6B4423 0%, #5C4033 100%)',
-                            boxShadow: '0 8px 24px rgba(107, 68, 35, 0.35)'
-                        }}
-                    >
-                        {loading ? (
-                            <span>Please wait...</span>
-                        ) : (
-                            <>
-                                <span>Enter Bakery</span>
-                                <FaArrowRight />
-                            </>
-                        )}
-                    </button>
-                </form>
+                        <form onSubmit={handleSubmit} className="space-y-6">
 
-                {/* Footer */}
-                <p className="text-xs text-center mt-6" style={{ color: '#A89580' }}>
-                    By continuing, you agree to our Terms & Privacy Policy
-                </p>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-[#8B7355] ml-1">Your Name</label>
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <FaUser className="text-[#D4B896] group-focus-within:text-[#FC8019] transition-colors" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#FC8019] focus:bg-white placeholder:text-[#D4B896]"
+                                        placeholder="John Doe"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-[#8B7355] ml-1">Phone Number</label>
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <FaPhone className="text-[#D4B896] group-focus-within:text-[#FC8019] transition-colors" />
+                                    </div>
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#FC8019] focus:bg-white placeholder:text-[#D4B896]"
+                                        placeholder="98765 43210"
+                                        maxLength="10"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-[#FC8019] to-[#FF9A3C] text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-[#FC8019]/30 hover:shadow-[#FC8019]/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                            >
+                                {loading ? (
+                                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        Start Ordering
+                                        <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                    </>
+                                )}
+                            </button>
+                        </form>
+
+                        <p className="text-xs text-center text-[#9CA3AF] mt-8">
+                            By continuing, you adhere to our <span className="underline cursor-pointer hover:text-[#FC8019]">Terms</span> and <span className="underline cursor-pointer hover:text-[#FC8019]">Privacy Policy</span>.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            {/* CSS for animations */}
-            <style>{`
-                @keyframes float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-15px); }
-                }
-                .animate-float { animation: float 6s ease-in-out infinite; }
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in-up { animation: fadeInUp 0.5s ease forwards; }
-            `}</style>
         </div>
     );
 };

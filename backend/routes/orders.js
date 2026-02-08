@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
-const { optionalVerifyToken } = require('../middleware/authMiddleware');
+const { optionalVerifyToken, verifyToken } = require('../middleware/authMiddleware');
 const { validateOrder, validateObjectId } = require('../middleware/validation');
 
 // Guest order creation (no auth required, but validated, checks for token optionally)
 router.post('/', optionalVerifyToken, validateOrder, orderController.createOrder);
 router.get('/track/:id', validateObjectId('id'), orderController.trackOrder);
 
-// Admin routes - unlocked for development
-router.get('/my-orders', orderController.getUserOrders);
+// Authenticated User routes
+router.get('/my-orders', verifyToken, orderController.getUserOrders);
 router.get('/all', orderController.getAllOrders);
 router.put('/:id/status', validateObjectId('id'), orderController.updateOrderStatus);
 router.put('/:id/accept', validateObjectId('id'), orderController.acceptOrder);

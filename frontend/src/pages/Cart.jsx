@@ -32,6 +32,14 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
+
+    // Check if user is logged in
+    if (!customer) {
+      // Redirect to login with return path to cart
+      navigate('/login', { state: { from: '/cart' } });
+      return;
+    }
+
     // Navigate to payment page - address can be collected there if needed
     navigate('/payment', {
       state: {

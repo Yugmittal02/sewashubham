@@ -16,6 +16,7 @@ const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const UserDashboard = lazy(() => import('./pages/UserDashboard'));
+const Login = lazy(() => import('./pages/Login'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
@@ -45,6 +46,7 @@ const App = () => {
                             <Route path="/order-success" element={<OrderSuccess />} />
                             <Route path="/dashboard" element={<UserDashboard />} />
                             <Route path="/category/:categoryId" element={<CategoryPage />} />
+                            <Route path="/login" element={<Login />} />
 
                             {/* Static Pages */}
                             <Route path="/terms" element={<TermsConditions />} />

@@ -1,10 +1,12 @@
 import React from 'react';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const { getItemCount } = useCart();
+    const { customer } = useAuth();
     const navigate = useNavigate();
     const itemCount = getItemCount();
 
@@ -16,7 +18,7 @@ const Header = () => {
                     {/* Left Side - Account + Logo */}
                     <div className="flex items-center gap-3">
                         <button
-                            onClick={() => navigate('/dashboard')}
+                            onClick={() => navigate(customer ? '/dashboard' : '/login')}
                             className="header-icon-btn w-10 h-10 rounded-full flex items-center justify-center transition-colors"
                             style={{ background: 'rgba(252, 128, 25, 0.1)', border: '2px solid #FC8019' }}
                             aria-label="Account"
@@ -28,10 +30,9 @@ const Header = () => {
                             className="header-logo flex items-center gap-2 cursor-pointer"
                             onClick={() => navigate('/')}
                         >
-                            <span className="logo-emoji text-3xl filter drop-shadow-sm">🍰</span>
-                            <div className="flex flex-col items-start leading-none ml-1">
-                                <h1 className="bakery-logo text-xl md:text-2xl font-serif font-bold tracking-wide" style={{ color: '#FC8019' }}>Sewa Shubham</h1>
-                                <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mt-0.5" style={{ color: '#E57312' }}>Bakery</span>
+                            <div className="flex flex-col items-start leading-none">
+                                <h1 className="bakery-logo text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#4A2C1A', fontFamily: 'Poppins, sans-serif', fontWeight: '700', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Sewa Shubham</h1>
+                                <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mt-0.5" style={{ color: '#8B5A2B' }}>Bakery</span>
                             </div>
                         </div>
                     </div>

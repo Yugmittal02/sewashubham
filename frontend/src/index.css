@@ -7,7 +7,7 @@
 
 :root {
   /* Page backgrounds - Clean white theme */
-  --bg-page: #FFFFFF;
+  --bg-page: #F8F3EE;
   --bg-cream: #FFF8F5;
   --bg-card: #FFFFFF;
   --border-light: #F0F0F0;
@@ -393,12 +393,14 @@ textarea,
 }
 
 .bakery-logo {
-  color: #FC8019;
-  font-family: 'Great Vibes', cursive;
+  color: #4A2C1A;
+  font-family: 'Poppins', sans-serif;
   font-size: 24px;
-  text-shadow: none;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   margin: 0;
+  letter-spacing: 0.02em;
 }
 
 @media (min-width: 640px) {
@@ -408,7 +410,7 @@ textarea,
 }
 
 .header-logo:hover .bakery-logo {
-  color: #E57312;
+  color: #8B4513;
 }
 
 /* Cart Button - Premium Orange */
@@ -539,9 +541,9 @@ textarea,
 
 /* Main Category Section Wrapper */
 .category-section-wrapper {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F5 50%, #FFF0E8 100%);
-  border-top: 3px solid #FC8019;
-  border-bottom: 3px solid #FC8019;
+  background: linear-gradient(180deg, #F8F3EE 0%, #F2EBE0 100%);
+  border-top: 1px solid rgba(232, 222, 200, 0.6);
+  border-bottom: 1px solid rgba(232, 222, 200, 0.6);
   padding: 32px 16px;
   margin: 20px 0;
   position: relative;
@@ -1029,11 +1031,10 @@ textarea,
 /* Filter Chips - Mobile Scrollable */
 .filter-chips {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  overflow-x: auto;
   padding: 4px 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
 }
 
 .filter-chips::-webkit-scrollbar {
@@ -1839,9 +1840,9 @@ textarea {
 .ads-banner-section {
   margin: 24px 0;
   padding: 32px 20px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFF8F5 50%, #FFF0E8 100%);
-  border-top: 4px solid #FC8019;
-  border-bottom: 4px solid #FC8019;
+  background: linear-gradient(180deg, #F2EBE0 0%, #F8F3EE 100%);
+  border-top: 1px solid rgba(232, 222, 200, 0.6);
+  border-bottom: 1px solid rgba(232, 222, 200, 0.6);
   position: relative;
   overflow: hidden;
 }

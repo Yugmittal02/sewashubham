@@ -40,6 +40,13 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
             icon: '💐',
             image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
+        },
+        {
+            id: 'anniversary',
+            name: 'Anniversary',
+            icon: '💑',
+            image: 'https://images.unsplash.com/photo-1530103862676-de3c9da59af7?w=400&h=400&fit=crop&q=80',
+            gradient: 'from-pink-100 to-rose-50'
         }
     ];
 
@@ -54,19 +61,21 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                 <h2>Our Categories</h2>
                 <p>Explore our delicious collection</p>
             </div>
-            <div className="category-grid">
+            {/* 3x3 Grid Layout (Mobile First) */}
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 px-4 max-w-lg md:max-w-4xl mx-auto justify-items-center">
                 {categories.map((category, index) => (
                     <button
                         key={category.id}
                         onClick={() => handleCategoryClick(category.id)}
-                        className={`category-card animate-fade-in-up ${activeCategory === category.id ? 'ring-2 ring-[#C9A962] ring-offset-2' : ''}`}
+                        className={`category-card animate-fade-in-up w-full aspect-square flex flex-col items-center justify-between p-0 overflow-hidden ${activeCategory === category.id ? 'ring-2 ring-[#C9A962] ring-offset-2' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                        <div className="relative overflow-hidden">
+                        <div className="relative w-full h-[75%] overflow-hidden">
                             <img
                                 src={category.image}
                                 alt={category.name}
                                 loading="lazy"
+                                className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                             />
                             {/* Hover overlay */}
                             <div
@@ -76,9 +85,9 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                                 }}
                             />
                         </div>
-                        <div className="category-card-label">
-                            <p>{category.name}</p>
-                            <span>{category.icon}</span>
+                        <div className="w-full h-[25%] flex flex-col items-center justify-center bg-gradient-to-b from-white to-[#FAF7F2] z-10 relative">
+                            <p className="text-[10px] md:text-sm font-bold text-[#3D3D3D] m-0 leading-tight">{category.name}</p>
+                            <span className="text-xs md:text-base leading-none mt-0.5">{category.icon}</span>
                         </div>
                     </button>
                 ))}

@@ -56,6 +56,13 @@ const CATEGORY_CONFIG = {
         banner: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=300&fit=crop',
         subcategories: ['All', 'Veg Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
         keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza']
+    },
+    anniversary: {
+        name: 'Anniversary',
+        icon: '💑',
+        banner: 'https://images.unsplash.com/photo-1530103862676-de3c9da59af7?w=800&h=300&fit=crop',
+        subcategories: ['All', 'Cakes', 'Flowers', 'Gift Combos', 'Chocolates', 'Decoration'],
+        keywords: ['anniversary', 'wedding', 'couple', 'love', 'romantic', 'heart', 'rose', 'gift']
     }
 };
 
@@ -129,7 +136,7 @@ const CategoryPage = () => {
     }, [allProducts, category.keywords, activeSubcategory, searchQuery]);
 
     return (
-        <div className="min-h-screen pb-20" style={{ background: '#F5F0E8' }}>
+        <div className="min-h-screen pb-20" style={{ background: '#F8F3EE' }}>
             {/* Header */}
             <header className="sticky top-0 z-20 px-4 py-3"
                 style={{ background: 'linear-gradient(180deg, #FC8019 0%, #FF9A3C 100%)', borderBottom: '3px solid #FC8019' }}>
@@ -214,7 +221,7 @@ const CategoryPage = () => {
 
             {/* Subcategory Tabs */}
             <div className="mt-4 px-4">
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+                <div className="flex flex-wrap justify-center gap-2 pb-2">
                     {category.subcategories.map((sub) => (
                         <button
                             key={sub}

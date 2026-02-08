@@ -74,12 +74,13 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
 
     return (
         <div className="subcategory-section" style={{
-            padding: '20px 16px',
-            background: 'linear-gradient(135deg, rgba(252, 128, 25, 0.08) 0%, rgba(255, 154, 60, 0.12) 100%)',
+            padding: '24px 16px',
+            background: 'linear-gradient(135deg, rgba(248, 243, 238, 0.8) 0%, rgba(240, 230, 218, 0.9) 100%)',
             backdropFilter: 'blur(10px)',
-            borderRadius: '20px',
-            margin: '16px',
-            border: '1px solid rgba(252, 128, 25, 0.15)'
+            borderRadius: '24px',
+            margin: '20px 16px',
+            border: '1px solid rgba(232, 222, 200, 0.6)',
+            boxShadow: '0 4px 20px rgba(74, 44, 26, 0.03)'
         }}>
             {/* Section Title */}
             <h3 style={{
@@ -92,8 +93,9 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
 
             {/* 2x4 Grid Layout */}
             <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
                 gap: '12px',
                 maxWidth: '100%'
             }}>
@@ -108,22 +110,25 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
                             alignItems: 'center',
                             gap: '8px',
                             padding: '12px 8px',
-                            background: 'white',
+                            width: '80px', // Fixed width for consistent look
+                            background: 'rgba(255, 255, 255, 0.6)',
                             borderRadius: '16px',
-                            border: `2px solid ${sub.color}30`,
+                            border: '1px solid rgba(232, 222, 200, 0.5)',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
                             animationDelay: `${index * 0.05}s`
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.boxShadow = `0 8px 20px ${sub.color}30`;
-                            e.currentTarget.style.borderColor = sub.color;
+                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(74, 44, 26, 0.1)';
+                            e.currentTarget.style.borderColor = '#C9A962';
+                            e.currentTarget.style.background = '#FFFFFF';
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'translateY(0)';
                             e.currentTarget.style.boxShadow = 'none';
-                            e.currentTarget.style.borderColor = `${sub.color}30`;
+                            e.currentTarget.style.borderColor = 'rgba(232, 222, 200, 0.5)';
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)';
                         }}
                     >
                         <div
@@ -132,7 +137,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
                                 height: '56px',
                                 borderRadius: '12px',
                                 overflow: 'hidden',
-                                border: `2px solid ${sub.color}`,
+                                border: '2px solid #E8DEC8',
                                 position: 'relative'
                             }}
                         >
@@ -148,18 +153,18 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
                             <div style={{
                                 position: 'absolute',
                                 inset: 0,
-                                background: 'rgba(0,0,0,0.1)',
+                                background: 'rgba(74, 44, 26, 0.05)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}>
-                                <span style={{ fontSize: '20px' }}>{sub.icon}</span>
+                                <span style={{ fontSize: '20px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}>{sub.icon}</span>
                             </div>
                         </div>
                         <p style={{
                             fontSize: '11px',
                             fontWeight: '600',
-                            color: '#1C1C1C',
+                            color: '#5C3A21',
                             textAlign: 'center',
                             lineHeight: '1.2',
                             margin: 0
