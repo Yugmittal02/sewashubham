@@ -220,20 +220,22 @@ const CategoryPage = () => {
             </div>
 
             {/* Subcategory Tabs */}
-            <div className="mt-4 px-4">
-                <div className="flex flex-wrap justify-center gap-2 pb-2">
+            <div className="mt-4 px-4 overflow-x-hidden">
+                <div className="flex overflow-x-auto pb-4 gap-3 hide-scrollbar snap-x px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
                     {category.subcategories.map((sub) => (
                         <button
                             key={sub}
                             onClick={() => setActiveSubcategory(sub)}
-                            className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
+                            className="flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap snap-start border-none outline-none"
                             style={{
                                 background: activeSubcategory === sub
                                     ? 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)'
-                                    : 'white',
-                                color: activeSubcategory === sub ? 'white' : '#FC8019',
-                                border: activeSubcategory === sub ? 'none' : '2px solid #FC8019',
-                                boxShadow: activeSubcategory === sub ? '0 4px 12px rgba(252, 128, 25, 0.3)' : 'none'
+                                    : '#FFFFFF',
+                                color: activeSubcategory === sub ? 'white' : '#5C3A21',
+                                border: activeSubcategory === sub ? 'none' : '1px solid #E8DEC8',
+                                boxShadow: activeSubcategory === sub
+                                    ? '0 4px 12px rgba(252, 128, 25, 0.3)'
+                                    : '0 2px 6px rgba(0,0,0,0.03)'
                             }}
                         >
                             {sub}
@@ -260,7 +262,7 @@ const CategoryPage = () => {
                             </span>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-2">
                             {filteredProducts.map((product, idx) => (
                                 <div key={product._id} className="animate-fade-in-up" style={{ animationDelay: `${idx * 0.05}s` }}>
                                     <ProductCardNew product={product} />

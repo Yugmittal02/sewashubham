@@ -79,21 +79,21 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
             }}
         >
             {/* Multiple Badges Container */}
-            <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
+            <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
                 {/* Bestseller Badge */}
                 {safeProduct.isBestseller && (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold text-white"
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold text-white"
                         style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)', boxShadow: '0 2px 8px rgba(255, 107, 53, 0.4)' }}>
-                        <FaFire size={10} />
+                        <FaFire size={8} />
                         <span>BESTSELLER</span>
                     </div>
                 )}
 
                 {/* New Badge */}
                 {safeProduct.isNew && !safeProduct.isBestseller && (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold text-white"
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold text-white"
                         style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
-                        <FaBolt size={9} />
+                        <FaBolt size={8} />
                         <span>NEW</span>
                     </div>
                 )}
@@ -108,10 +108,10 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
 
             {/* Featured Crown */}
             {featured && (
-                <div className="absolute top-3 right-12 z-10">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                <div className="absolute top-2 right-10 z-10">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center"
                         style={{ background: 'linear-gradient(135deg, #C9A962 0%, #D4B87A 100%)', boxShadow: '0 4px 12px rgba(201, 169, 98, 0.4)' }}>
-                        <FaCrown size={14} color="#3D2B1F" />
+                        <FaCrown size={12} color="#3D2B1F" />
                     </div>
                 </div>
             )}
