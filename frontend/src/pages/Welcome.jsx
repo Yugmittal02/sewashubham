@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaArrowRight, FaStar, FaClock, FaShieldAlt } from 'react-icons/fa';
-import logo from '../assets/cupcake_logo.svg';
+import logo from '../assets/logo.png';
 
 const Welcome = () => {
     const navigate = useNavigate();

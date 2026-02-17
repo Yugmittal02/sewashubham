@@ -64,9 +64,9 @@ const UserDashboard = () => {
             {/* Header */}
             <header className="sticky top-0 z-10 px-4 py-4 flex items-center justify-between"
                 style={{ background: 'linear-gradient(180deg, #2D1F16 0%, #3D2B1F 100%)', borderBottom: '3px solid #C9A962' }}>
-                <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ background: 'rgba(255,255,255,0.1)' }}>
-                    <FaArrowLeft size={18} color="#D4B896" />
+                <button onClick={() => navigate('/menu')} className="w-10 h-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
+                    style={{ background: 'rgba(255,255,255,0.2)' }}>
+                    <FaArrowLeft size={20} color="#FFFFFF" />
                 </button>
                 <div className="flex items-center gap-2">
                     <span className="text-2xl">👤</span>
