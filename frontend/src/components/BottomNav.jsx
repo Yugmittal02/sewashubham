@@ -33,7 +33,7 @@ const BottomNav = () => {
 
     const navItems = [
         { path: '/menu', icon: FaHome, label: 'Home' },
-        { path: '/category/cake', icon: FaThLarge, label: 'Categories' },
+        { path: '/categories', icon: FaThLarge, label: 'Categories' },
         { path: '/dashboard', icon: FaUser, label: 'Profile' },
         { path: '/contact', icon: FaPhoneAlt, label: 'Contact' },
     ];
