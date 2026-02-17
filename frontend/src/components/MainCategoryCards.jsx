@@ -38,7 +38,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
             id: 'flowers',
             name: 'Flowers',
             icon: '💐',
-            image: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
         },
         {

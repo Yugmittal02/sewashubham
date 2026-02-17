@@ -14,7 +14,7 @@ const Cart = () => {
   const { customer } = useAuth();
   const [orderType, setOrderType] = useState('Delivery');
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
-  const [feeSettings, setFeeSettings] = useState({ deliveryFee: 30, minOrderForFreeDelivery: 299 });
+  const [feeSettings, setFeeSettings] = useState({ deliveryFeeBase: 30, freeDeliveryThreshold: 299 });
 
   useEffect(() => {
     getFeeSettings().then(res => {
@@ -26,7 +26,7 @@ const Cart = () => {
   const selectedAddress = addresses[selectedAddressIndex];
 
   const deliveryFee = orderType === 'Delivery'
-    ? (total >= feeSettings.minOrderForFreeDelivery ? 0 : feeSettings.deliveryFee)
+    ? (total >= (feeSettings.freeDeliveryThreshold || 299) ? 0 : (feeSettings.deliveryFeeBase || 30))
     : 0;
   const grandTotal = total + deliveryFee;
 

@@ -53,7 +53,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
             id: 'flowers',
             name: 'Flowers',
             icon: '💐',
-            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=200&h=200&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=200&h=200&fit=crop&q=80',
             color: '#C97B4B'
         },
         {
@@ -65,11 +65,28 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
         }
     ];
 
+    // Map subcategory IDs to their parent category route and subcategory tab name
+    const categoryRouteMap = {
+        'first-birthday-cake': { route: 'cake', sub: 'First Birthday' },
+        'anniversary-cake': { route: 'anniversary', sub: 'All' },
+        'birthday-cake': { route: 'cake', sub: 'Birthday' },
+        'photo-cake': { route: 'cake', sub: 'Photo Cake' },
+        'patties': { route: 'patties', sub: 'All' },
+        'beverages': { route: 'beverages', sub: 'All' },
+        'flowers': { route: 'flowers', sub: 'All' },
+        'pizza': { route: 'pizza', sub: 'All' },
+    };
+
     const handleClick = (id) => {
         if (onSubCategorySelect) {
             onSubCategorySelect(id);
         }
-        navigate(`/category/${id}`);
+        const mapping = categoryRouteMap[id];
+        if (mapping) {
+            navigate(`/category/${mapping.route}${mapping.sub !== 'All' ? `?sub=${encodeURIComponent(mapping.sub)}` : ''}`);
+        } else {
+            navigate(`/category/${id}`);
+        }
     };
 
     return (

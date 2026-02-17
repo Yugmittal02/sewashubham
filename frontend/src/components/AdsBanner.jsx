@@ -59,7 +59,7 @@ const AdsBanner = () => {
             title: 'Beautiful Flowers',
             subtitle: 'Perfect for every occasion',
             description: 'Fresh Bouquets Daily',
-            image: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=600&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&h=400&fit=crop&q=80',
             bgGradient: gradients[2],
             link: '/category/flowers',
             badge: '💐 NEW',

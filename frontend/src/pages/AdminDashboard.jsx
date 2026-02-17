@@ -28,7 +28,6 @@ import {
   toggleProductAvailability,
   fetchProducts,
   updateOrderStatus,
-  fetchOffers, // Used in AdminOffers? No, fetched here.
   createOffer,
   deleteOffer,
   fetchAllOrders,
@@ -62,6 +61,7 @@ const AdminDashboard = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
+  const [editingOffer, setEditingOffer] = useState(null);
   const [showMapPicker, setShowMapPicker] = useState(false);
   const [showStockConfirm, setShowStockConfirm] = useState(null);
 
@@ -112,7 +112,8 @@ const AdminDashboard = () => {
 
   const loadOffers = async () => {
     try {
-      const { data } = await fetchOffers(); // Corrected to use fetchOffers (public or admin?) - using service.
+      const { fetchAllOffersAdmin } = await import("../services/api");
+      const { data } = await fetchAllOffersAdmin();
       setOffers(data);
     } catch (err) { console.error(err); }
   };
@@ -264,7 +265,8 @@ const AdminDashboard = () => {
       {activeTab === 'offers' && (
         <AdminOffers
           offers={offers}
-          onAdd={() => setShowOfferForm(true)}
+          onAdd={() => { setEditingOffer(null); setShowOfferForm(true); }}
+          onEdit={(o) => { setEditingOffer(o); setShowOfferForm(true); }}
           onDelete={handleDeleteOffer}
         />
       )}
@@ -278,6 +280,8 @@ const AdminDashboard = () => {
           todayOrders={todayOrders}
           todayRevenue={todayRevenue}
           pendingOrders={pendingOrders}
+          allOrders={orders}
+          products={products}
         />
       )}
 
@@ -307,8 +311,9 @@ const AdminDashboard = () => {
 
       {showOfferForm && (
         <OfferFormModal
-          onClose={() => setShowOfferForm(false)}
-          onSave={() => { loadOffers(); setShowOfferForm(false); }}
+          offer={editingOffer}
+          onClose={() => { setShowOfferForm(false); setEditingOffer(null); }}
+          onSave={() => { loadOffers(); setShowOfferForm(false); setEditingOffer(null); }}
         />
       )}
 

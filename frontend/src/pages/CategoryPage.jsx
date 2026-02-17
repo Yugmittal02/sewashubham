@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaArrowLeft, FaSearch, FaShoppingCart, FaFire } from 'react-icons/fa';
 import { fetchProducts } from '../services/api';
 import { useCart } from '../context/CartContext';
@@ -43,7 +43,7 @@ const CATEGORY_CONFIG = {
     flowers: {
         name: 'Flowers',
         icon: '💐',
-        banner: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&h=400&fit=crop&q=80',
+        banner: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Bouquets', 'Roses', 'Mixed', 'Premium', 'Gift Combos'],
         keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral', 'arrangement'],
         theme: { primary: '#9D174D', light: '#DB2777', glow: 'rgba(157, 23, 77, 0.25)', bg: '#FFF0F6' }
@@ -77,11 +77,15 @@ const CATEGORY_CONFIG = {
 const CategoryPage = () => {
     const { categoryId } = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { cart = [] } = useCart();
 
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeSubcategory, setActiveSubcategory] = useState('All');
+    const [activeSubcategory, setActiveSubcategory] = useState(() => {
+        const subParam = searchParams.get('sub');
+        return subParam || 'All';
+    });
     const [searchQuery, setSearchQuery] = useState('');
     const [showSearch, setShowSearch] = useState(false);
 

@@ -4,14 +4,17 @@ const offerSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
     image: { type: String },
-    discountType: { 
-        type: String, 
-        enum: ['percentage', 'flat'], 
-        default: 'percentage' 
+    discountType: {
+        type: String,
+        enum: ['percentage', 'flat'],
+        default: 'percentage'
     },
     discountValue: { type: Number, required: true },
+    maxDiscount: { type: Number, default: null }, // Max cap for percentage discounts
     code: { type: String, unique: true, uppercase: true },
     minOrderValue: { type: Number, default: 0 },
+    maxUsageCount: { type: Number, default: null }, // null = unlimited
+    usedCount: { type: Number, default: 0 },
     validFrom: { type: Date, default: Date.now },
     validTo: { type: Date },
     isActive: { type: Boolean, default: true },

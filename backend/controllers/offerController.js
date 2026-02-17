@@ -3,7 +3,7 @@ const Offer = require('../models/Offer');
 exports.getAllOffers = async (req, res) => {
     try {
         // Include offers where validTo is null, doesn't exist, or is in the future
-        const offers = await Offer.find({ 
+        const offers = await Offer.find({
             isActive: true,
             $or: [
                 { validTo: null },
@@ -57,32 +57,56 @@ exports.deleteOffer = async (req, res) => {
 exports.validateCoupon = async (req, res) => {
     try {
         const { code, orderTotal } = req.body;
-        const offer = await Offer.findOne({ 
-            code: code.toUpperCase(), 
+        const now = new Date();
+        const offer = await Offer.findOne({
+            code: code.toUpperCase(),
             isActive: true,
+            // Must have started (validFrom <= now)
             $or: [
-                { validTo: null },
-                { validTo: { $exists: false } },
-                { validTo: { $gte: new Date() } }
+                { validFrom: null },
+                { validFrom: { $exists: false } },
+                { validFrom: { $lte: now } }
             ]
         });
-        
+
         if (!offer) {
             return res.status(400).json({ message: 'Invalid or expired coupon' });
         }
-        
+
+        // Check expiry
+        if (offer.validTo && offer.validTo < now) {
+            return res.status(400).json({ message: 'This coupon has expired' });
+        }
+
+        // Check usage limit
+        if (offer.maxUsageCount !== null && offer.maxUsageCount !== undefined && offer.usedCount >= offer.maxUsageCount) {
+            return res.status(400).json({ message: 'This coupon has reached its usage limit' });
+        }
+
         if (orderTotal < offer.minOrderValue) {
             return res.status(400).json({ message: `Minimum order value is ₹${offer.minOrderValue}` });
         }
-        
+
         let discount = 0;
         if (offer.discountType === 'percentage') {
             discount = (orderTotal * offer.discountValue) / 100;
+            // Apply max discount cap
+            if (offer.maxDiscount && discount > offer.maxDiscount) {
+                discount = offer.maxDiscount;
+            }
         } else {
             discount = offer.discountValue;
         }
-        
-        res.json({ offer, discount });
+
+        // Don't let discount exceed order total
+        if (discount > orderTotal) {
+            discount = orderTotal;
+        }
+
+        // Increment usage count
+        await Offer.findByIdAndUpdate(offer._id, { $inc: { usedCount: 1 } });
+
+        res.json({ offer, discount: Math.round(discount) });
     } catch (error) {
         res.status(500).json({ message: 'Error validating coupon' });
     }
