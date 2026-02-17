@@ -14,56 +14,55 @@ const Header = () => {
 
     return (
         <header className="sticky top-0 z-50">
-            {/* Top Header Bar */}
-            <div className="bakery-header relative">
-                <div className="header-container flex justify-between items-center px-4 py-2">
-                    {/* Left Side - Account + Logo */}
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => navigate(customer ? '/dashboard' : '/login')}
-                            className="header-icon-btn w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                            style={{ background: 'rgba(252, 128, 25, 0.1)', border: '2px solid #FC8019' }}
-                            aria-label="Account"
-                        >
-                            <FaUser size={16} color="#FC8019" />
-                        </button>
-
-                        <div
-                            className="header-logo flex flex-col cursor-pointer"
-                            onClick={() => navigate('/')}
-                        >
-                            <div className="flex items-center gap-2">
-                                <img
-                                    src={logo}
-                                    alt="Sewa Shubham Bakery"
-                                    className="h-10 md:h-14 object-contain"
-                                />
-                                <div className="hidden sm:block">
-                                    <h1 className="text-sm font-bold text-gray-800 leading-none">Sewa Shubham</h1>
-                                    <p className="text-[10px] text-gray-400">Bakery & Cafe</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-1 mt-0.5">
-                                <span className="text-[9px] text-gray-400">📍 Delivering to Bharatpur</span>
-                                <span className="text-[8px] text-[#FC8019] font-bold">▼</span>
-                            </div>
+            <div className="px-4 py-2.5" style={{ background: '#FFFFFF', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+                <div className="flex justify-between items-center max-w-6xl mx-auto">
+                    {/* Left - Logo + Brand Name */}
+                    <div
+                        className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-transform"
+                        onClick={() => navigate('/')}
+                    >
+                        <img
+                            src={logo}
+                            alt="Sewa Shubham Bakery"
+                            className="h-9 w-9 object-contain"
+                        />
+                        <div>
+                            <h1 className="text-[15px] font-bold leading-tight" style={{ color: '#2D1810' }}>
+                                Sewa Shubham
+                            </h1>
+                            <p className="text-[10px] font-medium tracking-wider uppercase" style={{ color: '#C97B4B' }}>
+                                Bakery
+                            </p>
                         </div>
                     </div>
 
-                    {/* Right Side - Cart Only */}
-                    <button
-                        onClick={() => navigate('/cart')}
-                        className="cart-header-btn relative w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                        style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}
-                        aria-label="Cart"
-                    >
-                        <FaShoppingCart size={18} color="#FFFFFF" />
-                        {itemCount > 0 && (
-                            <span className="absolute -top-1 -right-1 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm" style={{ background: '#E53935' }}>
-                                {itemCount}
-                            </span>
-                        )}
-                    </button>
+                    {/* Right - Account + Cart */}
+                    <div className="flex items-center gap-2.5">
+                        <button
+                            onClick={() => navigate(customer ? '/dashboard' : '/login')}
+                            className="w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95"
+                            style={{ background: '#FFF5EE', border: '1.5px solid #F0D6C0' }}
+                            aria-label="Account"
+                        >
+                            <FaUser size={14} color="#C97B4B" />
+                        </button>
+                        <button
+                            onClick={() => navigate('/cart')}
+                            className="relative w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95"
+                            style={{ background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)' }}
+                            aria-label="Cart"
+                        >
+                            <FaShoppingCart size={14} color="#FFFFFF" />
+                            {itemCount > 0 && (
+                                <span
+                                    className="absolute -top-1 -right-1 text-white text-[9px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center"
+                                    style={{ background: '#E53935', minWidth: '18px', height: '18px', boxShadow: '0 2px 4px rgba(229,57,53,0.3)' }}
+                                >
+                                    {itemCount}
+                                </span>
+                            )}
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>

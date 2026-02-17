@@ -60,7 +60,7 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
             {/* Badges - Top Left */}
             <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
                 {safeProduct.isBestseller && (
-                    <span className="bg-[#FC8019] text-white text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                    <span className="bg-[#C97B4B] text-white text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
                         <FaBolt size={7} /> BEST
                     </span>
                 )}
@@ -99,7 +99,7 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
                 {/* Express Delivery Badge - Winni Style */}
                 <div className="absolute bottom-0 left-0 right-0 px-2 pb-2">
                     <div className="flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-full px-2 py-1 shadow-sm w-fit">
-                        <FaBolt size={8} className="text-[#FC8019]" />
+                        <FaBolt size={8} className="text-[#C97B4B]" />
                         <span className="text-[9px] font-semibold text-gray-700">Express Delivery</span>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
                         disabled={!safeProduct.isAvailable || added}
                         className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-all active:scale-95 ${added
                                 ? 'bg-green-600 text-white'
-                                : 'border-2 border-[#FC8019] text-[#FC8019] bg-white hover:bg-[#FC8019] hover:text-white'
+                                : 'border-2 border-[#C97B4B] text-[#C97B4B] bg-white hover:bg-[#C97B4B] hover:text-white'
                             }`}
                     >
                         {added ? (

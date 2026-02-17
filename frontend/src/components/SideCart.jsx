@@ -76,10 +76,10 @@ const SideCart = memo(({ isOpen, onClose }) => {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(252, 128, 25, 0.1)' }}>
-              <FaShoppingBag size={18} color="#FC8019" />
+              <FaShoppingBag size={18} color="#C97B4B" />
             </div>
             <div>
-              <h2 className="font-bold text-lg" style={{ color: '#FC8019' }}>Your Cart</h2>
+              <h2 className="font-bold text-lg" style={{ color: '#C97B4B' }}>Your Cart</h2>
               <p className="text-xs" style={{ color: '#7E7E7E' }}>
                 {getItemCount()} item{getItemCount() !== 1 ? "s" : ""}
               </p>
@@ -90,7 +90,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
             className="w-9 h-9 rounded-full flex items-center justify-center active:scale-95 transition-transform"
             style={{ background: 'rgba(252, 128, 25, 0.1)' }}
           >
-            <FaTimes size={18} color="#FC8019" />
+            <FaTimes size={18} color="#C97B4B" />
           </button>
         </div>
 
@@ -111,7 +111,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
               <button
                 onClick={handleClose}
                 className="mt-6 px-8 py-3 text-white font-bold rounded-full active:scale-95 transition-transform"
-                style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 6px 20px rgba(252, 128, 25, 0.3)' }}
+                style={{ background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)', boxShadow: '0 6px 20px rgba(252, 128, 25, 0.3)' }}
               >
                 🍰 Browse Menu
               </button>
@@ -145,7 +145,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
                       <div className="flex flex-wrap gap-1 mt-1">
                         {item.size && (
                           <span className="text-[10px] px-2 py-0.5 rounded-md font-medium"
-                            style={{ background: '#FFF5EE', color: '#FC8019' }}>
+                            style={{ background: '#FFF5EE', color: '#C97B4B' }}>
                             {item.size}
                           </span>
                         )}
@@ -159,7 +159,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
                           </span>
                         ))}
                       </div>
-                      <p className="font-bold text-base mt-2" style={{ color: '#FC8019' }}>
+                      <p className="font-bold text-base mt-2" style={{ color: '#C97B4B' }}>
                         ₹{(Number(item.price) || 0) * (Number(item.quantity) || 1)}
                       </p>
                     </div>
@@ -179,7 +179,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
                           className="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition-transform"
                           style={{ background: 'white' }}
                         >
-                          <FaMinus size={9} color="#FC8019" />
+                          <FaMinus size={9} color="#C97B4B" />
                         </button>
                         <span className="font-bold w-5 text-center text-sm" style={{ color: '#1C1C1C' }}>
                           {item.quantity}
@@ -187,7 +187,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
                         <button
                           onClick={() => handleUpdateQty(item.cartId, 1)}
                           className="w-7 h-7 rounded-lg text-white flex items-center justify-center active:scale-90 transition-transform"
-                          style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}
+                          style={{ background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)' }}
                         >
                           <FaPlus size={9} />
                         </button>
@@ -209,7 +209,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
                 <p className="text-xs uppercase font-medium" style={{ color: '#7E7E7E' }}>
                   Subtotal
                 </p>
-                <p className="text-2xl font-bold" style={{ color: '#FC8019' }}>
+                <p className="text-2xl font-bold" style={{ color: '#C97B4B' }}>
                   ₹{total.toFixed(0)}
                 </p>
               </div>
@@ -226,7 +226,7 @@ const SideCart = memo(({ isOpen, onClose }) => {
               onClick={handleCheckout}
               className="w-full h-14 text-white font-bold text-base rounded-full shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               style={{
-                background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+                background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
                 boxShadow: '0 8px 24px rgba(252, 128, 25, 0.35)'
               }}
             >

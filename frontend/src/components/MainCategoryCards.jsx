@@ -70,7 +70,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                         className={`flex-shrink-0 flex flex-col items-center gap-2 transition-transform active:scale-95 ${activeCategory === category.id ? 'scale-105' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                        <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 ${activeCategory === category.id ? 'bg-gradient-to-br from-[#FC8019] to-[#FF9A3C]' : 'bg-transparent'}`}>
+                        <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 ${activeCategory === category.id ? 'bg-gradient-to-br from-[#C97B4B] to-[#E8956A]' : 'bg-transparent'}`}>
                             <div className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md">
                                 <img
                                     src={category.image}
@@ -80,7 +80,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                                 />
                             </div>
                         </div>
-                        <span className={`text-xs font-semibold ${activeCategory === category.id ? 'text-[#FC8019]' : 'text-gray-600'}`}>
+                        <span className={`text-xs font-semibold ${activeCategory === category.id ? 'text-[#C97B4B]' : 'text-gray-600'}`}>
                             {category.name}
                         </span>
                     </button>

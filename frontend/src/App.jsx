@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import CookieConsent from './components/CookieConsent';
-import BottomNav from './components/BottomNav';
 
 // Keep Welcome static for instant landing page load
 import Welcome from './pages/Welcome';
@@ -64,7 +63,6 @@ const App = () => {
                             {/* Fallback */}
                             <Route path="*" element={<Navigate to="/" />} />
                         </Routes>
-                        <BottomNav />
                     </Suspense>
                 </Router>
             </CartProvider>

@@ -136,11 +136,11 @@ const CategoryPage = () => {
     }, [allProducts, category.keywords, activeSubcategory, searchQuery]);
 
     return (
-        <div className="min-h-screen pb-24" style={{ background: '#F8F3EE' }}>
+        <div className="min-h-screen pb-24" style={{ background: '#FDF8F4' }}>
             {/* Header - Rounded, Glass Effect */}
             <header className="sticky top-0 z-20 px-4 py-3"
                 style={{
-                    background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+                    background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
                     borderBottomLeftRadius: '24px',
                     borderBottomRightRadius: '24px',
                     boxShadow: '0 8px 32px rgba(252, 128, 25, 0.25)'
@@ -234,7 +234,7 @@ const CategoryPage = () => {
                             className="flex-shrink-0 px-5 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap snap-start active:scale-95"
                             style={{
                                 background: activeSubcategory === sub
-                                    ? 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)'
+                                    ? 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)'
                                     : '#FFFFFF',
                                 color: activeSubcategory === sub ? 'white' : '#666',
                                 border: activeSubcategory === sub ? 'none' : '1.5px solid #E8E3DB',
@@ -261,7 +261,7 @@ const CategoryPage = () => {
                     <>
                         {/* Results count */}
                         <div className="flex items-center gap-2 mb-3 px-1">
-                            <FaFire size={12} color="#FC8019" />
+                            <FaFire size={12} color="#C97B4B" />
                             <span className="text-xs font-medium text-gray-500">
                                 {filteredProducts.length} items found
                             </span>
@@ -287,7 +287,7 @@ const CategoryPage = () => {
                         <button
                             onClick={() => navigate('/menu')}
                             className="mt-5 px-8 py-3 rounded-full text-white font-semibold active:scale-95 transition-transform"
-                            style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 8px 24px rgba(252, 128, 25, 0.3)' }}
+                            style={{ background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)', boxShadow: '0 8px 24px rgba(252, 128, 25, 0.3)' }}
                         >
                             Browse All Items
                         </button>

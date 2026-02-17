@@ -10,7 +10,7 @@ const AdsBanner = () => {
     const [loading, setLoading] = useState(true);
 
     const gradients = [
-        'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+        'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
         'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
         'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',

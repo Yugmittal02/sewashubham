@@ -24,19 +24,19 @@ const Welcome = () => {
                 <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=150&h=150&fit=crop&q=80"
                     alt="Cake"
                     className="absolute top-[5%] left-[5%] w-16 h-16 md:w-24 md:h-24 object-cover rounded-2xl opacity-70 shadow-lg"
-                    style={{ animation: 'float 6s ease-in-out infinite', border: '3px solid #FC8019' }} />
+                    style={{ animation: 'float 6s ease-in-out infinite', border: '3px solid #C97B4B' }} />
                 <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=150&h=150&fit=crop&q=80"
                     alt="Coffee"
                     className="absolute top-[15%] right-[5%] w-14 h-14 md:w-20 md:h-20 object-cover rounded-2xl opacity-60 shadow-lg"
-                    style={{ animation: 'float 5s ease-in-out infinite 0.5s', border: '3px solid #FF9A3C' }} />
+                    style={{ animation: 'float 5s ease-in-out infinite 0.5s', border: '3px solid #E8956A' }} />
                 <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&h=150&fit=crop&q=80"
                     alt="Pastry"
                     className="absolute top-[45%] left-[2%] md:left-[8%] w-18 h-18 md:w-24 md:h-24 object-cover rounded-2xl opacity-65 shadow-lg"
-                    style={{ animation: 'float 7s ease-in-out infinite 1s', border: '3px solid #FC8019' }} />
+                    style={{ animation: 'float 7s ease-in-out infinite 1s', border: '3px solid #C97B4B' }} />
                 <img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=150&h=150&fit=crop&q=80"
                     alt="Birthday Cake"
                     className="absolute bottom-[20%] right-[3%] w-20 h-20 md:w-28 md:h-28 object-cover rounded-2xl opacity-60 shadow-lg"
-                    style={{ animation: 'float 6s ease-in-out infinite 1.5s', border: '3px solid #FF9A3C' }} />
+                    style={{ animation: 'float 6s ease-in-out infinite 1.5s', border: '3px solid #E8956A' }} />
 
                 {/* Glowing orbs */}
                 <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 rounded-full blur-[100px]"
@@ -64,14 +64,14 @@ const Welcome = () => {
                 {/* Trust Badges */}
                 <div className="flex flex-wrap justify-center gap-4 mb-10">
                     <div className="flex items-center gap-2 px-4 py-2 rounded-full"
-                        style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid #FC8019' }}>
-                        <FaStar size={14} color="#FC8019" />
-                        <span className="text-sm font-semibold" style={{ color: '#FC8019' }}>4.9 Rating</span>
+                        style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid #C97B4B' }}>
+                        <FaStar size={14} color="#C97B4B" />
+                        <span className="text-sm font-semibold" style={{ color: '#C97B4B' }}>4.9 Rating</span>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 rounded-full"
-                        style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid #FC8019' }}>
-                        <FaClock size={14} color="#FC8019" />
-                        <span className="text-sm font-semibold" style={{ color: '#FC8019' }}>30min Delivery</span>
+                        style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid #C97B4B' }}>
+                        <FaClock size={14} color="#C97B4B" />
+                        <span className="text-sm font-semibold" style={{ color: '#C97B4B' }}>30min Delivery</span>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 rounded-full"
                         style={{ background: 'rgba(255,255,255,0.9)', border: '2px solid #22C55E' }}>
@@ -85,7 +85,7 @@ const Welcome = () => {
                     onClick={() => navigate('/menu')}
                     className="group w-full max-w-xs text-white font-bold text-lg py-5 px-10 rounded-2xl shadow-xl transition-all duration-300 active:scale-95 flex items-center justify-center gap-3"
                     style={{
-                        background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+                        background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
                         boxShadow: '0 16px 48px rgba(252, 128, 25, 0.35)'
                     }}
                 >
@@ -97,7 +97,7 @@ const Welcome = () => {
                 <button
                     onClick={() => navigate('/login')}
                     className="mt-4 text-sm font-semibold transition-all hover:underline"
-                    style={{ color: '#FC8019' }}
+                    style={{ color: '#C97B4B' }}
                 >
                     Already a customer? Login →
                 </button>

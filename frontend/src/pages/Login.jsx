@@ -48,7 +48,7 @@ const Login = () => {
 
             {/* Background Elements */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FC8019] opacity-5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C97B4B] opacity-5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#C9A962] opacity-5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4"></div>
 
                 {/* Floating Icons Pattern */}
@@ -74,7 +74,7 @@ const Login = () => {
                         </div>
 
                         <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-                            Taste the <span className="text-[#FC8019]">Magic</span> <br />
+                            Taste the <span className="text-[#C97B4B]">Magic</span> <br />
                             in Every Bite
                         </h2>
 
@@ -85,11 +85,11 @@ const Login = () => {
 
                     <div className="relative z-10 mt-12 flex gap-4">
                         <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex-1 border border-white/20">
-                            <h3 className="text-2xl font-bold text-[#FC8019]">500+</h3>
+                            <h3 className="text-2xl font-bold text-[#C97B4B]">500+</h3>
                             <p className="text-xs text-white/60 uppercase tracking-wider mt-1">Daily Happy Customers</p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl flex-1 border border-white/20">
-                            <h3 className="text-2xl font-bold text-[#FC8019]">4.9★</h3>
+                            <h3 className="text-2xl font-bold text-[#C97B4B]">4.9★</h3>
                             <p className="text-xs text-white/60 uppercase tracking-wider mt-1">Average Rating</p>
                         </div>
                     </div>
@@ -109,13 +109,13 @@ const Login = () => {
                                 <label className="text-xs font-bold uppercase text-[#8B7355] ml-1">Your Name</label>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <FaUser className="text-[#D4B896] group-focus-within:text-[#FC8019] transition-colors" />
+                                        <FaUser className="text-[#D4B896] group-focus-within:text-[#C97B4B] transition-colors" />
                                     </div>
                                     <input
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#FC8019] focus:bg-white placeholder:text-[#D4B896]"
+                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#C97B4B] focus:bg-white placeholder:text-[#D4B896]"
                                         placeholder="John Doe"
                                         required
                                     />
@@ -126,13 +126,13 @@ const Login = () => {
                                 <label className="text-xs font-bold uppercase text-[#8B7355] ml-1">Phone Number</label>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <FaPhone className="text-[#D4B896] group-focus-within:text-[#FC8019] transition-colors" />
+                                        <FaPhone className="text-[#D4B896] group-focus-within:text-[#C97B4B] transition-colors" />
                                     </div>
                                     <input
                                         type="tel"
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
-                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#FC8019] focus:bg-white placeholder:text-[#D4B896]"
+                                        className="w-full bg-[#FAF7F2] border-2 border-[#E8E3DB] text-[#1C1C1C] text-lg rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all focus:border-[#C97B4B] focus:bg-white placeholder:text-[#D4B896]"
                                         placeholder="98765 43210"
                                         maxLength="10"
                                         required
@@ -143,7 +143,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-gradient-to-r from-[#FC8019] to-[#FF9A3C] text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-[#FC8019]/30 hover:shadow-[#FC8019]/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                                className="w-full bg-gradient-to-r from-[#C97B4B] to-[#E8956A] text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-[#C97B4B]/30 hover:shadow-[#C97B4B]/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed mt-4"
                             >
                                 {loading ? (
                                     <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -157,7 +157,7 @@ const Login = () => {
                         </form>
 
                         <p className="text-xs text-center text-[#9CA3AF] mt-8">
-                            By continuing, you adhere to our <span className="underline cursor-pointer hover:text-[#FC8019]">Terms</span> and <span className="underline cursor-pointer hover:text-[#FC8019]">Privacy Policy</span>.
+                            By continuing, you adhere to our <span className="underline cursor-pointer hover:text-[#C97B4B]">Terms</span> and <span className="underline cursor-pointer hover:text-[#C97B4B]">Privacy Policy</span>.
                         </p>
                     </div>
                 </div>

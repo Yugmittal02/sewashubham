@@ -450,20 +450,20 @@ const Payment = () => {
             className="w-12 h-12 rounded-2xl flex items-center justify-center active:scale-95 transition-all"
             style={{ background: 'rgba(252, 128, 25, 0.1)' }}
           >
-            <FaArrowLeft size={18} color="#FC8019" />
+            <FaArrowLeft size={18} color="#C97B4B" />
           </button>
           <div>
-            <h1 className="text-xl font-black" style={{ color: '#FC8019' }}>Payment</h1>
+            <h1 className="text-xl font-black" style={{ color: '#C97B4B' }}>Payment</h1>
             <p className="text-sm" style={{ color: '#7E7E7E' }}>Complete your order</p>
           </div>
         </div>
         {customer && (
           <div className="flex flex-col items-end">
-            <div className="text-[10px] uppercase font-bold tracking-wider mb-0.5" style={{ color: '#FC8019' }}>
+            <div className="text-[10px] uppercase font-bold tracking-wider mb-0.5" style={{ color: '#C97B4B' }}>
               {orderType}
             </div>
             <div className="flex items-center gap-2 px-3 py-1 rounded-lg" style={{ border: '1px solid rgba(252, 128, 25, 0.3)', background: 'rgba(252, 128, 25, 0.1)' }}>
-              <span className="text-xs font-bold max-w-[80px] truncate" style={{ color: '#FC8019' }}>
+              <span className="text-xs font-bold max-w-[80px] truncate" style={{ color: '#C97B4B' }}>
                 {customer.name}
               </span>
             </div>
@@ -661,7 +661,7 @@ const Payment = () => {
           disabled={loading}
           className="w-full h-16 text-white font-bold text-lg rounded-2xl active:scale-[0.98] transition-all flex justify-between items-center px-6 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
-            background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
+            background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
             boxShadow: '0 8px 32px rgba(252, 128, 25, 0.4)'
           }}
         >

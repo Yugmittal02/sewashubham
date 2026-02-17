@@ -11,28 +11,28 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
             name: 'First Birthday',
             icon: '🎉',
             image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=200&h=200&fit=crop&q=80',
-            color: '#FC8019'
+            color: '#C97B4B'
         },
         {
             id: 'anniversary-cake',
             name: 'Anniversary',
             icon: '💍',
             image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=200&h=200&fit=crop&q=80',
-            color: '#FC8019'
+            color: '#C97B4B'
         },
         {
             id: 'birthday-cake',
             name: 'Birthday',
             icon: '🎂',
             image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=200&h=200&fit=crop&q=80',
-            color: '#FC8019'
+            color: '#C97B4B'
         },
         {
             id: 'photo-cake',
             name: 'Photo Cake',
             icon: '📸',
             image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop&q=80',
-            color: '#FF9A3C'
+            color: '#E8956A'
         },
         // Row 2
         {
@@ -40,28 +40,28 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
             name: 'Patties',
             icon: '🥟',
             image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=200&h=200&fit=crop&q=80',
-            color: '#FC8019'
+            color: '#C97B4B'
         },
         {
             id: 'beverages',
             name: 'Beverages',
             icon: '☕',
             image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop&q=80',
-            color: '#FF9A3C'
+            color: '#E8956A'
         },
         {
             id: 'flowers',
             name: 'Flowers',
             icon: '💐',
             image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=200&h=200&fit=crop&q=80',
-            color: '#FC8019'
+            color: '#C97B4B'
         },
         {
             id: 'pizza',
             name: 'Pizza',
             icon: '🍕',
             image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop&q=80',
-            color: '#FF9A3C'
+            color: '#E8956A'
         }
     ];
 
@@ -75,7 +75,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
     return (
         <div className="mx-4 my-5 bg-white/60 backdrop-blur-md rounded-2xl border border-[#E8DEC8]/60 shadow-sm overflow-hidden">
             {/* Section Title */}
-            <h3 className="text-center text-[#FC8019] font-bold text-sm py-3 border-b border-[#E8DEC8]/40">
+            <h3 className="text-center text-[#C97B4B] font-bold text-sm py-3 border-b border-[#E8DEC8]/40">
                 ✨ Quick Picks
             </h3>
 

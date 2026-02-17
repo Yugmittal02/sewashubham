@@ -6,45 +6,45 @@
    ========================================= */
 
 :root {
-  /* Page backgrounds - Clean white theme */
-  --bg-page: #F8F3EE;
-  --bg-cream: #FFF8F5;
+  /* Page backgrounds - Warm cream theme */
+  --bg-page: #FDF8F4;
+  --bg-cream: #FFF8F2;
   --bg-card: #FFFFFF;
-  --border-light: #F0F0F0;
-  --border-card: #E8E8E8;
+  --border-light: #F0E8E0;
+  --border-card: #E8DFD6;
 
-  /* Text colors - Modern dark theme */
-  --text-dark: #1C1C1C;
-  --text-brown: #3D3D3D;
-  --text-muted: #7E7E7E;
-  --text-light: #9E9E9E;
+  /* Text colors - Warm dark theme */
+  --text-dark: #2D1810;
+  --text-brown: #5C3A2A;
+  --text-muted: #8B7355;
+  --text-light: #A89585;
 
-  /* Swiggy/Zomato Orange Theme */
-  --primary-orange: #FC8019;
-  --primary-orange-light: #FF9A3C;
-  --primary-orange-dark: #E57312;
-  --accent-orange: #FF6B00;
-  --accent-gold: #FC8019;
-  --accent-gold-light: #FF9A3C;
-  --accent-brown: #FC8019;
-  --accent-brown-dark: #E57312;
+  /* Warm Bakery Color Palette */
+  --primary-orange: #C97B4B;
+  --primary-orange-light: #E8956A;
+  --primary-orange-dark: #A85F35;
+  --accent-orange: #D4845A;
+  --accent-gold: #C97B4B;
+  --accent-gold-light: #E8956A;
+  --accent-brown: #8B5E3C;
+  --accent-brown-dark: #6B4530;
 
-  /* Header - White with orange accents */
+  /* Header - Clean white */
   --header-bg: #FFFFFF;
-  --header-gold: #FC8019;
+  --header-gold: #C97B4B;
 
-  /* Premium gradients - Orange theme */
-  --gradient-brown: linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%);
-  --gradient-gold: linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%);
-  --gradient-cream: linear-gradient(135deg, #FFFFFF 0%, #FFF8F5 50%, #FFF0E8 100%);
-  --gradient-orange: linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%);
+  /* Premium gradients - Warm bakery tones */
+  --gradient-brown: linear-gradient(135deg, #C97B4B 0%, #E8956A 100%);
+  --gradient-gold: linear-gradient(135deg, #C97B4B 0%, #E8956A 100%);
+  --gradient-cream: linear-gradient(135deg, #FFFFFF 0%, #FFF8F2 50%, #FFF0E8 100%);
+  --gradient-orange: linear-gradient(135deg, #C97B4B 0%, #E8956A 100%);
 
-  /* Shadows - Soft, Premium, Lifted */
-  --shadow-sm: 0 4px 12px rgba(28, 28, 28, 0.05);
-  --shadow-md: 0 8px 24px rgba(28, 28, 28, 0.08);
-  --shadow-lg: 0 16px 40px rgba(28, 28, 28, 0.12);
-  --shadow-glow: 0 0 50px rgba(252, 128, 25, 0.25);
-  --shadow-card-hover: 0 20px 40px rgba(28, 28, 28, 0.12);
+  /* Shadows - Soft, Warm */
+  --shadow-sm: 0 4px 12px rgba(45, 24, 16, 0.04);
+  --shadow-md: 0 8px 24px rgba(45, 24, 16, 0.06);
+  --shadow-lg: 0 16px 40px rgba(45, 24, 16, 0.10);
+  --shadow-glow: 0 0 50px rgba(201, 123, 75, 0.20);
+  --shadow-card-hover: 0 20px 40px rgba(45, 24, 16, 0.10);
 
   /* Border Radius - Rounded "Squircle" Look */
   --radius-sm: 12px;
