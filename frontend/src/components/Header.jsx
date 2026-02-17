@@ -24,13 +24,13 @@ const Header = () => {
                         <img
                             src={logo}
                             alt="Sewa Shubham Bakery"
-                            className="h-9 w-9 object-contain"
+                            className="h-[72px] w-[72px] object-contain"
                         />
                         <div>
-                            <h1 className="text-[15px] font-bold leading-tight" style={{ color: '#2D1810' }}>
+                            <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#2D1810' }}>
                                 Sewa Shubham
                             </h1>
-                            <p className="text-[10px] font-medium tracking-wider uppercase" style={{ color: '#C97B4B' }}>
+                            <p className="text-sm font-semibold tracking-wider uppercase" style={{ color: '#C97B4B' }}>
                                 Bakery
                             </p>
                         </div>

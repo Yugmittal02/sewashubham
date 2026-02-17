@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaHome, FaThLarge, FaShoppingBag, FaUser } from 'react-icons/fa';
-import { useCart } from '../context/CartContext';
+import { FaHome, FaThLarge, FaUser, FaPhoneAlt } from 'react-icons/fa';
 
 const BottomNav = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { getItemCount } = useCart();
-    const itemCount = getItemCount();
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -36,9 +33,9 @@ const BottomNav = () => {
 
     const navItems = [
         { path: '/menu', icon: FaHome, label: 'Home' },
-        { path: '/categories', icon: FaThLarge, label: 'Menu' }, // We might need to map this to a categories page or section
-        { path: '/cart', icon: FaShoppingBag, label: 'Cart', badge: itemCount },
-        { path: '/dashboard', icon: FaUser, label: 'Account' },
+        { path: '/category/cake', icon: FaThLarge, label: 'Categories' },
+        { path: '/dashboard', icon: FaUser, label: 'Profile' },
+        { path: '/contact', icon: FaPhoneAlt, label: 'Contact' },
     ];
 
     return (

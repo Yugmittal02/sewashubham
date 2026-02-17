@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import CookieConsent from './components/CookieConsent';
+import BottomNav from './components/BottomNav';
 
 // Keep Welcome static for instant landing page load
 import Welcome from './pages/Welcome';
@@ -37,36 +38,39 @@ const App = () => {
             <CartProvider>
                 <Router>
                     <Suspense fallback={<LoadingSpinner />}>
-                        <Routes>
-                            {/* Public Routes */}
-                            <Route path="/" element={<Welcome />} />
-                            <Route path="/menu" element={<Home />} />
-                            <Route path="/cart" element={<Cart />} />
-                            <Route path="/payment" element={<Payment />} />
-                            <Route path="/order-success" element={<OrderSuccess />} />
-                            <Route path="/dashboard" element={<UserDashboard />} />
-                            <Route path="/category/:categoryId" element={<CategoryPage />} />
-                            <Route path="/login" element={<Login />} />
+                        <div className="pb-20 md:pb-0 min-h-screen">
+                            <Routes>
+                                {/* Public Routes */}
+                                <Route path="/" element={<Welcome />} />
+                                <Route path="/menu" element={<Home />} />
+                                <Route path="/cart" element={<Cart />} />
+                                <Route path="/payment" element={<Payment />} />
+                                <Route path="/order-success" element={<OrderSuccess />} />
+                                <Route path="/dashboard" element={<UserDashboard />} />
+                                <Route path="/category/:categoryId" element={<CategoryPage />} />
+                                <Route path="/login" element={<Login />} />
 
-                            {/* Static Pages */}
-                            <Route path="/terms" element={<TermsConditions />} />
-                            <Route path="/privacy" element={<PrivacyPolicy />} />
-                            <Route path="/refund" element={<RefundPolicy />} />
-                            <Route path="/shipping" element={<ShippingPolicy />} />
-                            <Route path="/contact" element={<ContactUs />} />
+                                {/* Static Pages */}
+                                <Route path="/terms" element={<TermsConditions />} />
+                                <Route path="/privacy" element={<PrivacyPolicy />} />
+                                <Route path="/refund" element={<RefundPolicy />} />
+                                <Route path="/shipping" element={<ShippingPolicy />} />
+                                <Route path="/contact" element={<ContactUs />} />
 
-                            {/* Admin Routes - Unlocked for development */}
-                            <Route path="/admin/login" element={<AdminLogin />} />
-                            <Route path="/admin" element={<AdminDashboard />} />
-                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                                {/* Admin Routes - Unlocked for development */}
+                                <Route path="/admin/login" element={<AdminLogin />} />
+                                <Route path="/admin" element={<AdminDashboard />} />
+                                <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-                            {/* Fallback */}
-                            <Route path="*" element={<Navigate to="/" />} />
-                        </Routes>
+                                {/* Fallback */}
+                                <Route path="*" element={<Navigate to="/" />} />
+                            </Routes>
+                        </div>
+                        <BottomNav />
+                        <CookieConsent />
                     </Suspense>
                 </Router>
             </CartProvider>
-            <CookieConsent />
         </AuthProvider>
     );
 };

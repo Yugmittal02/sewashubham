@@ -70,27 +70,27 @@ const FeaturedBanner = ({ product, onAddSuccess }) => {
 
 // Winni/FNP Style Delivery Info Strip
 const DeliveryStrip = () => (
-    <div className="mx-4 mt-3 mb-2">
-        <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">⚡</span>
+    <div className="mx-4 mt-2 mb-1">
+        <div className="flex gap-1.5 overflow-x-auto hide-scrollbar">
+            <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-xs">⚡</span>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">Express Delivery</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Within 2 hours</p>
+                    <p className="text-[9px] font-bold text-gray-800 leading-none">Express Delivery</p>
+                    <p className="text-[7px] text-gray-400 mt-0.5">Within 2 hours</p>
                 </div>
             </div>
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">🎁</span>
+            <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-xs">🎁</span>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">Free Delivery</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Above ₹299</p>
+                    <p className="text-[9px] font-bold text-gray-800 leading-none">Free Delivery</p>
+                    <p className="text-[7px] text-gray-400 mt-0.5">Above ₹299</p>
                 </div>
             </div>
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">💯</span>
+            <div className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-xs">💯</span>
                 <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">100% Fresh</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Baked Daily</p>
+                    <p className="text-[9px] font-bold text-gray-800 leading-none">100% Fresh</p>
+                    <p className="text-[7px] text-gray-400 mt-0.5">Baked Daily</p>
                 </div>
             </div>
         </div>

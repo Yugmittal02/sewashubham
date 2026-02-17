@@ -31,6 +31,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 const defaultAllowedOrigins = [
   "https://sewashubhambakery.com",
   "https://www.sewashubhambakery.com",
+  "https://sewashubham-n995.vercel.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
@@ -80,14 +81,14 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: isProduction
       ? {
-          directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "blob:"],
-            scriptSrc: ["'self'"],
-            connectSrc: ["'self'"],
-          },
-        }
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "blob:"],
+          scriptSrc: ["'self'"],
+          connectSrc: ["'self'"],
+        },
+      }
       : false,
   }),
 );
