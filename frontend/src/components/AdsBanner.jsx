@@ -26,7 +26,7 @@ const AdsBanner = () => {
             title: 'Fresh Cakes Daily',
             subtitle: 'Made with love & premium ingredients',
             description: 'Order Now & Get 10% OFF',
-            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=400&fit=crop',
+            image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&h=400&fit=crop&q=80',
             bgGradient: gradients[0],
             link: '/category/cake',
             badge: '🔥 HOT',
@@ -37,7 +37,7 @@ const AdsBanner = () => {
             title: 'Birthday Specials',
             subtitle: 'Make celebrations memorable',
             description: 'Custom Cakes Available',
-            image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=600&h=400&fit=crop',
+            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=600&h=400&fit=crop&q=80',
             bgGradient: gradients[1],
             link: '/category/cake',
             badge: '🎉 SPECIAL',
@@ -48,7 +48,7 @@ const AdsBanner = () => {
             title: 'Crispy Patties',
             subtitle: 'Hot & Fresh from the oven',
             description: 'Starting at just ₹20',
-            image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&h=400&fit=crop',
+            image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&h=400&fit=crop&q=80',
             bgGradient: gradients[4],
             link: '/category/fastfood',
             badge: '⚡ QUICK',
@@ -59,7 +59,7 @@ const AdsBanner = () => {
             title: 'Beautiful Flowers',
             subtitle: 'Perfect for every occasion',
             description: 'Fresh Bouquets Daily',
-            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&h=400&fit=crop',
+            image: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=600&h=400&fit=crop&q=80',
             bgGradient: gradients[2],
             link: '/category/flowers',
             badge: '💐 NEW',
@@ -143,7 +143,7 @@ const AdsBanner = () => {
             </div>
 
             {/* Main Carousel - Compact */}
-            <div className="ads-carousel-wrapper relative rounded-xl overflow-hidden shadow-md bg-white aspect-[21/9] md:aspect-[24/8]">
+            <div className="ads-carousel-wrapper relative rounded-2xl overflow-hidden shadow-md bg-white" style={{ aspectRatio: '16/9' }}>
                 {/* Navigation Arrows */}
                 {ads.length > 1 && (
                     <>
@@ -174,11 +174,11 @@ const AdsBanner = () => {
                                 >
                                     {/* Left Content */}
                                     <div className="ad-slide-text flex-1 p-4 md:p-8 flex flex-col justify-center items-start z-10">
-                                        <div className="ad-slide-badge bg-white/90 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full mb-2 shadow-sm text-orange-600 uppercase tracking-wider">{ad.badge}</div>
-                                        <h3 className="ad-slide-title text-shadow text-white font-bold text-lg md:text-2xl mb-1 leading-tight">{ad.title}</h3>
-                                        <p className="ad-slide-subtitle text-white/90 text-xs md:text-sm mb-1">{ad.subtitle}</p>
-                                        <p className="ad-slide-description bg-white/20 inline-block px-2 py-0.5 rounded text-[10px] md:text-xs text-white backdrop-blur-sm mt-1">{ad.description}</p>
-                                        <button className="ad-slide-cta mt-3 bg-white text-orange-600 px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold shadow-lg flex items-center gap-1 hover:scale-105 transition-transform">
+                                        <div className="ad-slide-badge bg-white/90 text-[11px] md:text-xs font-bold px-2.5 py-1 rounded-full mb-2 shadow-sm text-orange-600 uppercase tracking-wider">{ad.badge}</div>
+                                        <h3 className="ad-slide-title text-shadow text-white font-bold text-xl md:text-2xl mb-1.5 leading-tight">{ad.title}</h3>
+                                        <p className="ad-slide-subtitle text-white/90 text-sm md:text-base mb-1">{ad.subtitle}</p>
+                                        <p className="ad-slide-description bg-white/20 inline-block px-3 py-1 rounded-full text-[11px] md:text-xs text-white backdrop-blur-sm mt-1">{ad.description}</p>
+                                        <button className="ad-slide-cta mt-3 bg-white text-orange-600 px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg flex items-center gap-1.5 hover:scale-105 active:scale-95 transition-transform">
                                             Shop Now <FaArrowRight size={10} />
                                         </button>
                                     </div>
@@ -208,38 +208,6 @@ const AdsBanner = () => {
                 )}
             </div>
 
-            {/* Quick Action Buttons - Compact */}
-            <div className="ads-action-buttons grid grid-cols-4 gap-2 mt-4 max-w-4xl mx-auto">
-                <button
-                    className="action-btn flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all"
-                    onClick={() => navigate('/category/cake')}
-                >
-                    <span className="action-icon text-lg md:text-xl">🎂</span>
-                    <span className="text-[10px] md:text-xs font-medium text-gray-700">Cakes</span>
-                </button>
-                <button
-                    className="action-btn flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all"
-                    onClick={() => navigate('/category/fastfood')}
-                >
-                    <span className="action-icon text-lg md:text-xl">🍔</span>
-                    <span className="text-[10px] md:text-xs font-medium text-gray-700">Fast Food</span>
-                </button>
-                <button
-                    className="action-btn highlight flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-orange-50 border border-orange-100 shadow-sm hover:shadow-md hover:border-orange-300 transition-all relative overflow-hidden"
-                    onClick={() => navigate('/category/cake?sub=birthday-cake')}
-                >
-                    <span className="action-icon text-lg md:text-xl relative z-10">🎁</span>
-                    <span className="text-[10px] md:text-xs font-bold text-orange-700 relative z-10">Birthday</span>
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-100/50 to-transparent z-0"></div>
-                </button>
-                <button
-                    className="action-btn flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all"
-                    onClick={() => navigate('/category/beverages')}
-                >
-                    <span className="action-icon text-lg md:text-xl">☕</span>
-                    <span className="text-[10px] md:text-xs font-medium text-gray-700">Drinks</span>
-                </button>
-            </div>
         </section>
     );
 };

@@ -6,63 +6,71 @@ import { useCart } from '../context/CartContext';
 import ProductCardNew from '../components/ProductCardNew';
 import Footer from '../components/Footer';
 
-// Category configurations with keywords to match products
+// Category configurations with unique color themes and authentic images
 const CATEGORY_CONFIG = {
     fastfood: {
         name: 'Fast Food',
         icon: '🍔',
-        banner: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Patties', 'Burger', 'Pizza', 'Sandwich', 'Maggi', 'Momos'],
-        keywords: ['fastfood', 'fast food', 'burger', 'pizza', 'patties', 'sandwich', 'momos', 'maggi', 'snacks', 'pattis']
+        keywords: ['fastfood', 'fast food', 'burger', 'pizza', 'patties', 'sandwich', 'momos', 'maggi', 'snacks', 'pattis'],
+        theme: { primary: '#E85D04', light: '#F48C06', glow: 'rgba(232, 93, 4, 0.25)', bg: '#FFF4EC' }
     },
     cake: {
         name: 'Cakes',
         icon: '🎂',
-        banner: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Birthday', 'Anniversary', 'First Birthday', 'Photo Cake', 'Custom', 'Cupcakes'],
-        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate cake', 'vanilla', 'photo cake']
+        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate cake', 'vanilla', 'photo cake'],
+        theme: { primary: '#BE185D', light: '#EC4899', glow: 'rgba(190, 24, 93, 0.25)', bg: '#FFF1F7' }
     },
     beverages: {
         name: 'Beverages',
         icon: '☕',
-        banner: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Cold Coffee', 'Tea', 'Shakes', 'Mocktails', 'Juice'],
-        keywords: ['beverages', 'beverage', 'coffee', 'tea', 'shake', 'juice', 'mocktail', 'drink', 'cold coffee', 'milkshake']
+        keywords: ['beverages', 'beverage', 'coffee', 'tea', 'shake', 'juice', 'mocktail', 'drink', 'cold coffee', 'milkshake'],
+        theme: { primary: '#6B4226', light: '#A0714F', glow: 'rgba(107, 66, 38, 0.25)', bg: '#FBF5F0' }
     },
     bakery: {
         name: 'Bakery',
         icon: '🥐',
-        banner: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Bread', 'Cookies', 'Croissants', 'Pastries', 'Biscuits'],
-        keywords: ['bakery', 'bread', 'cookies', 'croissant', 'biscuit', 'pastry', 'baked']
+        keywords: ['bakery', 'bread', 'cookies', 'croissant', 'biscuit', 'pastry', 'baked'],
+        theme: { primary: '#B45309', light: '#D97706', glow: 'rgba(180, 83, 9, 0.25)', bg: '#FFFBEB' }
     },
     flowers: {
         name: 'Flowers',
         icon: '💐',
-        banner: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Bouquets', 'Roses', 'Mixed', 'Premium', 'Gift Combos'],
-        keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral', 'arrangement']
+        keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral', 'arrangement'],
+        theme: { primary: '#9D174D', light: '#DB2777', glow: 'rgba(157, 23, 77, 0.25)', bg: '#FFF0F6' }
     },
     patties: {
         name: 'Patties',
         icon: '🥟',
-        banner: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Veg Patties', 'Paneer Patties', 'Aloo Patties', 'Special'],
-        keywords: ['patties', 'pattis', 'patty', 'patti', 'samosa', 'snack']
+        keywords: ['patties', 'pattis', 'patty', 'patti', 'samosa', 'snack'],
+        theme: { primary: '#C2410C', light: '#EA580C', glow: 'rgba(194, 65, 12, 0.25)', bg: '#FFF7ED' }
     },
     pizza: {
         name: 'Pizza',
         icon: '🍕',
-        banner: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Veg Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
-        keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza']
+        keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza'],
+        theme: { primary: '#DC2626', light: '#EF4444', glow: 'rgba(220, 38, 38, 0.25)', bg: '#FEF2F2' }
     },
     anniversary: {
         name: 'Anniversary',
         icon: '💑',
-        banner: 'https://images.unsplash.com/photo-1530103862676-de3c9da59af7?w=800&h=300&fit=crop',
+        banner: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&h=400&fit=crop&q=80',
         subcategories: ['All', 'Cakes', 'Flowers', 'Gift Combos', 'Chocolates', 'Decoration'],
-        keywords: ['anniversary', 'wedding', 'couple', 'love', 'romantic', 'heart', 'rose', 'gift']
+        keywords: ['anniversary', 'wedding', 'couple', 'love', 'romantic', 'heart', 'rose', 'gift'],
+        theme: { primary: '#7C3AED', light: '#A78BFA', glow: 'rgba(124, 58, 237, 0.25)', bg: '#F5F3FF' }
     }
 };
 
@@ -78,6 +86,7 @@ const CategoryPage = () => {
     const [showSearch, setShowSearch] = useState(false);
 
     const category = CATEGORY_CONFIG[categoryId] || CATEGORY_CONFIG.fastfood;
+    const theme = category.theme || { primary: '#C97B4B', light: '#E8956A', glow: 'rgba(201, 123, 75, 0.25)', bg: '#FDF8F4' };
     const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     useEffect(() => {
@@ -136,14 +145,14 @@ const CategoryPage = () => {
     }, [allProducts, category.keywords, activeSubcategory, searchQuery]);
 
     return (
-        <div className="min-h-screen pb-24" style={{ background: '#FDF8F4' }}>
+        <div className="min-h-screen pb-24" style={{ background: theme.bg }}>
             {/* Header - Rounded, Glass Effect */}
             <header className="sticky top-0 z-20 px-4 py-3"
                 style={{
-                    background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)',
+                    background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.light} 100%)`,
                     borderBottomLeftRadius: '24px',
                     borderBottomRightRadius: '24px',
-                    boxShadow: '0 8px 32px rgba(252, 128, 25, 0.25)'
+                    boxShadow: `0 8px 32px ${theme.glow}`
                 }}>
                 <div className="flex items-center justify-between">
                     {/* Left: Back + Category Name */}
@@ -208,13 +217,13 @@ const CategoryPage = () => {
 
             {/* Hero Banner - Rounded */}
             <div className="mx-4 mt-4">
-                <div className="relative rounded-3xl overflow-hidden" style={{ boxShadow: '0 8px 24px rgba(252, 128, 25, 0.15)' }}>
+                <div className="relative rounded-3xl overflow-hidden" style={{ boxShadow: `0 8px 24px ${theme.glow}` }}>
                     <img
                         src={category.banner}
                         alt={`${category.name} Banner`}
                         className="w-full h-40 md:h-48 object-cover"
                     />
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(252, 128, 25, 0.85) 0%, rgba(255, 154, 60, 0.4) 60%, transparent 100%)' }}>
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${theme.primary}dd 0%, ${theme.light}66 60%, transparent 100%)` }}>
                         <div className="p-5 h-full flex flex-col justify-end">
                             <p className="text-[10px] uppercase tracking-[0.2em] text-white/80 font-semibold">Explore</p>
                             <h2 className="text-2xl font-bold text-white mt-1">{category.name}</h2>
@@ -234,12 +243,12 @@ const CategoryPage = () => {
                             className="flex-shrink-0 px-5 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap snap-start active:scale-95"
                             style={{
                                 background: activeSubcategory === sub
-                                    ? 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)'
+                                    ? `linear-gradient(135deg, ${theme.primary} 0%, ${theme.light} 100%)`
                                     : '#FFFFFF',
                                 color: activeSubcategory === sub ? 'white' : '#666',
                                 border: activeSubcategory === sub ? 'none' : '1.5px solid #E8E3DB',
                                 boxShadow: activeSubcategory === sub
-                                    ? '0 6px 16px rgba(252, 128, 25, 0.3)'
+                                    ? `0 6px 16px ${theme.glow}`
                                     : '0 2px 8px rgba(0,0,0,0.04)'
                             }}
                         >
@@ -287,7 +296,7 @@ const CategoryPage = () => {
                         <button
                             onClick={() => navigate('/menu')}
                             className="mt-5 px-8 py-3 rounded-full text-white font-semibold active:scale-95 transition-transform"
-                            style={{ background: 'linear-gradient(135deg, #C97B4B 0%, #E8956A 100%)', boxShadow: '0 8px 24px rgba(252, 128, 25, 0.3)' }}
+                            style={{ background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.light} 100%)`, boxShadow: `0 8px 24px ${theme.glow}` }}
                         >
                             Browse All Items
                         </button>

@@ -10,42 +10,42 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
             id: 'cake',
             name: 'Cake',
             icon: '🎂',
-            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
         },
         {
             id: 'fastfood',
             name: 'Fastfood',
             icon: '🍔',
-            image: 'https://images.unsplash.com/photo-1603064752734-4c48eff53d05?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&q=80',
             gradient: 'from-amber-100 to-orange-50'
         },
         {
             id: 'bakery',
             name: 'Bakery',
             icon: '🥐',
-            image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&h=400&fit=crop&q=80',
             gradient: 'from-amber-100 to-yellow-50'
         },
         {
             id: 'beverages',
             name: 'Beverages',
             icon: '☕',
-            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop&q=80',
             gradient: 'from-amber-100 to-yellow-50'
         },
         {
             id: 'flowers',
             name: 'Flowers',
             icon: '💐',
-            image: 'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
         },
         {
             id: 'anniversary',
             name: 'Anniversary',
             icon: '💑',
-            image: 'https://images.unsplash.com/photo-1626803775151-61d756612f97?w=400&h=400&fit=crop&q=80', // Better anniversary image
+            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=400&h=400&fit=crop&q=80',
             gradient: 'from-pink-100 to-rose-50'
         }
     ];
