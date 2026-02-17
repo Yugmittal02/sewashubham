@@ -4,6 +4,8 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+import logo from '../assets/cupcake_logo.svg';
+
 const Header = () => {
     const { getItemCount } = useCart();
     const { customer } = useAuth();
@@ -27,12 +29,23 @@ const Header = () => {
                         </button>
 
                         <div
-                            className="header-logo flex items-center gap-2 cursor-pointer"
+                            className="header-logo flex flex-col cursor-pointer"
                             onClick={() => navigate('/')}
                         >
-                            <div className="flex flex-col items-start leading-none">
-                                <h1 className="bakery-logo text-xl md:text-2xl font-bold tracking-wide" style={{ color: '#4A2C1A', fontFamily: 'Poppins, sans-serif', fontWeight: '700', textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>Sewa Shubham</h1>
-                                <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-semibold mt-0.5" style={{ color: '#8B5A2B' }}>Bakery</span>
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={logo}
+                                    alt="Sewa Shubham Bakery"
+                                    className="h-10 md:h-14 object-contain"
+                                />
+                                <div className="hidden sm:block">
+                                    <h1 className="text-sm font-bold text-gray-800 leading-none">Sewa Shubham</h1>
+                                    <p className="text-[10px] text-gray-400">Bakery & Cafe</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-1 mt-0.5">
+                                <span className="text-[9px] text-gray-400">📍 Delivering to Bharatpur</span>
+                                <span className="text-[8px] text-[#FC8019] font-bold">▼</span>
                             </div>
                         </div>
                     </div>

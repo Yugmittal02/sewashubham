@@ -63,7 +63,7 @@ const Cart = () => {
         <p className="mb-8 text-center" style={{ color: '#7E7E7E' }}>Add some delicious items to get started!</p>
         <button
           onClick={() => navigate('/menu')}
-          className="px-8 py-4 rounded-2xl text-white font-bold"
+          className="px-8 py-4 rounded-full text-white font-bold active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 8px 24px rgba(252, 128, 25, 0.3)' }}
         >
           🍰 Browse Menu
@@ -76,7 +76,7 @@ const Cart = () => {
     <div className="min-h-screen pb-40" style={{ background: '#FFFFFF' }}>
       {/* Header */}
       <header className="sticky top-0 z-10 px-4 py-4 flex justify-between items-center"
-        style={{ background: '#FFFFFF', borderBottom: '3px solid #FC8019', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+        style={{ background: '#FFFFFF', borderBottom: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px' }}>
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ background: 'rgba(252, 128, 25, 0.1)' }}>
           <FaArrowLeft size={18} color="#FC8019" />
@@ -94,11 +94,11 @@ const Cart = () => {
 
       {/* Order Type Toggle */}
       <div className="mx-4 mt-4">
-        <div className="p-1.5 rounded-2xl flex gap-1"
-          style={{ background: 'white', border: '2px solid #E8E3DB', boxShadow: '0 4px 16px rgba(28, 28, 28, 0.08)' }}>
+        <div className="p-1.5 rounded-full flex gap-1"
+          style={{ background: 'white', border: '1.5px solid #E8E3DB', boxShadow: '0 4px 16px rgba(28, 28, 28, 0.06)' }}>
           <button
             onClick={() => setOrderType('Delivery')}
-            className={`flex-1 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Delivery' ? 'text-white' : ''}`}
+            className={`flex-1 py-3 rounded-full font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Delivery' ? 'text-white' : ''}`}
             style={orderType === 'Delivery' ? { background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 4px 12px rgba(252, 128, 25, 0.3)' } : { color: '#7E7E7E' }}
           >
             <FaTruck size={18} />
@@ -107,7 +107,7 @@ const Cart = () => {
           </button>
           <button
             onClick={() => setOrderType('Takeaway')}
-            className={`flex-1 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Takeaway' ? 'text-white' : ''}`}
+            className={`flex-1 py-3 rounded-full font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Takeaway' ? 'text-white' : ''}`}
             style={orderType === 'Takeaway' ? { background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 4px 12px rgba(252, 128, 25, 0.3)' } : { color: '#7E7E7E' }}
           >
             <FaShoppingBag size={18} />
@@ -115,7 +115,7 @@ const Cart = () => {
           </button>
           <button
             onClick={() => setOrderType('Dine-in')}
-            className={`flex-1 py-3 rounded-xl font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Dine-in' ? 'text-white' : ''}`}
+            className={`flex-1 py-3 rounded-full font-semibold flex flex-col items-center gap-1 transition-all ${orderType === 'Dine-in' ? 'text-white' : ''}`}
             style={orderType === 'Dine-in' ? { background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)', boxShadow: '0 4px 12px rgba(252, 128, 25, 0.3)' } : { color: '#7E7E7E' }}
           >
             <FaUtensils size={18} />
@@ -237,7 +237,7 @@ const Cart = () => {
           className="flex-1 bg-transparent outline-none text-sm font-medium"
           style={{ color: '#FC8019' }}
         />
-        <button className="px-4 py-2 rounded-lg text-white text-sm font-bold"
+        <button className="px-5 py-2 rounded-full text-white text-sm font-bold active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}>
           Apply
         </button>
@@ -290,14 +290,14 @@ const Cart = () => {
         style={{ background: 'linear-gradient(180deg, transparent 0%, #FFFFFF 20%, #FFFFFF 100%)' }}>
         <button
           onClick={handleCheckout}
-          className="w-full py-4 rounded-2xl text-white font-bold text-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="w-full py-4 rounded-full text-white font-bold text-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
           style={{
             background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)',
             boxShadow: '0 8px 32px rgba(252, 128, 25, 0.4)'
           }}
         >
           <span>Proceed to Pay</span>
-          <span className="px-3 py-1 rounded-lg text-sm" style={{ background: 'rgba(255,255,255,0.2)' }}>
+          <span className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(255,255,255,0.2)' }}>
             ₹{(Number(grandTotal) || 0).toFixed(0)}
           </span>
         </button>

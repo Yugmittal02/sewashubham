@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaArrowRight, FaStar, FaClock, FaShieldAlt } from 'react-icons/fa';
+import logo from '../assets/cupcake_logo.svg';
 
 const Welcome = () => {
     const navigate = useNavigate();
@@ -47,27 +48,17 @@ const Welcome = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col items-center justify-center relative z-10 text-center px-6 py-12">
                 {/* Logo */}
-                <div className="w-28 h-28 md:w-36 md:h-36 rounded-3xl flex items-center justify-center mb-6 md:mb-8"
-                    style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF5EE 100%)',
-                        border: '4px solid #FC8019',
-                        boxShadow: '0 20px 60px rgba(252, 128, 25, 0.2), 0 0 0 8px rgba(252, 128, 25, 0.1)',
-                        animation: 'float 4s ease-in-out infinite'
-                    }}>
-                    <span className="text-6xl md:text-7xl">🧁</span>
+                <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center mb-8 animate-float">
+                    <img
+                        src={logo}
+                        alt="Sewa Shubham Bakery"
+                        className="w-full h-full object-contain drop-shadow-2xl"
+                    />
                 </div>
 
-                {/* Branding */}
-                <h1 className="text-5xl md:text-7xl font-script mb-2" style={{ color: '#FC8019' }}>
-                    Sewa Shubham
-                </h1>
-                <p className="text-lg font-semibold tracking-[0.3em] uppercase mb-2" style={{ color: '#FF9A3C' }}>
-                    Bakery & Cafe
-                </p>
-
                 {/* Tagline */}
-                <p className="text-base mb-8 max-w-sm" style={{ color: '#7E7E7E' }}>
-                    ✨ Fresh Bakes • Delicious Moments • Happy Memories ✨
+                <p className="text-xl md:text-2xl font-bold tracking-wide italic mb-10 max-w-md" style={{ color: '#8B5A2B', textShadow: '0 2px 4px rgba(139, 90, 43, 0.1)' }}>
+                    ✨ Fresh Bakes • Delicious Moments ✨
                 </p>
 
                 {/* Trust Badges */}

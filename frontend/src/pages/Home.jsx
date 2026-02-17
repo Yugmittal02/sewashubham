@@ -6,7 +6,7 @@ import AdsBanner from '../components/AdsBanner';
 import ProductCardNew from '../components/ProductCardNew';
 import SideCart from '../components/SideCart';
 import Footer from '../components/Footer';
-import { FaShoppingBag, FaStar, FaCrown, FaArrowRight } from 'react-icons/fa';
+import { FaShoppingBag, FaStar, FaCrown, FaArrowRight, FaSearch } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 
 // Premium Skeleton loader
@@ -68,23 +68,31 @@ const FeaturedBanner = ({ product, onAddSuccess }) => {
     );
 };
 
-// Quick Stats Bar
-const QuickStats = () => (
-    <div className="mx-5 mb-6 p-4 rounded-2xl flex justify-around animate-fade-in"
-        style={{ background: 'linear-gradient(135deg, #FC8019 0%, #FF9A3C 100%)' }}>
-        <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>⚡ 30min</p>
-            <p className="text-[10px] text-white/80">Delivery</p>
-        </div>
-        <div className="w-px bg-white/20"></div>
-        <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>🔥 Fresh</p>
-            <p className="text-[10px] text-white/80">Daily Made</p>
-        </div>
-        <div className="w-px bg-white/20"></div>
-        <div className="text-center">
-            <p className="text-xl font-bold" style={{ color: '#FFFFFF' }}>💯 Quality</p>
-            <p className="text-[10px] text-white/80">Guaranteed</p>
+// Winni/FNP Style Delivery Info Strip
+const DeliveryStrip = () => (
+    <div className="mx-4 mt-3 mb-2">
+        <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-base">⚡</span>
+                <div>
+                    <p className="text-[11px] font-bold text-gray-800 leading-none">Express Delivery</p>
+                    <p className="text-[9px] text-gray-400 mt-0.5">Within 2 hours</p>
+                </div>
+            </div>
+            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-base">🎁</span>
+                <div>
+                    <p className="text-[11px] font-bold text-gray-800 leading-none">Free Delivery</p>
+                    <p className="text-[9px] text-gray-400 mt-0.5">Above ₹299</p>
+                </div>
+            </div>
+            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
+                <span className="text-base">💯</span>
+                <div>
+                    <p className="text-[11px] font-bold text-gray-800 leading-none">100% Fresh</p>
+                    <p className="text-[9px] text-gray-400 mt-0.5">Baked Daily</p>
+                </div>
+            </div>
         </div>
     </div>
 );
@@ -177,8 +185,23 @@ const Home = () => {
                 onSearchChange={setSearchQuery}
             />
 
-            {/* Quick Stats Bar */}
-            <QuickStats />
+            {/* Sticky Pill Search Bar */}
+            <div className="sticky top-[60px] z-40 px-4 py-3 bg-[#F8F3EE]/95 backdrop-blur-sm transition-all duration-300">
+                <div className="relative max-w-lg mx-auto">
+                    <input
+                        type="text"
+                        placeholder="Search for cakes, pastries..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 rounded-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#FC8019] transition-shadow text-sm"
+                        style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+                    />
+                    <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+            </div>
+
+            {/* Delivery Info Strip - Winni Style */}
+            <DeliveryStrip />
 
             {/* Main Category Cards */}
             <MainCategoryCards
@@ -271,7 +294,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className="products-grid">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 px-2 md:px-0">
                     {loading ? (
                         <>
                             <ProductSkeleton index={0} />
@@ -282,13 +305,13 @@ const Home = () => {
                             <ProductSkeleton index={5} />
                         </>
                     ) : filteredProducts.length === 0 ? (
-                        <div className="empty-state">
-                            <p className="empty-icon">🍰</p>
-                            <p className="empty-title">No products found</p>
-                            <p className="empty-subtitle">Try a different category or search term</p>
+                        <div className="col-span-2 md:col-span-full flex flex-col items-center justify-center py-10 text-center">
+                            <p className="text-4xl mb-4">🍰</p>
+                            <p className="text-lg font-bold text-gray-800">No products found</p>
+                            <p className="text-gray-500 mb-4">Try a different category or search term</p>
                             <button
                                 onClick={() => setActiveCategory('')}
-                                className="empty-btn"
+                                className="px-6 py-2 bg-orange-500 text-white rounded-full font-bold shadow-md active:scale-95 transition-transform"
                             >
                                 View All Items
                             </button>
@@ -337,6 +360,9 @@ const Home = () => {
 
             {/* Footer */}
             <Footer />
+
+            {/* Bottom Nav Spacer */}
+            <div className="h-20 md:h-0"></div>
         </div>
     );
 };
