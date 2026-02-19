@@ -73,24 +73,16 @@ const Welcome = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col items-center justify-center relative z-20 text-center px-6">
 
-                {/* Center Icon/Logo Area */}
-                <div className="mb-8 relative">
-                    <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-[2.5rem] shadow-xl shadow-orange-100/50 flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                        <FaUtensils className="text-4xl md:text-5xl text-orange-500" />
+                {/* Logo */}
+                <div className="mb-4 relative">
+                    <div className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+                        <img
+                            src={brandLogo}
+                            alt="Sewa Shubham Bakery"
+                            className="w-full h-full object-contain drop-shadow-2xl"
+                        />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
                 </div>
-
-                {/* Brand Name */}
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-2 text-gray-900">
-                    <span className="text-slate-800">SewaShubham</span>
-                    <span className="text-orange-500">Bakery</span>
-                </h1>
-
-                {/* Subtitle */}
-                <h2 className="text-sm md:text-base font-bold tracking-[0.2em] text-gray-400 uppercase mb-6">
-                    BAKERY & CAFE
-                </h2>
 
                 {/* Tagline */}
                 <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg mb-10 leading-relaxed">
