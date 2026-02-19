@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaArrowRight, FaStar, FaClock, FaShieldAlt } from 'react-icons/fa';
-import logo from '../assets/brand_logo.png';
+import { FaArrowRight, FaUtensils } from 'react-icons/fa';
+import brandLogo from '../assets/brand_logo.png';
 
 const Welcome = () => {
     const navigate = useNavigate();
@@ -15,119 +15,138 @@ const Welcome = () => {
     }, [customer, navigate]);
 
     return (
-        <div className="min-h-screen flex flex-col relative overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #FFF8F0 0%, #FFF0DC 50%, #FFECD6 100%)' }}>
+        <div className="min-h-screen flex flex-col relative overflow-hidden bg-white">
+            {/* Background Gradient - Very subtle and bright */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FFFDF7] via-[#FFF8F0] to-[#FFF0DC] z-0"></div>
 
-            {/* Background Elements (Static & Professional) - Positioned in Corners */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {/* Top Left */}
-                <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=150&h=150&fit=crop&q=80"
-                    alt="Cake"
-                    className="absolute top-4 left-4 w-20 h-20 md:w-32 md:h-32 object-cover rounded-2xl shadow-xl drop-shadow-xl"
-                    style={{ border: '3px solid #FF8E53', opacity: 0.9 }} />
+            {/* Decorative Blobs */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-100 rounded-full blur-[100px] opacity-60"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-50 rounded-full blur-[100px] opacity-60"></div>
 
-                {/* Top Right */}
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=150&h=150&fit=crop&q=80"
-                    alt="Coffee"
-                    className="absolute top-4 right-4 w-20 h-20 md:w-32 md:h-32 object-cover rounded-2xl shadow-xl drop-shadow-xl"
-                    style={{ border: '3px solid #FF6B6B', opacity: 0.9 }} />
+            {/* Floating Food Items - Placed naturally like the reference */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+                {/* Top Left - Cake/Dessert */}
+                <div className="absolute top-[5%] left-[5%] animate-float-slow">
+                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shadow-2xl shadow-orange-100/50">
+                        <img
+                            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop&q=80"
+                            alt="Chocolate Cake"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
 
-                {/* Bottom Left - Avoid overlapping footer */}
-                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&h=150&fit=crop&q=80"
-                    alt="Pastry"
-                    className="absolute bottom-24 left-4 w-24 h-24 md:w-32 md:h-32 object-cover rounded-2xl shadow-xl drop-shadow-xl"
-                    style={{ border: '3px solid #FDA085', opacity: 0.9 }} />
+                {/* Top Right - Drink */}
+                <div className="absolute top-[15%] right-[5%] animate-float-medium">
+                    <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden shadow-2xl shadow-orange-100/50">
+                        <img
+                            src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300&h=300&fit=crop&q=80"
+                            alt="Iced Drink"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
 
-                {/* Bottom Right - Avoid overlapping footer */}
-                <img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=150&h=150&fit=crop&q=80"
-                    alt="Birthday Cake"
-                    className="absolute bottom-24 right-4 w-24 h-24 md:w-32 md:h-32 object-cover rounded-2xl shadow-xl drop-shadow-xl"
-                    style={{ border: '3px solid #FF6B6B', opacity: 0.9 }} />
+                {/* Bottom Left - Pastry/Dessert */}
+                <div className="absolute bottom-[20%] left-[-2%] animate-float-fast">
+                    <div className="w-28 h-28 md:w-40 md:h-40 rounded-full overflow-hidden shadow-2xl shadow-orange-100/50">
+                        <img
+                            src="https://images.unsplash.com/photo-1626803775151-61d756612f97?w=300&h=300&fit=crop&q=80"
+                            alt="Pastry"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
 
-                {/* Subtle Background Glows */}
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 rounded-full blur-[120px]"
-                    style={{ background: 'rgba(255, 142, 83, 0.12)' }}></div>
-                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 rounded-full blur-[120px]"
-                    style={{ background: 'rgba(255, 107, 107, 0.12)' }}></div>
+                {/* Bottom Right - Small Drink/Item */}
+                <div className="absolute bottom-[10%] right-[0%] animate-float-slow">
+                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden shadow-xl shadow-orange-100/50">
+                        <img
+                            src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=300&fit=crop&q=80"
+                            alt="Milkshake"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col items-center justify-center relative z-10 text-center px-6 py-12 gap-4 md:gap-8">
+            <div className="flex-1 flex flex-col items-center justify-center relative z-20 text-center px-6">
 
-                {/* Logo - HUGE (3x Size Request) - No Bottom Margin to decrease space */}
-                <div className="w-80 h-80 md:w-96 md:h-96 flex items-center justify-center relative">
-                    <div className="absolute inset-0 bg-orange-400 opacity-20 blur-3xl rounded-full scale-110"></div>
-                    <img
-                        src={logo}
-                        alt="Sewa Shubham Bakery"
-                        className="w-full h-full object-contain drop-shadow-2xl relative z-10"
-                    />
+                {/* Center Icon/Logo Area */}
+                <div className="mb-8 relative">
+                    <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-[2.5rem] shadow-xl shadow-orange-100/50 flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                        <FaUtensils className="text-4xl md:text-5xl text-orange-500" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
                 </div>
 
-                {/* Tagline */}
-                <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight italic max-w-lg leading-relaxed px-2 mb-8"
-                    style={{
-                        background: 'linear-gradient(90deg, #D9480F 0%, #E8590C 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        textShadow: '0 4px 12px rgba(232, 89, 12, 0.15)'
-                    }}>
-                    ✨ Fresh Bakes • Delicious Moments ✨
+                {/* Brand Name */}
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-2 text-gray-900">
+                    <span className="text-slate-800">SewaShubham</span>
+                    <span className="text-orange-500">Bakery</span>
+                </h1>
+
+                {/* Subtitle */}
+                <h2 className="text-sm md:text-base font-bold tracking-[0.2em] text-gray-400 uppercase mb-6">
+                    BAKERY & CAFE
                 </h2>
 
-                {/* Trust Badges */}
-                <div className="flex flex-wrap justify-center gap-4 w-full max-w-md px-2 z-20">
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm"
-                        style={{ border: '1.5px solid #FF8E53', boxShadow: '0 4px 12px rgba(255, 142, 83, 0.1)' }}>
-                        <FaStar size={14} color="#FF8E53" />
-                        <span className="text-xs md:text-sm font-bold text-gray-800">4.9 Rating</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm"
-                        style={{ border: '1.5px solid #FF6B6B', boxShadow: '0 4px 12px rgba(255, 107, 107, 0.1)' }}>
-                        <FaClock size={14} color="#FF6B6B" />
-                        <span className="text-xs md:text-sm font-bold text-gray-800">30min Delivery</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm"
-                        style={{ border: '1.5px solid #20C997', boxShadow: '0 4px 12px rgba(32, 201, 151, 0.1)' }}>
-                        <FaShieldAlt size={14} color="#20C997" />
-                        <span className="text-xs md:text-sm font-bold text-gray-800">Safe Payment</span>
-                    </div>
-                </div>
+                {/* Tagline */}
+                <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg mb-10 leading-relaxed">
+                    Fresh Bakes • Delicious Moments • <span className="text-yellow-500 font-bold">Happy Memories ✨</span>
+                </p>
 
-                {/* CTA Button */}
+                {/* Main CTA Button */}
                 <button
                     onClick={() => navigate('/menu')}
-                    className="group w-full max-w-xs text-white font-black text-lg md:text-xl py-4 md:py-5 px-8 md:px-10 rounded-2xl shadow-xl active:scale-95 flex items-center justify-center gap-3 relative overflow-hidden mt-4 z-20"
-                    style={{
-                        background: 'linear-gradient(45deg, #FF512F 0%, #DD2476 100%)',
-                        boxShadow: '0 20px 40px -10px rgba(255, 81, 47, 0.4)'
-                    }}
+                    className="group bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-4 px-8 rounded-2xl shadow-lg shadow-orange-500/30 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-xs justify-center"
                 >
-                    <span className="relative z-10 drop-shadow-md">🍰 Browse Our Menu</span>
-                    <FaArrowRight className="relative z-10 drop-shadow-md" />
+                    Browse Our Menu
+                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                {/* Secondary CTA */}
+                {/* Secondary/Login Link */}
                 <button
                     onClick={() => navigate('/login')}
-                    className="mt-2 text-sm font-bold hover:text-orange-600 hover:underline z-20 relative"
-                    style={{ color: '#E8590C' }}
+                    className="mt-6 text-sm font-medium text-gray-400 hover:text-orange-500 transition-colors"
                 >
-                    Already a customer? Login →
+                    Member Login
                 </button>
+
             </div>
 
-            {/* Footer */}
-            <div className="relative z-10 text-center pb-8 px-6">
-                <p className="text-sm font-semibold" style={{ color: '#862E9C' }}>
-                    Made with ❤️ for our lovely customers
-                </p>
-                <p className="text-xs mt-2 font-medium" style={{ color: '#ADB5BD' }}>
-                    © 2024 Bakery Delight. All rights reserved.
+            {/* Footer - Copyright */}
+            <div className="relative z-20 pb-6 text-center">
+                <p className="text-xs md:text-sm font-medium text-gray-300">
+                    Made with <span className="text-red-400">❤️</span> for our lovely customers
                 </p>
             </div>
+
+
+            {/* Keyframe Animations for Floating */}
+            <style jsx>{`
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-15px) rotate(2deg); }
+                }
+                @keyframes float-reverse {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(15px) rotate(-2deg); }
+                }
+                 .animate-float-slow {
+                    animation: float 6s ease-in-out infinite;
+                }
+                .animate-float-medium {
+                    animation: float-reverse 5s ease-in-out infinite;
+                }
+                .animate-float-fast {
+                    animation: float 4s ease-in-out infinite;
+                }
+            `}</style>
         </div>
     );
 };
 
 export default Welcome;
+

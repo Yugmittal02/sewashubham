@@ -1046,10 +1046,24 @@ textarea,
 /* Filter Chips - Mobile Scrollable */
 .filter-chips {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 10px;
   padding: 4px 0;
+  /* Mobile: Single line scroll */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  /* Space for scrollbar if any, though hidden */
+}
+
+@media (min-width: 768px) {
+  .filter-chips {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    padding-bottom: 4px;
+  }
 }
 
 .filter-chips::-webkit-scrollbar {
