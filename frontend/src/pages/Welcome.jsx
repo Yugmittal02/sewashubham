@@ -117,7 +117,7 @@ const Welcome = () => {
 
 
             {/* Keyframe Animations for Floating */}
-            <style jsx>{`
+            <style>{`
                 @keyframes float {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
                     50% { transform: translateY(-15px) rotate(2deg); }
