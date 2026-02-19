@@ -74,7 +74,7 @@ const Welcome = () => {
             <div className="flex-1 flex flex-col items-center justify-center relative z-20 text-center px-6">
 
                 {/* Logo */}
-                <div className="mb-4 relative">
+                <div className="mb-2 relative">
                     <div className="w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
                         <img
                             src={brandLogo}
@@ -83,6 +83,12 @@ const Welcome = () => {
                         />
                     </div>
                 </div>
+
+                {/* Brand Name */}
+                <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 text-gray-900">
+                    <span className="text-slate-800">Sewa Shubham </span>
+                    <span className="text-orange-500">Bakery</span>
+                </h1>
 
                 {/* Tagline */}
                 <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg mb-10 leading-relaxed">
