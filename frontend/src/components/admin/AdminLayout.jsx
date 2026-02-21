@@ -19,10 +19,10 @@ const AdminLayout = ({ activeTab, setActiveTab, children }) => {
     ];
 
     return (
-        <div className="min-h-screen pb-20 md:pb-0 md:pl-20" style={{ background: '#F5F2ED' }}>
+        <div className="min-h-screen bg-gray-50 pb-20 md:pb-0 md:pl-20">
             {/* Desktop Sidebar (Hidden on Mobile) */}
-            <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-20 flex-col items-center py-6 z-50" style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FAF7F2 100%)', borderRight: '1px solid #E8E0D6' }}>
-                <div className="w-12 h-12 rounded-xl mb-8 flex items-center justify-center text-2xl shadow-sm" style={{ background: 'linear-gradient(135deg, #FEF0D8 0%, #FCE4BE 100%)', border: '1px solid #E8C078' }}>
+            <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-20 bg-white border-r border-gray-200 flex-col items-center py-6 z-50">
+                <div className="w-12 h-12 bg-amber-100 rounded-xl mb-8 flex items-center justify-center text-2xl shadow-sm border border-amber-200">
                     🍰
                 </div>
                 <div className="flex flex-col gap-4 w-full px-2">
@@ -31,10 +31,9 @@ const AdminLayout = ({ activeTab, setActiveTab, children }) => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`p-3 rounded-xl flex flex-col items-center justify-center transition-all group relative ${activeTab === tab.id
-                                ? "text-amber-700"
+                                ? "bg-amber-50 text-amber-600"
                                 : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                                 }`}
-                            style={activeTab === tab.id ? { background: 'linear-gradient(135deg, #FEF0D8 0%, #FCE4BE 100%)', boxShadow: '0 2px 8px rgba(212, 165, 90, 0.2)' } : {}}
                         >
                             <tab.icon size={20} />
                             <div className="absolute left-16 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
@@ -58,12 +57,11 @@ const AdminLayout = ({ activeTab, setActiveTab, children }) => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex flex-col items-center justify-center w-full h-full transition-all ${activeTab === tab.id
-                                ? "text-amber-700"
+                                ? "text-amber-600"
                                 : "text-gray-400"
                                 }`}
                         >
-                            <div className={`p-1.5 rounded-xl transition-all ${activeTab === tab.id ? 'transform -translate-y-1' : ''}`}
-                                style={activeTab === tab.id ? { background: 'linear-gradient(135deg, #FEF0D8 0%, #FCE4BE 100%)' } : {}}>
+                            <div className={`p-1.5 rounded-xl transition-all ${activeTab === tab.id ? 'bg-amber-50 transform -translate-y-1' : ''}`}>
                                 <tab.icon size={20} />
                             </div>
                             <span className={`text-[10px] font-medium mt-0.5 ${activeTab === tab.id ? 'font-bold' : ''}`}>

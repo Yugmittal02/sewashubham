@@ -222,15 +222,15 @@ const AdminDashboard = () => {
   return (
     <AdminLayout activeTab={activeTab} setActiveTab={setActiveTab}>
       {/* Mobile Header (Sticky - Inside Layout Main) */}
-      <header className="text-white px-4 py-4 sticky top-0 z-40" style={{ background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 100%)', boxShadow: '0 4px 20px rgba(22, 33, 62, 0.3)' }}>
+      <header className="bg-gray-900 text-white px-4 py-4 sticky top-0 z-40 shadow-md">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D4612C 0%, #F28B50 100%)', boxShadow: '0 4px 12px rgba(212, 97, 44, 0.4)' }}>
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center">
               <FaUtensils className="text-white" />
             </div>
             <div>
               <h1 className="font-bold text-lg leading-tight">Admin Panel</h1>
-              <p className="text-xs" style={{ color: '#8B9CC7' }}>{admin?.name || 'Admin'}</p>
+              <p className="text-xs text-gray-400">{admin?.name || 'Admin'}</p>
             </div>
           </div>
           <button

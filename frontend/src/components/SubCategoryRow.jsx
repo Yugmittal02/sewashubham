@@ -97,7 +97,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
             </h3>
 
             {/* 4x2 Grid Layout */}
-            <div className="grid grid-cols-4 gap-2 p-3">
+            <div className="grid grid-cols-4 gap-3 p-3">
                 {subCategories.map((sub, index) => (
                     <button
                         key={sub.id}
@@ -105,7 +105,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
                         className="animate-fade-in flex flex-col items-center gap-2 group"
                         style={{ animationDelay: `${index * 0.05}s` }}
                     >
-                        <div className="w-[68px] h-[68px] md:w-20 md:h-20 rounded-xl overflow-hidden border border-[#E8DEC8] relative shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300">
+                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden border border-[#E8DEC8] relative shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300">
                             <img
                                 src={sub.image}
                                 alt={sub.name}
