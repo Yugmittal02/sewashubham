@@ -36,7 +36,7 @@ const Header = () => {
                             <img
                                 src={logo}
                                 alt="Sewa Shubham Bakery"
-                                className="h-12 w-auto object-contain"
+                                className="h-16 w-auto object-contain"
                             />
                             <div>
                                 <h1 className="text-xl font-extrabold leading-tight" style={{ color: '#2D1810' }}>
