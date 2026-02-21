@@ -62,7 +62,7 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                 <p>Explore our delicious collection</p>
             </div>
             {/* Horizontal Scroll Layout (Mobile First) - Single line */}
-            <div className="grid grid-cols-3 gap-y-3 gap-x-1 px-4 pb-4 md:flex md:justify-center md:gap-2">
+            <div className="flex overflow-x-auto gap-2 px-4 pb-4 md:justify-center scrollbar-hide">
                 {categories.map((category, index) => (
                     <button
                         key={category.id}
