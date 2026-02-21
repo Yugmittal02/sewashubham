@@ -60,17 +60,17 @@ const UserDashboard = () => {
     if (!customer) return null;
 
     return (
-        <div className="min-h-screen pb-20" style={{ background: 'linear-gradient(180deg, #F5F0E8 0%, #FAF7F2 100%)' }}>
+        <div className="min-h-screen pb-20" style={{ background: 'linear-gradient(180deg, #EDE3D4 0%, #F8F3EB 100%)' }}>
             {/* Header */}
             <header className="sticky top-0 z-10 px-4 py-4 flex items-center justify-between"
-                style={{ background: 'linear-gradient(180deg, #2D1F16 0%, #3D2B1F 100%)', borderBottom: '3px solid #C9A962' }}>
+                style={{ background: 'linear-gradient(135deg, #1A110A 0%, #2D1F16 50%, #3D2B1F 100%)', borderBottom: '3px solid #D4A55A' }}>
                 <button onClick={() => navigate('/menu')} className="w-10 h-10 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
                     style={{ background: 'rgba(255,255,255,0.2)' }}>
                     <FaArrowLeft size={20} color="#FFFFFF" />
                 </button>
                 <div className="flex items-center gap-2">
                     <span className="text-2xl">👤</span>
-                    <h1 className="text-xl font-script" style={{ color: '#D4B896' }}>My Account</h1>
+                    <h1 className="text-xl font-script" style={{ color: '#E8C9A0' }}>My Account</h1>
                 </div>
                 <button onClick={() => navigate('/notifications')} className="w-10 h-10 rounded-full flex items-center justify-center relative"
                     style={{ background: 'rgba(255,255,255,0.1)' }}>
@@ -81,14 +81,14 @@ const UserDashboard = () => {
 
             {/* Profile Card */}
             <div className="mx-4 mt-4 p-6 rounded-2xl relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #3D2B1F 0%, #4A3728 100%)', boxShadow: '0 8px 32px rgba(74, 55, 40, 0.25)' }}>
+                style={{ background: 'linear-gradient(135deg, #2A1C12 0%, #3D2B1F 50%, #4A3728 100%)', boxShadow: '0 12px 40px rgba(74, 55, 40, 0.35)' }}>
                 {/* Decorative circles */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full" style={{ background: 'rgba(201, 169, 98, 0.1)' }}></div>
                 <div className="absolute -bottom-10 -left-10 w-24 h-24 rounded-full" style={{ background: 'rgba(201, 169, 98, 0.1)' }}></div>
 
                 <div className="relative flex items-center gap-4">
                     <div className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #C9A962 0%, #D4B87A 100%)', boxShadow: '0 4px 12px rgba(201, 169, 98, 0.4)' }}>
+                        style={{ background: 'linear-gradient(135deg, #D4A55A 0%, #E8C078 100%)', boxShadow: '0 6px 16px rgba(212, 165, 90, 0.5)' }}>
                         <span className="text-3xl">😊</span>
                     </div>
                     <div className="flex-1">
@@ -112,7 +112,7 @@ const UserDashboard = () => {
             <div className="mx-4 mt-4 grid grid-cols-3 gap-3">
                 <button onClick={() => navigate('/address/add')}
                     className="p-4 rounded-xl flex flex-col items-center gap-2 transition-all hover:scale-105"
-                    style={{ background: 'white', border: '2px solid #E8E3DB', boxShadow: '0 4px 12px rgba(74, 55, 40, 0.06)' }}>
+                    style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F2 100%)', border: '2px solid #E8DDD0', boxShadow: '0 4px 16px rgba(74, 55, 40, 0.08)' }}>
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#FEF3E2' }}>
                         <FaMapMarkerAlt size={16} color="#6B4423" />
                     </div>
@@ -120,7 +120,7 @@ const UserDashboard = () => {
                 </button>
                 <button onClick={() => navigate('/favorites')}
                     className="p-4 rounded-xl flex flex-col items-center gap-2 transition-all hover:scale-105"
-                    style={{ background: 'white', border: '2px solid #E8E3DB', boxShadow: '0 4px 12px rgba(74, 55, 40, 0.06)' }}>
+                    style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF5F0 100%)', border: '2px solid #E8DDD0', boxShadow: '0 4px 16px rgba(74, 55, 40, 0.08)' }}>
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#FEE2E2' }}>
                         <FaHeart size={16} color="#E57373" />
                     </div>
@@ -128,7 +128,7 @@ const UserDashboard = () => {
                 </button>
                 <button onClick={() => navigate('/offers')}
                     className="p-4 rounded-xl flex flex-col items-center gap-2 transition-all hover:scale-105"
-                    style={{ background: 'white', border: '2px solid #E8E3DB', boxShadow: '0 4px 12px rgba(74, 55, 40, 0.06)' }}>
+                    style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #F5FFF5 100%)', border: '2px solid #E8DDD0', boxShadow: '0 4px 16px rgba(74, 55, 40, 0.08)' }}>
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#DCFCE7' }}>
                         <FaPercent size={14} color="#22C55E" />
                     </div>
@@ -138,9 +138,9 @@ const UserDashboard = () => {
 
             {/* Loyalty Card */}
             <div className="mx-4 mt-4 p-4 rounded-2xl flex items-center gap-4"
-                style={{ background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8CC 100%)', border: '2px solid #C9A962' }}>
+                style={{ background: 'linear-gradient(135deg, #FEF0D8 0%, #FCE4BE 100%)', border: '2px solid #D4A55A', boxShadow: '0 4px 16px rgba(212, 165, 90, 0.15)' }}>
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center"
-                    style={{ background: 'linear-gradient(135deg, #C9A962 0%, #D4B87A 100%)' }}>
+                    style={{ background: 'linear-gradient(135deg, #D4A55A 0%, #E8C078 100%)', boxShadow: '0 4px 12px rgba(212, 165, 90, 0.3)' }}>
                     <FaGift size={24} color="#3D2B1F" />
                 </div>
                 <div className="flex-1">

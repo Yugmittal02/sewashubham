@@ -62,15 +62,15 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                 <p>Explore our delicious collection</p>
             </div>
             {/* Horizontal Scroll Layout (Mobile First) - Single line */}
-            <div className="flex overflow-x-auto gap-3 px-4 pb-4 no-scrollbar md:justify-center md:gap-6">
+            <div className="grid grid-cols-3 gap-y-3 gap-x-1 px-4 pb-4 md:flex md:justify-center md:gap-2">
                 {categories.map((category, index) => (
                     <button
                         key={category.id}
                         onClick={() => handleCategoryClick(category.id)}
-                        className={`flex-shrink-0 flex flex-col items-center gap-2 transition-transform active:scale-95 ${activeCategory === category.id ? 'scale-105' : ''}`}
+                        className={`flex flex-col items-center gap-1.5 transition-transform active:scale-95 ${activeCategory === category.id ? 'scale-105' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                        <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full p-0.5 ${activeCategory === category.id ? 'bg-gradient-to-br from-[#C97B4B] to-[#E8956A]' : 'bg-transparent'}`}>
+                        <div className={`w-[85px] h-[85px] md:w-[120px] md:h-[120px] rounded-full p-0.5 ${activeCategory === category.id ? 'bg-gradient-to-br from-[#C97B4B] to-[#E8956A]' : 'bg-transparent'}`}>
                             <div className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-md">
                                 <img
                                     src={category.image}

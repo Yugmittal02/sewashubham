@@ -17,11 +17,11 @@ const Welcome = () => {
     return (
         <div className="min-h-screen flex flex-col relative overflow-hidden bg-white">
             {/* Background Gradient - Very subtle and bright */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#FFFDF7] via-[#FFF8F0] to-[#FFF0DC] z-0"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FFF8ED] via-[#FFF0DC] to-[#FFE4C4] z-0"></div>
 
             {/* Decorative Blobs */}
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-100 rounded-full blur-[100px] opacity-60"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-50 rounded-full blur-[100px] opacity-60"></div>
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-70" style={{ background: '#F5C78A' }}></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-60" style={{ background: '#F0A868' }}></div>
 
             {/* Floating Food Items - Placed naturally like the reference */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
@@ -86,19 +86,20 @@ const Welcome = () => {
 
                 {/* Brand Name */}
                 <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 text-gray-900">
-                    <span className="text-slate-800">Sewa Shubham </span>
-                    <span className="text-orange-500">Bakery</span>
+                    <span style={{ color: '#2D1810' }}>Sewa Shubham </span>
+                    <span style={{ color: '#D4612C' }}>Bakery</span>
                 </h1>
 
                 {/* Tagline */}
-                <p className="text-lg md:text-xl font-medium text-slate-600 max-w-lg mb-10 leading-relaxed">
-                    Fresh Bakes • Delicious Moments • <span className="text-yellow-500 font-bold">Happy Memories ✨</span>
+                <p className="text-lg md:text-xl font-medium max-w-lg mb-10 leading-relaxed" style={{ color: '#5C3A2A' }}>
+                    Fresh Bakes • Delicious Moments • <span className="font-bold" style={{ color: '#C8910D' }}>Happy Memories ✨</span>
                 </p>
 
                 {/* Main CTA Button */}
                 <button
                     onClick={() => navigate('/menu')}
-                    className="group bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-4 px-8 rounded-2xl shadow-lg shadow-orange-500/30 flex items-center gap-3 transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-xs justify-center"
+                    className="group text-white font-bold text-lg py-4 px-8 rounded-2xl flex items-center gap-3 transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-xs justify-center"
+                    style={{ background: 'linear-gradient(135deg, #D4612C 0%, #F28B50 100%)', boxShadow: '0 8px 30px rgba(212, 97, 44, 0.4)' }}
                 >
                     Browse Our Menu
                     <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -107,7 +108,8 @@ const Welcome = () => {
                 {/* Secondary/Login Link */}
                 <button
                     onClick={() => navigate('/login')}
-                    className="mt-6 text-sm font-medium text-gray-400 hover:text-orange-500 transition-colors"
+                    className="mt-6 text-sm font-semibold transition-colors"
+                    style={{ color: '#A0714F' }}
                 >
                     Member Login
                 </button>
@@ -116,7 +118,7 @@ const Welcome = () => {
 
             {/* Footer - Copyright */}
             <div className="relative z-20 pb-6 text-center">
-                <p className="text-xs md:text-sm font-medium text-gray-300">
+                <p className="text-xs md:text-sm font-medium" style={{ color: '#B89B7A' }}>
                     Made with <span className="text-red-400">❤️</span> for our lovely customers
                 </p>
             </div>

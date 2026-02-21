@@ -56,64 +56,64 @@ const AdminStats = ({ todayOrders, todayRevenue, pendingOrders, allOrders = [], 
             {/* Top Stats Grid */}
             <div className="grid grid-cols-2 gap-4 mb-6">
                 {/* Today's Orders */}
-                <div className="bg-white p-5 rounded-3xl shadow-sm border border-orange-100 relative overflow-hidden">
+                <div className="p-5 rounded-3xl shadow-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF8F2 100%)', border: '1px solid #F0D6C0' }}>
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
-                                <FaClipboardList />
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FEE4CC 0%, #FDD5B0 100%)' }}>
+                                <FaClipboardList className="text-orange-600" />
                             </div>
-                            <span className="text-gray-500 font-bold text-xs">Today</span>
+                            <span className="font-bold text-xs" style={{ color: '#8B7355' }}>Today</span>
                         </div>
-                        <p className="text-3xl font-black text-gray-800">{todayOrders.length}</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">orders</p>
+                        <p className="text-3xl font-black" style={{ color: '#D4612C' }}>{todayOrders.length}</p>
+                        <p className="text-[10px] mt-0.5" style={{ color: '#A0714F' }}>orders</p>
                     </div>
                     <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-orange-50 to-transparent rounded-full -mr-6 -mt-6 opacity-50 pointer-events-none"></div>
                 </div>
 
                 {/* Today's Revenue */}
-                <div className="bg-white p-5 rounded-3xl shadow-sm border border-green-100 relative overflow-hidden">
+                <div className="p-5 rounded-3xl shadow-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #F0FFF4 100%)', border: '1px solid #C6F0D4' }}>
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600">
-                                <FaRupeeSign />
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)' }}>
+                                <FaRupeeSign className="text-green-600" />
                             </div>
-                            <span className="text-gray-500 font-bold text-xs">Revenue</span>
+                            <span className="font-bold text-xs" style={{ color: '#8B7355' }}>Revenue</span>
                         </div>
-                        <p className="text-3xl font-black text-gray-800">₹{todayRevenue.toFixed(0)}</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">today</p>
+                        <p className="text-3xl font-black" style={{ color: '#16A34A' }}>₹{todayRevenue.toFixed(0)}</p>
+                        <p className="text-[10px] mt-0.5" style={{ color: '#22C55E' }}>today</p>
                     </div>
                     <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-green-50 to-transparent rounded-full -mr-6 -mt-6 opacity-50 pointer-events-none"></div>
                 </div>
 
                 {/* Pending Orders */}
-                <div className="bg-white p-5 rounded-3xl shadow-sm border border-yellow-100 relative overflow-hidden">
+                <div className="p-5 rounded-3xl shadow-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FFFBEB 100%)', border: '1px solid #FDE68A' }}>
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600">
-                                <FaClock />
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)' }}>
+                                <FaClock className="text-yellow-600" />
                             </div>
-                            <span className="text-gray-500 font-bold text-xs">Pending</span>
+                            <span className="font-bold text-xs" style={{ color: '#8B7355' }}>Pending</span>
                         </div>
-                        <p className="text-3xl font-black text-gray-800">{pendingOrders}</p>
+                        <p className="text-3xl font-black" style={{ color: '#CA8A04' }}>{pendingOrders}</p>
                         {pendingOrders > 0 && (
                             <div className="animate-pulse mt-1">
-                                <span className="text-[10px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">⚡ Action Needed</span>
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ color: '#A16207', background: '#FEF9C3' }}>⚡ Action Needed</span>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {/* Avg Order Value */}
-                <div className="bg-white p-5 rounded-3xl shadow-sm border border-purple-100 relative overflow-hidden">
+                <div className="p-5 rounded-3xl shadow-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FAF5FF 100%)', border: '1px solid #E9D5FF' }}>
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600">
-                                <FaShoppingCart size={14} />
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)' }}>
+                                <FaShoppingCart size={14} className="text-purple-600" />
                             </div>
-                            <span className="text-gray-500 font-bold text-xs">Avg Value</span>
+                            <span className="font-bold text-xs" style={{ color: '#8B7355' }}>Avg Value</span>
                         </div>
-                        <p className="text-3xl font-black text-gray-800">₹{avgOrderValue}</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">per order</p>
+                        <p className="text-3xl font-black" style={{ color: '#7C3AED' }}>₹{avgOrderValue}</p>
+                        <p className="text-[10px] mt-0.5" style={{ color: '#8B5CF6' }}>per order</p>
                     </div>
                 </div>
             </div>

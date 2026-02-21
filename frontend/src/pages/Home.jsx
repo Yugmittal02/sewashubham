@@ -94,6 +94,14 @@ const DeliveryStrip = () => (
                 </div>
             </div>
         </div>
+        {/* 100% Eggless Green Strip */}
+        <div className="mt-2 flex items-center justify-center gap-2 py-1.5 rounded-full"
+            style={{ background: 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)' }}>
+            <span className="w-4 h-4 rounded-sm border-2 border-white flex items-center justify-center">
+                <span className="w-2 h-2 rounded-full bg-white"></span>
+            </span>
+            <span className="text-[11px] font-extrabold text-white tracking-widest uppercase">100% Eggless</span>
+        </div>
     </div>
 );
 

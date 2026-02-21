@@ -52,7 +52,7 @@ const CATEGORY_CONFIG = {
         name: 'Patties',
         icon: '🥟',
         banner: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Veg Patties', 'Paneer Patties', 'Aloo Patties', 'Special'],
+        subcategories: ['All', '100% Eggless Patties', 'Paneer Patties', 'Aloo Patties', 'Special'],
         keywords: ['patties', 'pattis', 'patty', 'patti', 'samosa', 'snack'],
         theme: { primary: '#C2410C', light: '#EA580C', glow: 'rgba(194, 65, 12, 0.25)', bg: '#FFF7ED' }
     },
@@ -60,8 +60,8 @@ const CATEGORY_CONFIG = {
         name: 'Pizza',
         icon: '🍕',
         banner: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Veg Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
-        keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza'],
+        subcategories: ['All', '100% Eggless Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
+        keywords: ['pizza', 'pizzas', 'cheese pizza', 'eggless pizza'],
         theme: { primary: '#DC2626', light: '#EF4444', glow: 'rgba(220, 38, 38, 0.25)', bg: '#FEF2F2' }
     },
     anniversary: {
