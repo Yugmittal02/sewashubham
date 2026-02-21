@@ -62,12 +62,12 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
                 <p>Explore our delicious collection</p>
             </div>
             {/* Horizontal Scroll Layout (Mobile First) - Single line */}
-            <div className="grid grid-cols-3 gap-y-3 gap-x-2 px-4 pb-4 md:flex md:justify-center md:gap-4">
+            <div className="flex gap-3 px-4 pb-4 overflow-x-auto hide-scrollbar md:justify-center md:gap-4">
                 {categories.map((category, index) => (
                     <button
                         key={category.id}
                         onClick={() => handleCategoryClick(category.id)}
-                        className={`flex flex-col items-center gap-1.5 transition-transform active:scale-95 ${activeCategory === category.id ? 'scale-105' : ''}`}
+                        className={`flex-shrink-0 flex flex-col items-center gap-1.5 transition-transform active:scale-95 ${activeCategory === category.id ? 'scale-105' : ''}`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                     >
                         <div className={`w-[72px] h-[72px] md:w-24 md:h-24 rounded-full p-0.5 ${activeCategory === category.id ? 'bg-gradient-to-br from-[#C97B4B] to-[#E8956A]' : 'bg-transparent'}`}>
