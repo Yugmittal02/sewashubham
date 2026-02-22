@@ -559,8 +559,8 @@ textarea,
   background: linear-gradient(180deg, #F8F3EE 0%, #F2EBE0 100%);
   border-top: 1px solid rgba(232, 222, 200, 0.6);
   border-bottom: 1px solid rgba(232, 222, 200, 0.6);
-  padding: 32px 16px;
-  margin: 20px 0;
+  padding: 14px 12px 12px;
+  margin: 2px 0 4px 0;
   position: relative;
   overflow: hidden;
 }
@@ -579,15 +579,15 @@ textarea,
 
 .category-section-title {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   position: relative;
 }
 
 .category-section-title h2 {
   font-family: 'Great Vibes', cursive;
-  font-size: 36px;
+  font-size: 42px;
   color: var(--text-brown);
-  margin: 0 0 8px 0;
+  margin: 0 0 4px 0;
   display: inline-block;
 }
 
@@ -597,14 +597,14 @@ textarea,
   width: 80px;
   height: 3px;
   background: var(--gradient-gold);
-  margin: 8px auto 0;
+  margin: 4px auto 0;
   border-radius: 2px;
 }
 
 .category-section-title p {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-muted);
-  margin: 8px 0 0 0;
+  margin: 4px 0 0 0;
 }
 
 .category-grid {
@@ -633,7 +633,7 @@ textarea,
   }
 
   .category-section-wrapper {
-    padding: 24px 12px;
+    padding: 16px 12px 24px;
   }
 
   .category-section-title h2 {

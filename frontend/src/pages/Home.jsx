@@ -68,42 +68,115 @@ const FeaturedBanner = ({ product, onAddSuccess }) => {
     );
 };
 
-// Winni/FNP Style Delivery Info Strip
+// Delivery Info Strip – 3 pill cards
 const DeliveryStrip = () => (
-    <div className="mx-4 mt-2 mb-1">
-        <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">⚡</span>
-                <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">Express Delivery</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Within 2 hours</p>
+    <div style={{ padding: '0 16px', marginTop: '4px', marginBottom: '0' }}>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+            {[
+                { icon: '⚡', title: 'Express Delivery', sub: 'Within 2 hours' },
+                { icon: '🎁', title: 'Free Delivery', sub: 'Above ₹299' },
+                { icon: '💯', title: '100% Fresh', sub: 'Baked Daily' }
+            ].map((item, i) => (
+                <div key={i} style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 10px',
+                    borderRadius: '30px',
+                    background: '#FFFFFF',
+                    border: '1px solid #F0E8E0',
+                    boxShadow: '0 2px 8px rgba(45,24,16,0.04)'
+                }}>
+                    <span style={{ fontSize: '16px', flexShrink: 0 }}>{item.icon}</span>
+                    <div>
+                        <p style={{ fontSize: '10px', fontWeight: 700, color: '#2D1810', margin: 0, lineHeight: 1.2 }}>{item.title}</p>
+                        <p style={{ fontSize: '9px', color: '#A89585', margin: 0, marginTop: '1px' }}>{item.sub}</p>
+                    </div>
                 </div>
-            </div>
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">🎁</span>
-                <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">Free Delivery</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Above ₹299</p>
-                </div>
-            </div>
-            <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm">
-                <span className="text-base">💯</span>
-                <div>
-                    <p className="text-[11px] font-bold text-gray-800 leading-none">100% Fresh</p>
-                    <p className="text-[9px] text-gray-400 mt-0.5">Baked Daily</p>
-                </div>
-            </div>
+            ))}
         </div>
         {/* Pure Veg Green Strip */}
-        <div className="mt-14 flex items-center justify-center gap-2 py-1.5"
-            style={{ background: 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)' }}>
-            <span className="w-4 h-4 rounded-sm border-2 border-white flex items-center justify-center">
-                <span className="w-2 h-2 rounded-full bg-white"></span>
+        <div style={{
+            marginTop: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '7px 0',
+            background: 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)',
+            borderRadius: '6px'
+        }}>
+            <span style={{
+                width: '16px', height: '16px',
+                borderRadius: '3px',
+                border: '2px solid #FFFFFF',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FFFFFF' }}></span>
             </span>
-            <span className="text-[11px] font-extrabold text-white tracking-widest uppercase">Pure Veg</span>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '0.15em', textTransform: 'uppercase' }}>100% Eggless</span>
         </div>
     </div>
 );
+
+// Quick Picks Section – Horizontal Scrollable Product Thumbnails
+const QuickPicksSection = ({ products }) => {
+    if (!products || products.length === 0) return null;
+    const picks = products.slice(0, 4);
+    return (
+        <div style={{
+            margin: '12px 16px',
+            padding: '16px',
+            background: '#FFFFFF',
+            borderRadius: '20px',
+            boxShadow: '0 2px 12px rgba(45,24,16,0.05)'
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px' }}>
+                <span style={{ fontSize: '18px' }}>✨</span>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#2D1810', margin: 0 }}>Quick Picks</h3>
+            </div>
+            <div style={{
+                display: 'flex',
+                gap: '12px',
+                overflowX: 'auto',
+                paddingBottom: '4px'
+            }} className="hide-scrollbar">
+                {picks.map((product) => (
+                    <div key={product._id} style={{
+                        flexShrink: 0,
+                        width: '100px',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: '16px',
+                            overflow: 'hidden',
+                            boxShadow: '0 3px 12px rgba(45,24,16,0.08)'
+                        }}>
+                            <img
+                                src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop'}
+                                alt={product.name}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                loading="lazy"
+                            />
+                        </div>
+                        <p style={{
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            color: '#5C3A2A',
+                            margin: '6px 0 0',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{product.name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const Home = () => {
     const [products, setProducts] = useState([]);
@@ -193,18 +266,30 @@ const Home = () => {
                 onSearchChange={setSearchQuery}
             />
 
-            {/* Sticky Pill Search Bar */}
-            <div className="sticky top-[60px] z-40 px-4 py-3 bg-[#FDF8F4]/95 backdrop-blur-sm transition-all duration-300">
-                <div className="relative max-w-lg mx-auto">
+            {/* Search Bar */}
+            <div style={{ padding: '8px 16px 4px', background: '#FDF8F4' }}>
+                <div style={{ position: 'relative', maxWidth: '500px', margin: '0 auto' }}>
                     <input
                         type="text"
-                        placeholder="Search for cakes, pastries..."
+                        placeholder="Search for cakes, pastries…"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 rounded-full bg-white border-none shadow-sm focus:ring-2 focus:ring-[#C97B4B] transition-shadow text-sm"
-                        style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+                        style={{
+                            width: '100%',
+                            paddingLeft: '44px',
+                            paddingRight: '16px',
+                            paddingTop: '12px',
+                            paddingBottom: '12px',
+                            borderRadius: '30px',
+                            border: 'none',
+                            background: '#F0EDEA',
+                            fontSize: '13px',
+                            color: '#5C3A2A',
+                            outline: 'none',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.04)'
+                        }}
                     />
-                    <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FaSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#A89585', fontSize: '14px' }} />
                 </div>
             </div>
 
@@ -219,6 +304,11 @@ const Home = () => {
 
             {/* Promotional Ads Banner */}
             <AdsBanner />
+
+            {/* Quick Picks */}
+            {!loading && filteredProducts.length > 0 && (
+                <QuickPicksSection products={filteredProducts} />
+            )}
 
             {/* Bestsellers Section - Premium Design */}
             {!loading && filteredProducts.length > 0 && (

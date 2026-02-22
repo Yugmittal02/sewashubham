@@ -90,7 +90,7 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
     };
 
     return (
-        <div className="mx-4 my-5 bg-white/60 backdrop-blur-md rounded-2xl border border-[#E8DEC8]/60 shadow-sm overflow-hidden">
+        <div className="mx-4 mt-2 mb-4 bg-white/60 backdrop-blur-md rounded-2xl border border-[#E8DEC8]/60 shadow-sm overflow-hidden">
             {/* Section Title */}
             <h3 className="text-center text-[#C97B4B] font-bold text-sm py-3 border-b border-[#E8DEC8]/40">
                 ✨ Quick Picks
