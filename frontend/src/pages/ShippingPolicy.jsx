@@ -92,7 +92,7 @@ const ShippingPolicy = () => {
                         <div className="rounded-xl p-4 mt-2" style={{ background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8CC 100%)', border: '2px solid #C9A962' }}>
                             <p className="text-sm" style={{ color: '#8B7355' }}>
                                 <strong className="text-[#6B4423]">📍 Store Location:</strong><br />
-                                Bakery Delight, Main Road<br />
+                                BBC Cakes, Main Road<br />
                                 <strong className="text-[#6B4423]">Timings:</strong> 10:00 AM - 10:00 PM<br />
                                 <strong className="text-[#6B4423]">Contact:</strong> <a href="tel:+919694034523" className="underline" style={{ color: '#6B4423' }}>+91 96940 34523</a>
                             </p>

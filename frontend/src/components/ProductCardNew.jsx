@@ -12,7 +12,7 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
         name: product?.name || 'Product',
         price: Number(product?.price) || 0,
         originalPrice: Number(product?.originalPrice || product?.mrp) || Number(product?.price) || 0,
-        image: product?.image || '',
+        image: product?.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop&q=80',
         rating: product?.rating || '4.5',
         soldCount: product?.soldCount || Math.floor(Math.random() * 200 + 50),
         description: product?.description || '',
@@ -140,8 +140,8 @@ const ProductCardNew = memo(({ product, onAddSuccess, index = 0, featured = fals
                         onClick={handleAdd}
                         disabled={!safeProduct.isAvailable || added}
                         className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-all active:scale-95 ${added
-                                ? 'bg-green-600 text-white'
-                                : 'border-2 border-[#C97B4B] text-[#C97B4B] bg-white hover:bg-[#C97B4B] hover:text-white'
+                            ? 'bg-green-600 text-white'
+                            : 'border-2 border-[#C97B4B] text-[#C97B4B] bg-white hover:bg-[#C97B4B] hover:text-white'
                             }`}
                     >
                         {added ? (

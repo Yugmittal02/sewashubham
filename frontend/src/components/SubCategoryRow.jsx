@@ -7,24 +7,24 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
     const subCategories = [
         // Row 1
         {
-            id: 'first-birthday-cake',
-            name: 'First Birthday',
-            icon: '🎉',
-            image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=200&h=200&fit=crop&q=80',
+            id: 'birthday-cake',
+            name: 'Birthday',
+            icon: '🎂',
+            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=200&h=200&fit=crop&q=80',
+            color: '#C97B4B'
+        },
+        {
+            id: 'wedding-cake',
+            name: 'Wedding',
+            icon: '💒',
+            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=200&h=200&fit=crop&q=80',
             color: '#C97B4B'
         },
         {
             id: 'anniversary-cake',
             name: 'Anniversary',
             icon: '💍',
-            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=200&h=200&fit=crop&q=80',
-            color: '#C97B4B'
-        },
-        {
-            id: 'birthday-cake',
-            name: 'Birthday',
-            icon: '🎂',
-            image: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=200&h=200&fit=crop&q=80',
+            image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=200&h=200&fit=crop&q=80',
             color: '#C97B4B'
         },
         {
@@ -36,45 +36,45 @@ const SubCategoryRow = ({ onSubCategorySelect }) => {
         },
         // Row 2
         {
-            id: 'patties',
-            name: 'Patties',
-            icon: '🥟',
-            image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=200&h=200&fit=crop&q=80',
+            id: 'eggless-cake',
+            name: 'Eggless',
+            icon: '🌿',
+            image: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=200&h=200&fit=crop&q=80',
             color: '#C97B4B'
         },
         {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '☕',
-            image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop&q=80',
+            id: 'theme-cake',
+            name: 'Theme Cake',
+            icon: '🎪',
+            image: 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=200&h=200&fit=crop&q=80',
             color: '#E8956A'
         },
         {
-            id: 'flowers',
-            name: 'Flowers',
-            icon: '💐',
-            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=200&h=200&fit=crop&q=80',
+            id: 'cupcakes',
+            name: 'Cupcakes',
+            icon: '🧁',
+            image: 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=200&h=200&fit=crop&q=80',
             color: '#C97B4B'
         },
         {
-            id: 'pizza',
-            name: 'Pizza',
-            icon: '🍕',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop&q=80',
+            id: 'pastries',
+            name: 'Pastries',
+            icon: '🥐',
+            image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=200&h=200&fit=crop&q=80',
             color: '#E8956A'
         }
     ];
 
     // Map subcategory IDs to their parent category route and subcategory tab name
     const categoryRouteMap = {
-        'first-birthday-cake': { route: 'cake', sub: 'First Birthday' },
-        'anniversary-cake': { route: 'anniversary', sub: 'All' },
         'birthday-cake': { route: 'cake', sub: 'Birthday' },
+        'wedding-cake': { route: 'cake', sub: 'Wedding' },
+        'anniversary-cake': { route: 'cake', sub: 'Anniversary' },
         'photo-cake': { route: 'cake', sub: 'Photo Cake' },
-        'patties': { route: 'patties', sub: 'All' },
-        'beverages': { route: 'beverages', sub: 'All' },
-        'flowers': { route: 'flowers', sub: 'All' },
-        'pizza': { route: 'pizza', sub: 'All' },
+        'eggless-cake': { route: 'cake', sub: 'Eggless' },
+        'theme-cake': { route: 'cake', sub: 'Theme Cake' },
+        'cupcakes': { route: 'cake', sub: 'Cupcakes' },
+        'pastries': { route: 'cake', sub: 'Pastries' },
     };
 
     const handleClick = (id) => {

@@ -8,52 +8,52 @@ const Categories = () => {
 
     const categories = [
         {
-            id: 'cake',
-            name: 'Cake',
-            icon: '🎂',
-            image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=400&fit=crop&q=80',
-            description: 'Delicious cakes for every occasion',
+            id: 'chocolate-cake',
+            name: 'Chocolate Cakes',
+            icon: '🍫',
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop&q=80',
+            description: 'Rich chocolate cakes & truffle delights',
+            color: 'bg-amber-50'
+        },
+        {
+            id: 'fruit-cake',
+            name: 'Fruit Cakes',
+            icon: '🍓',
+            image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=400&fit=crop&q=80',
+            description: 'Fresh fruit topped cream cakes',
             color: 'bg-pink-50'
         },
         {
-            id: 'fastfood',
-            name: 'Fast Food',
-            icon: '🍔',
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&q=80',
-            description: 'Tasty burgers, fries & more',
-            color: 'bg-orange-50'
+            id: 'designer-cake',
+            name: 'Designer Cakes',
+            icon: '🎨',
+            image: 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=400&h=400&fit=crop&q=80',
+            description: 'Custom designed celebration cakes',
+            color: 'bg-purple-50'
         },
         {
-            id: 'bakery',
-            name: 'Bakery',
-            icon: '🥐',
-            image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&h=400&fit=crop&q=80',
-            description: 'Freshly baked breads & cookies',
+            id: 'premium-cake',
+            name: 'Premium Cakes',
+            icon: '👑',
+            image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=400&fit=crop&q=80',
+            description: 'Tiramisu, Red Velvet & luxury cakes',
             color: 'bg-yellow-50'
         },
         {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '☕',
-            image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop&q=80',
-            description: 'Refreshing drinks & shakes',
-            color: 'bg-emerald-50'
+            id: 'cheesecake',
+            name: 'Cheesecakes',
+            icon: '🧀',
+            image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop&q=80',
+            description: 'Creamy baked & unbaked cheesecakes',
+            color: 'bg-orange-50'
         },
         {
-            id: 'flowers',
-            name: 'Flowers',
-            icon: '💐',
-            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=400&h=400&fit=crop&q=80',
-            description: 'Beautiful bouquets',
+            id: 'kids-cake',
+            name: 'Kids Special',
+            icon: '🎈',
+            image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=400&fit=crop&q=80',
+            description: 'Fun cartoon & theme cakes for kids',
             color: 'bg-rose-50'
-        },
-        {
-            id: 'anniversary',
-            name: 'Anniversary',
-            icon: '💑',
-            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=400&h=400&fit=crop&q=80',
-            description: 'Special gifts for couples',
-            color: 'bg-purple-50'
         }
     ];
 

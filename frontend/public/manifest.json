@@ -1,7 +1,7 @@
 {
-  "name": "SewaShubham Bakery",
-  "short_name": "SewaShubham",
-  "description": "Order delicious food from SewaShubham Bakery",
+  "name": "BBC Cakes",
+  "short_name": "BBC Cakes",
+  "description": "Order delicious cakes and pastries from BBC Cakes",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff7ed",
@@ -21,18 +21,31 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["food", "shopping"],
+  "categories": [
+    "food",
+    "shopping"
+  ],
   "screenshots": [],
   "shortcuts": [
     {
       "name": "Browse Menu",
       "url": "/menu",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "View Cart",
       "url": "/cart",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

@@ -84,7 +84,7 @@ const PrivacyPolicy = () => {
                         <p style={{ color: '#8B7355' }}>For privacy-related queries:</p>
                         <p className="mt-2">
                             📞 Phone: <a href="tel:+919694034523" className="font-bold" style={{ color: '#6B4423' }}>+91 96940 34523</a><br />
-                            📧 Email: <a href="mailto:contact@bakerydelight.com" className="font-bold" style={{ color: '#6B4423' }}>contact@bakerydelight.com</a>
+                            📧 Email: <a href="mailto:contact@bbccakes.com" className="font-bold" style={{ color: '#6B4423' }}>contact@bbccakes.com</a>
                         </p>
                     </div>
                 </div>

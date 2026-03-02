@@ -7,40 +7,40 @@ const MainCategoryCards = ({ onCategorySelect, activeCategory }) => {
 
     const categories = [
         {
-            id: 'cake',
-            name: 'Cake',
-            icon: '🎂',
+            id: 'chocolate-cake',
+            name: 'Chocolate',
+            icon: '🍫',
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop&q=80',
+        },
+        {
+            id: 'fruit-cake',
+            name: 'Fruit Cakes',
+            icon: '🍓',
+            image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=400&fit=crop&q=80',
+        },
+        {
+            id: 'designer-cake',
+            name: 'Designer',
+            icon: '🎨',
+            image: 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=400&h=400&fit=crop&q=80',
+        },
+        {
+            id: 'premium-cake',
+            name: 'Premium',
+            icon: '👑',
+            image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=400&fit=crop&q=80',
+        },
+        {
+            id: 'cheesecake',
+            name: 'Cheesecake',
+            icon: '🧀',
+            image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop&q=80',
+        },
+        {
+            id: 'kids-cake',
+            name: 'Kids Special',
+            icon: '🎈',
             image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=400&fit=crop&q=80',
-        },
-        {
-            id: 'fastfood',
-            name: 'Fastfood',
-            icon: '🍔',
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&q=80',
-        },
-        {
-            id: 'bakery',
-            name: 'Bakery',
-            icon: '🥐',
-            image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&h=400&fit=crop&q=80',
-        },
-        {
-            id: 'beverages',
-            name: 'Beverages',
-            icon: '☕',
-            image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop&q=80',
-        },
-        {
-            id: 'flowers',
-            name: 'Flowers',
-            icon: '💐',
-            image: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=400&h=400&fit=crop&q=80',
-        },
-        {
-            id: 'anniversary',
-            name: 'Anniversary',
-            icon: '💑',
-            image: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=400&h=400&fit=crop&q=80',
         },
     ];
 

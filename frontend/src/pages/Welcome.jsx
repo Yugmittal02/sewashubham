@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaArrowRight, FaUtensils, FaStar, FaTruck, FaClock } from 'react-icons/fa';
+import { FaArrowRight, FaStar, FaTruck, FaClock } from 'react-icons/fa';
 
 const Welcome = () => {
     const navigate = useNavigate();
@@ -12,11 +12,9 @@ const Welcome = () => {
         if (customer) {
             navigate('/menu');
         }
-        // Trigger entrance animations
         setTimeout(() => setLoaded(true), 100);
     }, [customer, navigate]);
 
-    // Time-based greeting
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return '🌅 Good Morning!';
@@ -26,43 +24,43 @@ const Welcome = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-hidden">
-            {/* Animated Background */}
+            {/* Premium Dark Background */}
             <div className="absolute inset-0 z-0"
                 style={{
-                    background: 'linear-gradient(160deg, #FFF8F0 0%, #FFE8CC 25%, #FFDDB5 50%, #FFE8CC 75%, #FFF5EB 100%)',
+                    background: 'linear-gradient(160deg, #0F0A06 0%, #1A120B 25%, #231711 50%, #1A120B 75%, #0F0A06 100%)',
                 }}
             ></div>
 
-            {/* Animated gradient overlay */}
-            <div className="absolute inset-0 z-0 animate-gradient-shift"
+            {/* Subtle warm glow overlays */}
+            <div className="absolute inset-0 z-0"
                 style={{
-                    background: 'radial-gradient(ellipse at 30% 20%, rgba(249, 115, 22, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(251, 146, 60, 0.06) 0%, transparent 50%)',
+                    background: 'radial-gradient(ellipse at 30% 20%, rgba(201, 123, 75, 0.12) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(180, 83, 9, 0.08) 0%, transparent 50%)',
                 }}
             ></div>
 
-            {/* Subtle dot pattern */}
-            <div className="absolute inset-0 z-0 opacity-[0.04]"
+            {/* Gold sparkle pattern */}
+            <div className="absolute inset-0 z-0 opacity-[0.03]"
                 style={{
-                    backgroundImage: `radial-gradient(circle, #F97316 1px, transparent 1px)`,
-                    backgroundSize: '32px 32px',
+                    backgroundImage: `radial-gradient(circle, #C9A962 1px, transparent 1px)`,
+                    backgroundSize: '40px 40px',
                 }}
             ></div>
 
-            {/* Decorative Warm Blobs */}
-            <div className="absolute top-[-15%] left-[-15%] w-[50%] h-[50%] rounded-full blur-[120px] opacity-30 animate-blob"
-                style={{ background: '#FFD6A8' }}></div>
-            <div className="absolute bottom-[-15%] right-[-15%] w-[50%] h-[50%] rounded-full blur-[120px] opacity-25 animate-blob-reverse"
-                style={{ background: '#FFCFA0' }}></div>
-            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-15"
-                style={{ background: '#FFC78A' }}></div>
+            {/* Decorative Blobs - Deep gold tones */}
+            <div className="absolute top-[-15%] left-[-15%] w-[50%] h-[50%] rounded-full blur-[120px] opacity-20 animate-blob"
+                style={{ background: '#8B6914' }}></div>
+            <div className="absolute bottom-[-15%] right-[-15%] w-[50%] h-[50%] rounded-full blur-[120px] opacity-15 animate-blob-reverse"
+                style={{ background: '#6B4226' }}></div>
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] rounded-full blur-[100px] opacity-10"
+                style={{ background: '#C9A962' }}></div>
 
-            {/* Floating Food Items */}
+            {/* Floating Cake Images */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-                {/* Top Left - Cake */}
+                {/* Top Left - Chocolate Cake */}
                 <div className={`absolute top-[4%] left-[3%] transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
                     <div className="animate-float-slow">
-                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden ring-4 ring-white/40"
-                            style={{ boxShadow: '0 12px 40px rgba(249, 115, 22, 0.2)' }}>
+                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden ring-2 ring-amber-700/30"
+                            style={{ boxShadow: '0 12px 40px rgba(201, 169, 98, 0.2)' }}>
                             <img
                                 src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop&q=80"
                                 alt="Chocolate Cake"
@@ -72,66 +70,66 @@ const Welcome = () => {
                     </div>
                 </div>
 
-                {/* Top Right - Iced Drink */}
+                {/* Top Right - Red Velvet */}
                 <div className={`absolute top-[8%] right-[3%] transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
                     <div className="animate-float-medium">
-                        <div className="w-18 h-18 md:w-24 md:h-24 rounded-full overflow-hidden ring-4 ring-white/40"
-                            style={{ boxShadow: '0 12px 40px rgba(249, 115, 22, 0.2)', width: '72px', height: '72px' }}>
+                        <div className="w-18 h-18 md:w-24 md:h-24 rounded-full overflow-hidden ring-2 ring-amber-700/30"
+                            style={{ boxShadow: '0 12px 40px rgba(201, 169, 98, 0.2)', width: '72px', height: '72px' }}>
                             <img
-                                src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300&h=300&fit=crop&q=80"
-                                alt="Iced Drink"
+                                src="https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=300&h=300&fit=crop&q=80"
+                                alt="Red Velvet Cake"
                                 className="w-full h-full object-cover"
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Left - Pastry */}
+                {/* Bottom Left - Strawberry Cake */}
                 <div className={`absolute bottom-[20%] left-[-2%] transition-all duration-1000 delay-400 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
                     <div className="animate-float-fast">
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden ring-4 ring-white/40"
-                            style={{ boxShadow: '0 12px 40px rgba(249, 115, 22, 0.18)' }}>
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden ring-2 ring-amber-700/30"
+                            style={{ boxShadow: '0 12px 40px rgba(201, 169, 98, 0.18)' }}>
                             <img
-                                src="https://images.unsplash.com/photo-1626803775151-61d756612f97?w=300&h=300&fit=crop&q=80"
-                                alt="Pastry"
+                                src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=300&h=300&fit=crop&q=80"
+                                alt="Strawberry Cake"
                                 className="w-full h-full object-cover"
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Right - Drink */}
+                {/* Bottom Right - Blueberry Cheesecake */}
                 <div className={`absolute bottom-[12%] right-[0%] transition-all duration-1000 delay-300 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                     <div className="animate-float-slow">
-                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden ring-4 ring-white/40"
-                            style={{ boxShadow: '0 12px 40px rgba(249, 115, 22, 0.18)' }}>
+                        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full overflow-hidden ring-2 ring-amber-700/30"
+                            style={{ boxShadow: '0 12px 40px rgba(201, 169, 98, 0.18)' }}>
                             <img
-                                src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300&h=300&fit=crop&q=80"
-                                alt="Iced Drink"
+                                src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=300&h=300&fit=crop&q=80"
+                                alt="Blueberry Cheesecake"
                                 className="w-full h-full object-cover"
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Mid Right - Milkshake */}
+                {/* Mid Right - Cupcake */}
                 <div className={`absolute top-[42%] right-[1%] transition-all duration-1000 delay-500 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
                     <div className="animate-float-medium">
-                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden ring-3 ring-white/30"
-                            style={{ boxShadow: '0 8px 30px rgba(249, 115, 22, 0.15)' }}>
+                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden ring-2 ring-amber-700/20"
+                            style={{ boxShadow: '0 8px 30px rgba(201, 169, 98, 0.15)' }}>
                             <img
-                                src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=300&fit=crop&q=80"
-                                alt="Milkshake"
+                                src="https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=300&h=300&fit=crop&q=80"
+                                alt="Cupcakes"
                                 className="w-full h-full object-cover"
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Floating emojis */}
-                <div className="absolute top-[30%] left-[8%] text-2xl animate-float-emoji-1 opacity-40">🍰</div>
-                <div className="absolute top-[60%] right-[10%] text-xl animate-float-emoji-2 opacity-30">🧁</div>
-                <div className="absolute bottom-[35%] left-[15%] text-lg animate-float-emoji-3 opacity-25">🍩</div>
+                {/* Floating emojis - Gold tinted */}
+                <div className="absolute top-[30%] left-[8%] text-2xl animate-float-emoji-1 opacity-30">🍰</div>
+                <div className="absolute top-[60%] right-[10%] text-xl animate-float-emoji-2 opacity-20">🧁</div>
+                <div className="absolute bottom-[35%] left-[15%] text-lg animate-float-emoji-3 opacity-15">✨</div>
             </div>
 
             {/* Main Content */}
@@ -140,56 +138,70 @@ const Welcome = () => {
                 {/* Time-based greeting */}
                 <div className={`transition-all duration-700 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
                     <p className="text-sm font-medium mb-4 px-4 py-1.5 rounded-full inline-block"
-                        style={{ background: 'rgba(249, 115, 22, 0.1)', color: '#EA580C' }}>
+                        style={{ background: 'rgba(201, 169, 98, 0.15)', color: '#C9A962', border: '1px solid rgba(201, 169, 98, 0.2)' }}>
                         {getGreeting()}
                     </p>
                 </div>
 
-                {/* Logo Icon with Glow */}
+                {/* Logo Icon with Gold Glow */}
                 <div className={`mb-5 relative transition-all duration-800 delay-100 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
                     <div className="absolute inset-0 rounded-full animate-pulse-glow"
-                        style={{ background: 'rgba(249, 115, 22, 0.15)', filter: 'blur(20px)', transform: 'scale(1.3)' }}></div>
-                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center relative"
+                        style={{ background: 'rgba(201, 169, 98, 0.2)', filter: 'blur(25px)', transform: 'scale(1.3)' }}></div>
+                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center relative overflow-hidden"
                         style={{
-                            background: 'linear-gradient(145deg, #FFFFFF 0%, #FFF8F2 100%)',
-                            boxShadow: '0 10px 50px rgba(249, 115, 22, 0.2), 0 4px 15px rgba(0,0,0,0.06), inset 0 -2px 8px rgba(249, 115, 22, 0.05)',
+                            background: 'linear-gradient(145deg, #2A1F14 0%, #1A120B 100%)',
+                            boxShadow: '0 10px 50px rgba(201, 169, 98, 0.3), 0 0 0 2px rgba(201, 169, 98, 0.15)',
                         }}>
-                        <FaUtensils size={38} color="#F97316" />
+                        <img
+                            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop&q=80"
+                            alt="BBC Cakes"
+                            className="w-full h-full object-cover"
+                            style={{ filter: 'brightness(0.8) contrast(1.1)' }}
+                        />
+                        <div className="absolute inset-0" style={{ background: 'radial-gradient(circle, transparent 40%, rgba(15, 10, 6, 0.4) 100%)' }}></div>
                     </div>
                 </div>
 
-                {/* Brand Name */}
+                {/* Brand Name - Premium Gold */}
                 <div className={`transition-all duration-700 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                    <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-1">
-                        <span style={{ color: '#1a1a2e' }}>Sewa Shubham</span>
+                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-1"
+                        style={{
+                            background: 'linear-gradient(135deg, #C9A962 0%, #E8D5A3 40%, #C9A962 60%, #A8893A 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            filter: 'drop-shadow(0 2px 8px rgba(201, 169, 98, 0.3))',
+                        }}>
+                        BBC Cakes
                     </h1>
-                    <p className="text-lg md:text-xl font-bold mb-5">
-                        <span style={{ color: '#F97316' }}>Bakery & Cafe</span>
+                    <p className="text-sm md:text-base font-bold tracking-[0.3em] uppercase mb-5"
+                        style={{ color: 'rgba(201, 169, 98, 0.6)' }}>
+                        PREMIUM BAKERY
                     </p>
                 </div>
 
                 {/* Tagline */}
                 <div className={`transition-all duration-700 delay-300 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                     <p className="text-base md:text-lg font-medium max-w-md mb-8 leading-relaxed"
-                        style={{ color: '#78716C' }}>
-                        ✨ Fresh Bakes • Delicious Moments • Happy Memories ✨
+                        style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                        ✨ Handcrafted Cakes • Premium Ingredients • Sweet Memories ✨
                     </p>
                 </div>
 
-                {/* Main CTA Button with shine effect */}
+                {/* Main CTA Button - Gold gradient */}
                 <div className={`transition-all duration-700 delay-400 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                     <button
                         onClick={() => navigate('/menu')}
                         className="group text-white font-bold text-lg py-4 px-10 rounded-2xl flex items-center gap-3 transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-sm justify-center relative overflow-hidden"
                         style={{
-                            background: 'linear-gradient(135deg, #F97316 0%, #FB923C 50%, #F97316 100%)',
-                            boxShadow: '0 10px 35px rgba(249, 115, 22, 0.4), 0 4px 12px rgba(249, 115, 22, 0.2)',
+                            background: 'linear-gradient(135deg, #8B6914 0%, #C9A962 50%, #8B6914 100%)',
+                            boxShadow: '0 10px 35px rgba(201, 169, 98, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3)',
+                            border: '1px solid rgba(201, 169, 98, 0.3)',
                         }}
                     >
                         {/* Shine effect */}
                         <div className="absolute inset-0 animate-shine"
                             style={{
-                                background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 55%, transparent 60%)',
+                                background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.2) 55%, transparent 60%)',
                                 backgroundSize: '300% 100%',
                             }}></div>
                         <span className="relative z-10 flex items-center gap-3">
@@ -199,29 +211,29 @@ const Welcome = () => {
                     </button>
                 </div>
 
-                {/* Trust Badges */}
+                {/* Trust Badges - Gold tones */}
                 <div className={`flex items-center gap-4 mt-8 transition-all duration-700 delay-500 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                     <div className="flex items-center gap-1.5">
-                        <FaStar size={12} color="#FBBF24" />
-                        <span className="text-xs font-semibold" style={{ color: '#92400E' }}>4.8 Rating</span>
+                        <FaStar size={12} color="#C9A962" />
+                        <span className="text-xs font-semibold" style={{ color: 'rgba(201, 169, 98, 0.7)' }}>4.8 Rating</span>
                     </div>
-                    <div className="w-1 h-1 rounded-full bg-orange-300"></div>
+                    <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(201, 169, 98, 0.3)' }}></div>
                     <div className="flex items-center gap-1.5">
-                        <FaTruck size={12} color="#F97316" />
-                        <span className="text-xs font-semibold" style={{ color: '#92400E' }}>Free Delivery</span>
+                        <FaTruck size={12} color="#C9A962" />
+                        <span className="text-xs font-semibold" style={{ color: 'rgba(201, 169, 98, 0.7)' }}>Free Delivery</span>
                     </div>
-                    <div className="w-1 h-1 rounded-full bg-orange-300"></div>
+                    <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(201, 169, 98, 0.3)' }}></div>
                     <div className="flex items-center gap-1.5">
-                        <FaClock size={12} color="#F97316" />
-                        <span className="text-xs font-semibold" style={{ color: '#92400E' }}>30 Min</span>
+                        <FaClock size={12} color="#C9A962" />
+                        <span className="text-xs font-semibold" style={{ color: 'rgba(201, 169, 98, 0.7)' }}>30 Min</span>
                     </div>
                 </div>
             </div>
 
             {/* Footer */}
             <div className="relative z-20 pb-8 text-center">
-                <p className="text-sm font-medium" style={{ color: '#D97706' }}>
-                    Made with <span className="text-red-500 animate-heartbeat inline-block">❤️</span> for our lovely customers
+                <p className="text-sm font-medium" style={{ color: 'rgba(201, 169, 98, 0.4)' }}>
+                    Made with <span className="text-red-400 animate-heartbeat inline-block">❤️</span> for our lovely customers
                 </p>
             </div>
 

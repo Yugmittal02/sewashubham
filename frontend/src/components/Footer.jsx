@@ -11,7 +11,7 @@ const Footer = memo(() => {
             <div className="footer-logo">
                 <div className="flex items-center justify-center gap-3 mb-2">
                     <span className="text-3xl animate-float" style={{ animationDuration: '3s' }}>🍰</span>
-                    <h3>Sewa Shubham Bakery</h3>
+                    <h3>BBC Cakes</h3>
                 </div>
                 <p>Crafting sweet memories since 2002</p>
             </div>
@@ -62,7 +62,7 @@ const Footer = memo(() => {
                 <p className="flex items-center justify-center gap-2 text-white">
                     Made with <FaHeart size={12} style={{ color: '#FFFFFF' }} className="animate-pulse" /> in Bharatpur
                 </p>
-                <p className="mt-2 text-white opacity-80">© {currentYear} Sewa Shubham Bakery. All rights reserved.</p>
+                <p className="mt-2 text-white opacity-80">© {currentYear} BBC Cakes. All rights reserved.</p>
             </div>
         </footer>
     );

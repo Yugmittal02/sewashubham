@@ -70,7 +70,7 @@ const Login = () => {
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-8">
                             <span className="text-4xl">🧁</span>
-                            <h1 className="text-2xl font-bold tracking-wide">Sewa Shubham</h1>
+                            <h1 className="text-2xl font-bold tracking-wide">BBC Cakes</h1>
                         </div>
 
                         <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">

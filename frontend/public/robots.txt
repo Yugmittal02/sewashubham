@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://sewashubhambakery.com/sitemap.xml
+Sitemap: https://bbccakes.com/sitemap.xml

@@ -8,69 +8,62 @@ import Footer from '../components/Footer';
 
 // Category configurations with unique color themes and authentic images
 const CATEGORY_CONFIG = {
-    fastfood: {
-        name: 'Fast Food',
-        icon: '🍔',
-        banner: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Patties', 'Burger', 'Pizza', 'Sandwich', 'Maggi', 'Momos'],
-        keywords: ['fastfood', 'fast food', 'burger', 'pizza', 'patties', 'sandwich', 'momos', 'maggi', 'snacks', 'pattis'],
-        theme: { primary: '#E85D04', light: '#F48C06', glow: 'rgba(232, 93, 4, 0.25)', bg: '#FFF4EC' }
+    'chocolate-cake': {
+        name: 'Chocolate Cakes',
+        icon: '🍫',
+        banner: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Truffle', 'Fudge', 'Dark Chocolate', 'Brownie', 'Lava'],
+        keywords: ['chocolate', 'truffle', 'fudge', 'brownie', 'lava', 'dark chocolate', 'cocoa'],
+        theme: { primary: '#5C3A21', light: '#8B5E3C', glow: 'rgba(92, 58, 33, 0.25)', bg: '#FDF8F4' }
     },
+    'fruit-cake': {
+        name: 'Fruit Cakes',
+        icon: '🍓',
+        banner: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Strawberry', 'Mango', 'Pineapple', 'Blueberry', 'Mixed Fruit'],
+        keywords: ['fruit', 'strawberry', 'mango', 'pineapple', 'blueberry', 'berry', 'fresh fruit'],
+        theme: { primary: '#BE185D', light: '#EC4899', glow: 'rgba(190, 24, 93, 0.25)', bg: '#FFF1F7' }
+    },
+    'designer-cake': {
+        name: 'Designer Cakes',
+        icon: '🎨',
+        banner: 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Rainbow', 'Theme', 'Fondant', 'Tier Cake', 'Custom'],
+        keywords: ['designer', 'rainbow', 'theme', 'fondant', 'tier', 'custom', 'sprinkle', 'funfetti'],
+        theme: { primary: '#7C3AED', light: '#A78BFA', glow: 'rgba(124, 58, 237, 0.25)', bg: '#F5F3FF' }
+    },
+    'premium-cake': {
+        name: 'Premium Cakes',
+        icon: '👑',
+        banner: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Red Velvet', 'Tiramisu', 'Opera', 'Mousse', 'Black Forest'],
+        keywords: ['premium', 'red velvet', 'tiramisu', 'opera', 'mousse', 'black forest', 'white forest', 'velvet'],
+        theme: { primary: '#B45309', light: '#D97706', glow: 'rgba(180, 83, 9, 0.25)', bg: '#FFFBEB' }
+    },
+    cheesecake: {
+        name: 'Cheesecakes',
+        icon: '🧀',
+        banner: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Baked', 'Unbaked', 'Blueberry', 'Mango', 'Oreo'],
+        keywords: ['cheesecake', 'cheese cake', 'baked cheesecake', 'cream cheese'],
+        theme: { primary: '#EA580C', light: '#F97316', glow: 'rgba(234, 88, 12, 0.25)', bg: '#FFF7ED' }
+    },
+    'kids-cake': {
+        name: 'Kids Special',
+        icon: '🎈',
+        banner: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&h=400&fit=crop&q=80',
+        subcategories: ['All', 'Cartoon', 'Unicorn', 'Superhero', 'Princess', 'Animal'],
+        keywords: ['kids', 'cartoon', 'unicorn', 'superhero', 'princess', 'animal', 'fun', 'children'],
+        theme: { primary: '#DC2626', light: '#EF4444', glow: 'rgba(220, 38, 38, 0.25)', bg: '#FEF2F2' }
+    },
+    // Legacy - keep 'cake' as default catch-all
     cake: {
         name: 'Cakes',
         icon: '🎂',
         banner: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Birthday', 'Anniversary', 'First Birthday', 'Photo Cake', 'Custom', 'Cupcakes'],
-        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate cake', 'vanilla', 'photo cake'],
+        subcategories: ['All', 'Birthday', 'Wedding', 'Anniversary', 'Photo Cake', 'Eggless', 'Theme Cake', 'Cupcakes', 'Pastries'],
+        keywords: ['cake', 'cakes', 'pastry', 'pastries', 'cupcake', 'birthday', 'anniversary', 'chocolate', 'vanilla', 'photo cake', 'wedding'],
         theme: { primary: '#BE185D', light: '#EC4899', glow: 'rgba(190, 24, 93, 0.25)', bg: '#FFF1F7' }
-    },
-    beverages: {
-        name: 'Beverages',
-        icon: '☕',
-        banner: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Cold Coffee', 'Tea', 'Shakes', 'Mocktails', 'Juice'],
-        keywords: ['beverages', 'beverage', 'coffee', 'tea', 'shake', 'juice', 'mocktail', 'drink', 'cold coffee', 'milkshake'],
-        theme: { primary: '#6B4226', light: '#A0714F', glow: 'rgba(107, 66, 38, 0.25)', bg: '#FBF5F0' }
-    },
-    bakery: {
-        name: 'Bakery',
-        icon: '🥐',
-        banner: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Bread', 'Cookies', 'Croissants', 'Pastries', 'Biscuits'],
-        keywords: ['bakery', 'bread', 'cookies', 'croissant', 'biscuit', 'pastry', 'baked'],
-        theme: { primary: '#B45309', light: '#D97706', glow: 'rgba(180, 83, 9, 0.25)', bg: '#FFFBEB' }
-    },
-    flowers: {
-        name: 'Flowers',
-        icon: '💐',
-        banner: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Bouquets', 'Roses', 'Mixed', 'Premium', 'Gift Combos'],
-        keywords: ['flower', 'flowers', 'bouquet', 'rose', 'roses', 'gift', 'floral', 'arrangement'],
-        theme: { primary: '#9D174D', light: '#DB2777', glow: 'rgba(157, 23, 77, 0.25)', bg: '#FFF0F6' }
-    },
-    patties: {
-        name: 'Patties',
-        icon: '🥟',
-        banner: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Veg Patties', 'Paneer Patties', 'Aloo Patties', 'Special'],
-        keywords: ['patties', 'pattis', 'patty', 'patti', 'samosa', 'snack'],
-        theme: { primary: '#C2410C', light: '#EA580C', glow: 'rgba(194, 65, 12, 0.25)', bg: '#FFF7ED' }
-    },
-    pizza: {
-        name: 'Pizza',
-        icon: '🍕',
-        banner: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Veg Pizza', 'Cheese Pizza', 'Special', 'Mini Pizza'],
-        keywords: ['pizza', 'pizzas', 'cheese pizza', 'veg pizza'],
-        theme: { primary: '#DC2626', light: '#EF4444', glow: 'rgba(220, 38, 38, 0.25)', bg: '#FEF2F2' }
-    },
-    anniversary: {
-        name: 'Anniversary',
-        icon: '💑',
-        banner: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&h=400&fit=crop&q=80',
-        subcategories: ['All', 'Cakes', 'Flowers', 'Gift Combos', 'Chocolates', 'Decoration'],
-        keywords: ['anniversary', 'wedding', 'couple', 'love', 'romantic', 'heart', 'rose', 'gift'],
-        theme: { primary: '#7C3AED', light: '#A78BFA', glow: 'rgba(124, 58, 237, 0.25)', bg: '#F5F3FF' }
     }
 };
 

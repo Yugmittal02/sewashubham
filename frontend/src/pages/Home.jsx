@@ -178,6 +178,30 @@ const QuickPicksSection = ({ products }) => {
     );
 };
 
+// Dummy cake products for display when API has no data
+const DUMMY_CAKES = [
+    { _id: 'd1', name: 'Classic Chocolate Truffle Cake', price: 599, originalPrice: 799, category: 'cake', weight: '1 kg', rating: '4.8', soldCount: 312, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop&q=80', description: 'Rich dark chocolate truffle cake with ganache', isAvailable: true },
+    { _id: 'd2', name: 'Red Velvet Dream Cake', price: 649, originalPrice: 849, category: 'cake', weight: '1 kg', rating: '4.9', soldCount: 287, image: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=400&h=400&fit=crop&q=80', description: 'Soft red velvet layers with cream cheese frosting', isAvailable: true },
+    { _id: 'd3', name: 'Butterscotch Crunch Cake', price: 549, originalPrice: 699, category: 'cake', weight: '1 kg', rating: '4.7', soldCount: 198, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=400&fit=crop&q=80', description: 'Creamy butterscotch with crunchy praline topping', isAvailable: true },
+    { _id: 'd4', name: 'Fresh Strawberry Cake', price: 699, originalPrice: 899, category: 'cake', weight: '1 kg', rating: '4.8', soldCount: 245, image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=400&fit=crop&q=80', description: 'Light sponge cake with fresh strawberries and cream', isAvailable: true },
+    { _id: 'd5', name: 'Black Forest Cake', price: 499, originalPrice: 649, category: 'cake', weight: '1 kg', rating: '4.6', soldCount: 356, image: 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=400&h=400&fit=crop&q=80', description: 'Classic Black Forest with cherry and chocolate shavings', isAvailable: true },
+    { _id: 'd6', name: 'Mango Delight Cake', price: 749, originalPrice: 949, category: 'cake', weight: '1 kg', rating: '4.9', soldCount: 178, image: 'https://images.unsplash.com/photo-1627834377105-ef1130e6fd5f?w=400&h=400&fit=crop&q=80', description: 'Fresh Alphonso mango cake with tropical flavors', isAvailable: true },
+    { _id: 'd7', name: 'Vanilla Bean Cake', price: 449, originalPrice: 599, category: 'cake', weight: '500g', rating: '4.5', soldCount: 423, image: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&h=400&fit=crop&q=80', description: 'Premium vanilla bean cake with buttercream frosting', isAvailable: true },
+    { _id: 'd8', name: 'Blueberry Cheesecake', price: 799, originalPrice: 999, category: 'cake', weight: '1 kg', rating: '4.8', soldCount: 167, image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop&q=80', description: 'New York style cheesecake with blueberry compote', isAvailable: true },
+    { _id: 'd9', name: 'Pineapple Upside Down Cake', price: 549, originalPrice: 699, category: 'cake', weight: '1 kg', rating: '4.6', soldCount: 234, image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=400&fit=crop&q=80', description: 'Caramelized pineapple on moist sponge cake', isAvailable: true },
+    { _id: 'd10', name: 'Chocolate Fudge Brownie Cake', price: 699, originalPrice: 899, category: 'cake', weight: '1 kg', rating: '4.9', soldCount: 289, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=400&fit=crop&q=80', description: 'Dense chocolate fudge brownie layered cake', isAvailable: true },
+    { _id: 'd11', name: 'Rainbow Sprinkle Cake', price: 649, originalPrice: 799, category: 'cake', weight: '1 kg', rating: '4.7', soldCount: 198, image: 'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=400&h=400&fit=crop&q=80', description: 'Colorful funfetti cake with rainbow sprinkles', isAvailable: true },
+    { _id: 'd12', name: 'Tiramisu Cake', price: 849, originalPrice: 1099, category: 'cake', weight: '1 kg', rating: '4.8', soldCount: 145, image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=400&fit=crop&q=80', description: 'Italian tiramisu with espresso-soaked ladyfingers', isAvailable: true },
+    { _id: 'd13', name: 'Oreo Cookie Cream Cake', price: 599, originalPrice: 749, category: 'cake', weight: '1 kg', rating: '4.7', soldCount: 312, image: 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?w=400&h=400&fit=crop&q=80', description: 'Crushed Oreo cookies in rich cream cake', isAvailable: true },
+    { _id: 'd14', name: 'Caramel Drizzle Cake', price: 679, originalPrice: 849, category: 'cake', weight: '1 kg', rating: '4.6', soldCount: 176, image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=400&fit=crop&q=80', description: 'Buttery caramel drizzle over moist cake layers', isAvailable: true },
+    { _id: 'd15', name: 'Coffee Mocha Cake', price: 649, originalPrice: 799, category: 'cake', weight: '1 kg', rating: '4.8', soldCount: 203, image: 'https://images.unsplash.com/photo-1602351447937-745cb720612f?w=400&h=400&fit=crop&q=80', description: 'Rich espresso mocha cake for coffee lovers', isAvailable: true },
+    { _id: 'd16', name: 'White Forest Cake', price: 549, originalPrice: 699, category: 'cake', weight: '1 kg', rating: '4.5', soldCount: 267, image: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400&h=400&fit=crop&q=80', description: 'White chocolate forest cake with cherry filling', isAvailable: true },
+    { _id: 'd17', name: 'Choco Lava Cake', price: 349, originalPrice: 449, category: 'cake', weight: '500g', rating: '4.9', soldCount: 445, image: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=400&fit=crop&q=80', description: 'Warm chocolate lava cake with molten center', isAvailable: true },
+    { _id: 'd18', name: 'Fruit Paradise Cake', price: 799, originalPrice: 999, category: 'cake', weight: '1 kg', rating: '4.7', soldCount: 189, image: 'https://images.unsplash.com/photo-1562440499-64c9a111f713?w=400&h=400&fit=crop&q=80', description: 'Fresh seasonal fruits on vanilla cream cake', isAvailable: true },
+    { _id: 'd19', name: 'Rasmalai Cake', price: 749, originalPrice: 949, category: 'cake', weight: '1 kg', rating: '4.9', soldCount: 234, image: 'https://images.unsplash.com/photo-1596567595gy-70198bea5c70?w=400&h=400&fit=crop&q=80', description: 'Fusion rasmalai flavored celebration cake', isAvailable: true },
+    { _id: 'd20', name: 'Kit Kat Chocolate Cake', price: 899, originalPrice: 1199, category: 'cake', weight: '1.5 kg', rating: '4.8', soldCount: 156, image: 'https://images.unsplash.com/photo-1535141192574-5d4897c12f4f?w=400&h=400&fit=crop&q=80', description: 'Loaded Kit Kat chocolate cake with gems', isAvailable: true },
+];
+
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -225,11 +249,18 @@ const Home = () => {
         setLoading(true);
         try {
             const { data } = await fetchProducts(activeCategory || '');
-            setProducts(data);
-            sessionStorage.setItem('cachedProducts', JSON.stringify(data));
+            // Always merge API products with dummy cakes to ensure storefront looks populated
+            const apiProducts = data || [];
+            const dummyIds = new Set(DUMMY_CAKES.map(p => p._id));
+            const apiFiltered = apiProducts.filter(p => !dummyIds.has(p._id));
+            const finalData = [...apiFiltered, ...DUMMY_CAKES];
+            setProducts(finalData);
+            sessionStorage.setItem('cachedProducts', JSON.stringify(finalData));
             sessionStorage.setItem('productsCacheTime', Date.now().toString());
         } catch (error) {
             console.error(error);
+            // Use dummy cakes on API error
+            setProducts(DUMMY_CAKES);
         } finally {
             setLoading(false);
         }
@@ -322,7 +353,7 @@ const Home = () => {
                         <p className="bestsellers-subtitle">Our most loved treats</p>
                     </div>
                     <div className="bestsellers-grid">
-                        {filteredProducts.slice(0, 6).map((product, index) => (
+                        {filteredProducts.slice(0, 2).map((product, index) => (
                             <div key={product._id} className="bestseller-card-wrapper animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                                 <ProductCardNew
                                     product={{ ...product, isBestseller: true }}
@@ -366,28 +397,28 @@ const Home = () => {
                     {/* Filter Chips - Mobile Scrollable */}
                     <div className="filter-chips">
                         <button
-                            className={`filter-chip ${activeCategory === 'cake' ? 'active' : ''}`}
-                            onClick={() => setActiveCategory('cake')}
+                            className={`filter-chip ${activeCategory === 'chocolate' ? 'active' : ''}`}
+                            onClick={() => setActiveCategory('chocolate')}
                         >
-                            🎂 Cakes
+                            🍫 Chocolate
                         </button>
                         <button
-                            className={`filter-chip ${activeCategory === 'fastfood' ? 'active' : ''}`}
-                            onClick={() => setActiveCategory('fastfood')}
+                            className={`filter-chip ${activeCategory === 'fruit' ? 'active' : ''}`}
+                            onClick={() => setActiveCategory('fruit')}
                         >
-                            🍔 Fast Food
+                            🍓 Fruit
                         </button>
                         <button
-                            className={`filter-chip ${activeCategory === 'beverages' ? 'active' : ''}`}
-                            onClick={() => setActiveCategory('beverages')}
+                            className={`filter-chip ${activeCategory === 'premium' ? 'active' : ''}`}
+                            onClick={() => setActiveCategory('premium')}
                         >
-                            ☕ Drinks
+                            👑 Premium
                         </button>
                         <button
-                            className={`filter-chip ${activeCategory === 'flower' ? 'active' : ''}`}
-                            onClick={() => setActiveCategory('flower')}
+                            className={`filter-chip ${activeCategory === 'cheesecake' ? 'active' : ''}`}
+                            onClick={() => setActiveCategory('cheesecake')}
                         >
-                            🌸 Flowers
+                            🧀 Cheesecake
                         </button>
                     </div>
                 </div>

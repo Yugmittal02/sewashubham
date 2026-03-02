@@ -42,8 +42,8 @@ const ContactUs = () => {
         {
             icon: FaEnvelope,
             label: 'Email',
-            value: 'contact@bakerydelight.com',
-            href: 'mailto:contact@bakerydelight.com',
+            value: 'contact@bbccakes.com',
+            href: 'mailto:contact@bbccakes.com',
             iconColor: '#C9A962',
             bgColor: '#FEF3E2',
         },
@@ -121,7 +121,7 @@ const ContactUs = () => {
                         <div>
                             <p className="font-bold" style={{ color: '#4A3728' }}>Our Location</p>
                             <p className="text-sm mt-1" style={{ color: '#8B7355' }}>
-                                Bakery Delight, Main Market Road,<br />
+                                BBC Cakes, Main Market Road,<br />
                                 Near City Center, Delhi - 110001
                             </p>
                         </div>
