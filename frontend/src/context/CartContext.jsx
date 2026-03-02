@@ -5,7 +5,7 @@ const CartContext = createContext();
 // Helper to safely parse JSON from localStorage
 const getStoredCart = () => {
   try {
-    const stored = localStorage.getItem("bbccakes_cart");
+    const stored = localStorage.getItem("jantabakery_cart");
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
   // Persist cart to localStorage whenever it changes
   useEffect(() => {
     try {
-      localStorage.setItem("bbccakes_cart", JSON.stringify(cart));
+      localStorage.setItem("jantabakery_cart", JSON.stringify(cart));
     } catch (e) {
       console.error("Failed to save cart to localStorage:", e);
     }
@@ -71,7 +71,7 @@ export const CartProvider = ({ children }) => {
     setCart([]);
     // Also clear from localStorage
     try {
-      localStorage.removeItem("bbccakes_cart");
+      localStorage.removeItem("jantabakery_cart");
     } catch (e) {
       console.error("Failed to clear cart from localStorage:", e);
     }

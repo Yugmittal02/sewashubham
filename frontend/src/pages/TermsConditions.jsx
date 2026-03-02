@@ -33,19 +33,19 @@ const TermsConditions = () => {
                     <div className="rounded-xl p-4 mb-6" style={{ background: 'linear-gradient(135deg, #FEF3E2 0%, #FDE8CC 100%)', border: '2px solid #C9A962' }}>
                         <h3 className="text-base font-bold mb-2" style={{ color: '#6B4423' }}>🏪 Business Information</h3>
                         <p className="text-sm" style={{ color: '#8B7355' }}>
-                            <strong className="text-[#4A3728]">Business Name:</strong> BBC Cakes<br />
+                            <strong className="text-[#4A3728]">Business Name:</strong> Janta Bakery<br />
                             <strong className="text-[#4A3728]">Location:</strong> Delhi, India<br />
                             <strong className="text-[#4A3728]">Contact:</strong> +91 96940 34523<br />
-                            <strong className="text-[#4A3728]">Email:</strong> contact@bbccakes.com
+                            <strong className="text-[#4A3728]">Email:</strong> contact@jantabakery.com
                         </p>
                     </div>
 
                     <div className="prose prose-sm" style={{ color: '#5C4033' }}>
                         <h2 className="text-lg font-bold mt-6 mb-3" style={{ color: '#4A3728' }}>1. Acceptance of Terms</h2>
-                        <p style={{ color: '#8B7355' }}>By accessing and using the BBC Cakes website and ordering services, you accept and agree to be bound by these Terms and Conditions.</p>
+                        <p style={{ color: '#8B7355' }}>By accessing and using the Janta Bakery website and ordering services, you accept and agree to be bound by these Terms and Conditions.</p>
 
                         <h2 className="text-lg font-bold mt-6 mb-3" style={{ color: '#4A3728' }}>2. Services Offered</h2>
-                        <p style={{ color: '#8B7355' }}>BBC Cakes provides online food ordering services including:</p>
+                        <p style={{ color: '#8B7355' }}>Janta Bakery provides online food ordering services including:</p>
                         <ul className="list-disc pl-5 mt-2 space-y-1" style={{ color: '#8B7355' }}>
                             <li>Bakery items (cakes, pastries, snacks)</li>
                             <li>Pick-up orders from our store</li>
@@ -74,7 +74,7 @@ const TermsConditions = () => {
                         <p style={{ color: '#8B7355' }}>For any queries regarding these Terms & Conditions, please contact us:</p>
                         <p className="mt-2">
                             📞 Phone: <a href="tel:+919694034523" className="font-bold" style={{ color: '#6B4423' }}>+91 96940 34523</a><br />
-                            📧 Email: <a href="mailto:contact@bbccakes.com" className="font-bold" style={{ color: '#6B4423' }}>contact@bbccakes.com</a>
+                            📧 Email: <a href="mailto:contact@jantabakery.com" className="font-bold" style={{ color: '#6B4423' }}>contact@jantabakery.com</a>
                         </p>
                     </div>
                 </div>

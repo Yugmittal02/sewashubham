@@ -79,7 +79,7 @@ const AdminLogin = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-orange-50/50 border-2 border-orange-50 rounded-xl pl-11 pr-4 py-3.5 text-gray-800 font-medium focus:bg-white focus:outline-none focus:border-orange-300 transition-all placeholder:text-gray-300"
-                                    placeholder="admin@bbccakes.com"
+                                    placeholder="admin@jantabakery.com"
                                     required
                                 />
                             </div>

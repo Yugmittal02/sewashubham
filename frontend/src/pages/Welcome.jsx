@@ -9,11 +9,8 @@ const Welcome = () => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        if (customer) {
-            navigate('/menu');
-        }
         setTimeout(() => setLoaded(true), 100);
-    }, [customer, navigate]);
+    }, []);
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -154,7 +151,7 @@ const Welcome = () => {
                         }}>
                         <img
                             src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop&q=80"
-                            alt="BBC Cakes"
+                            alt="Janta Bakery"
                             className="w-full h-full object-cover"
                             style={{ filter: 'brightness(0.8) contrast(1.1)' }}
                         />
@@ -171,7 +168,7 @@ const Welcome = () => {
                             WebkitTextFillColor: 'transparent',
                             filter: 'drop-shadow(0 2px 8px rgba(201, 169, 98, 0.3))',
                         }}>
-                        BBC Cakes
+                        Janta Bakery
                     </h1>
                     <p className="text-sm md:text-base font-bold tracking-[0.3em] uppercase mb-5"
                         style={{ color: 'rgba(201, 169, 98, 0.6)' }}>

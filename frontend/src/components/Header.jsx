@@ -39,7 +39,7 @@ const Header = () => {
                         >
                             <img
                                 src={logo}
-                                alt="BBC Cakes"
+                                alt="Janta Bakery"
                                 style={{
                                     height: '44px',
                                     width: '44px',
@@ -54,7 +54,7 @@ const Header = () => {
                     {/* Center - Brand Name */}
                     <div className="flex-1 text-center px-2">
                         <h1 className="text-2xl md:text-3xl font-extrabold leading-tight m-0" style={{ color: '#2D1810', letterSpacing: '0.02em' }}>
-                            BBC Cakes
+                            Janta Bakery
                         </h1>
                         <p className="text-[11px] font-bold tracking-[0.2em] uppercase m-0" style={{ color: '#C97B4B' }}>
                             PREMIUM BAKERY

@@ -1,7 +1,7 @@
 {
-  "name": "BBC Cakes",
-  "short_name": "BBC Cakes",
-  "description": "Order delicious cakes and pastries from BBC Cakes",
+  "name": "Janta Bakery",
+  "short_name": "Janta Bakery",
+  "description": "Order delicious cakes and pastries from Janta Bakery",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff7ed",

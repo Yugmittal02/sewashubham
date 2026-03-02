@@ -42,8 +42,8 @@ const ContactUs = () => {
         {
             icon: FaEnvelope,
             label: 'Email',
-            value: 'contact@bbccakes.com',
-            href: 'mailto:contact@bbccakes.com',
+            value: 'contact@jantabakery.com',
+            href: 'mailto:contact@jantabakery.com',
             iconColor: '#C9A962',
             bgColor: '#FEF3E2',
         },
@@ -121,7 +121,7 @@ const ContactUs = () => {
                         <div>
                             <p className="font-bold" style={{ color: '#4A3728' }}>Our Location</p>
                             <p className="text-sm mt-1" style={{ color: '#8B7355' }}>
-                                BBC Cakes, Main Market Road,<br />
+                                Janta Bakery, Main Market Road,<br />
                                 Near City Center, Delhi - 110001
                             </p>
                         </div>

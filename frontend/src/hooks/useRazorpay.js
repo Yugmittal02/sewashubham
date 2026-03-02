@@ -90,7 +90,7 @@ export const useRazorpay = () => {
           key: key,
           amount: data.amount,
           currency: data.currency,
-          name: "BBC Cakes",
+          name: "Janta Bakery",
           description: `Order Payment`,
           order_id: data.razorpayOrderId,
           prefill: {
