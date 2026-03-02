@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaArrowLeft } from 'react-icons/fa';
 
-import logo from '../assets/brand_logo.png';
 
 const Header = () => {
     const { getItemCount } = useCart();
@@ -24,7 +23,7 @@ const Header = () => {
             }}>
                 <div className="flex justify-between items-center">
                     {/* Left - Logo Badge */}
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-3 w-[80px]">
                         {showBackButton && (
                             <button
                                 onClick={() => navigate(-1)}
@@ -33,22 +32,6 @@ const Header = () => {
                                 <FaArrowLeft size={16} color="#4A3728" />
                             </button>
                         )}
-                        <div
-                            className="cursor-pointer active:scale-95 transition-transform"
-                            onClick={() => navigate('/')}
-                        >
-                            <img
-                                src={logo}
-                                alt="Janta Bakery"
-                                style={{
-                                    height: '44px',
-                                    width: '44px',
-                                    objectFit: 'cover',
-                                    borderRadius: '14px',
-                                    boxShadow: '0 2px 8px rgba(45,24,16,0.10)'
-                                }}
-                            />
-                        </div>
                     </div>
 
                     {/* Center - Brand Name */}

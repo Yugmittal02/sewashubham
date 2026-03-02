@@ -140,24 +140,7 @@ const Welcome = () => {
                     </p>
                 </div>
 
-                {/* Logo Icon with Gold Glow */}
-                <div className={`mb-5 relative transition-all duration-800 delay-100 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-                    <div className="absolute inset-0 rounded-full animate-pulse-glow"
-                        style={{ background: 'rgba(201, 169, 98, 0.2)', filter: 'blur(25px)', transform: 'scale(1.3)' }}></div>
-                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center relative overflow-hidden"
-                        style={{
-                            background: 'linear-gradient(145deg, #2A1F14 0%, #1A120B 100%)',
-                            boxShadow: '0 10px 50px rgba(201, 169, 98, 0.3), 0 0 0 2px rgba(201, 169, 98, 0.15)',
-                        }}>
-                        <img
-                            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop&q=80"
-                            alt="Janta Bakery"
-                            className="w-full h-full object-cover"
-                            style={{ filter: 'brightness(0.8) contrast(1.1)' }}
-                        />
-                        <div className="absolute inset-0" style={{ background: 'radial-gradient(circle, transparent 40%, rgba(15, 10, 6, 0.4) 100%)' }}></div>
-                    </div>
-                </div>
+
 
                 {/* Brand Name - Premium Gold */}
                 <div className={`transition-all duration-700 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
